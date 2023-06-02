@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Data Group</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .container {
+            align-items: flex-start;
+        }
+
+        .input-field {
+            margin-bottom: 20px;
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row" style=" max-width: 50%;">
+            <h4>Input Nilai</h4>
+            <div class="input-field col s6">
+                <select id="day">
+                    <option value="1">Senin</option>
+                    <option value="2">Selasa</option>
+                    <option value="3">Rabu</option>
+                    <option value="4">Kamis</option>
+                    <option value="5">Jumat</option>
+                    <option value="6">Sabtu</option>
+                </select>
+                <label for="day">Hari</label>
+            </div>
+            <div class="input-field col s6">
+                <select id="shift">
+                    <option value="1">Shift 1</option>
+                    <option value="2">Shift 2</option>
+                    <option value="3">Shift 3</option>
+                    <option value="4">Shift 4</option>
+                </select>
+                <label for="shift">Shift</label>
+            </div>
+            <button class="btn col s12 waves-effect waves-light" id="submit">Submit</button>
+        </div>
+        <div class="row" id="result" style="display: none;">
+            <div class="col s12">
+                <h4>Hasil</h4>
+                <table class="striped">
+                    <thead>
+                        <tr>
+                            <th>Group</th>
+                            <th>Names</th>
+                            <th>Input Nilai</th>
+                        </tr>
+                    </thead>
+                    <tbody id="result-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('select').formSelect();
+
+            $('#submit').click(function () {
+                var day = $('#day').val();
+                var shift = $('#shift').val();
+
+                $.ajax({
+                    url: 'https://localhost:7067/api/Seelabs/score/list-group',
+                    type: 'POST',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Content-Type', 'application/json');
+                        xhr.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQXNzaXN0YW50Iiwic2VlbGFic190b2tlbiI6InM4OWU2M3Znb3BwNjR2cWgzcmtvM2trNXNwZHBvN2hxIiwibmJmIjoxNjg1NzQxMzc1LCJleHAiOjE2ODU3NDg1NzUsImlhdCI6MTY4NTc0MTM3NX0.H_RfpdjkTZBbJ5H3tog95qQnAsT6V6bcU7gDjKNRQZw');
+                    },
+                    data: JSON.stringify({
+                        day: day,
+                        shift: shift
+                    }),
+                    success: function (response) {
+                        var data = response.data;
+
+                        // Bersihkan hasil sebelumnya
+                        var tbody = $('#result-body');
+                        tbody.empty();
+
+                        // Tambahkan data ke tabel
+                        $.each(data, function (index, item) {
+                            var row = $('<tr>');
+                            var idGroupCell = $('<td>').text(item.id_group);
+                            var namesCell = $('<td>').text(item.names.join(', '));
+                            var inputButton = $('<button>').text('Input Nilai').addClass('btn waves-effect waves-light');
+                            var inputButtonCell = $('<td>').append(inputButton);
+                            row.append(idGroupCell, namesCell, inputButtonCell);
+                            tbody.append(row);
+                        });
+
+                        // Tampilkan hasil
+                        $('#result').show();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

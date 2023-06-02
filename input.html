@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/datepicker.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h4>Input Nilai</h4>
+        <div class="row">
+            <div class="input-field col s6">
+                <input type="text" id="module">
+                <label for="module">Modul</label>
+            </div>
+            <div class="input-field col s6">
+                <input type="text" id="tanggal" class="datepicker">
+                <label for="tanggal">Tanggal</label>
+            </div>
+        </div>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>UID</th>
+                    <th>Status</th>
+                    <th>TP</th>
+                    <th>TA</th>
+                    <th>D1</th>
+                    <th>D2</th>
+                    <th>D3</th>
+                    <th>D4</th>
+                    <th>I1</th>
+                    <th>I2</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ARISTO SACHIO AKBAR INDRA BADRI</td>
+                    <td><input type="text" name="uid[]" class="input-uid"></td>
+                    <td><input type="text" name="status[]" class="input-status"></td>
+                    <td><input type="text" name="TP[]" class="input-tp"></td>
+                    <td><input type="text" name="TA[]" class="input-ta"></td>
+                    <td><input type="text" name="D1[]" class="input-d1"></td>
+                    <td><input type="text" name="D2[]" class="input-d2"></td>
+                    <td><input type="text" name="D3[]" class="input-d3"></td>
+                    <td><input type="text" name="D4[]" class="input-d4"></td>
+                    <td><input type="text" name="I1[]" class="input-i1"></td>
+                    <td><input type="text" name="I2[]" class="input-i2"></td>
+                </tr>
+                <!-- Tambahkan baris data lainnya di sini -->
+            </tbody>
+        </table>
+        <br>
+        <button class="btn waves-effect waves-light" id="submit">Submit</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/datepicker.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Inisialisasi datepicker
+            $('.datepicker').datepicker();
+
+            // Event handler untuk tombol Submit
+            $('#submit').click(function () {
+                // Ambil nilai input dan lakukan submit data
+                var module = $('#module').val();
+                var tanggal = $('#tanggal').val();
+                // ...
+                // Lanjutkan dengan kode untuk mengambil nilai-nilai lainnya dan submit data
+            });
+        });
+    </script>
+</body>
+
+</html>
