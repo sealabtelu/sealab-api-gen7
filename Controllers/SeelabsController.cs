@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace SealabAPI.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "Assistant")]
     [ApiController]
     public class SeelabsController : ControllerBase
     {
@@ -21,8 +22,19 @@ namespace SealabAPI.Controllers
             _logger = logger;
             _modelService = modelService;
         }
-
-        [Authorize(Roles = "Assistant")]
+        [HttpGet("schedule")]
+        public async Task<ActionResult> Schedule()
+        {
+            try
+            {
+                var data = await _modelService.Schedule();
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
         [HttpPost("score/input")]
         public async Task<ActionResult> ScoreInput(ScoreInputRequest model)
         {
@@ -36,8 +48,6 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
-
-        [Authorize(Roles = "Assistant")]
         [HttpPost("score/list-group")]
         public async Task<ActionResult> ScoreListGroup(ScoreListGroupRequest model)
         {

@@ -13,7 +13,7 @@ namespace SealabAPI.DataAccess.Services
     {
         private readonly HttpRequestHelper _client;
         private readonly HttpRequest _httpRequest;
-        private string _token => _httpRequest.GetSeelabsToken();
+        private string _token => _httpRequest.ReadToken("seelabs_token");
         public SeelabsService(IHttpContextAccessor httpRequest)
         {
             _httpRequest = httpRequest.HttpContext.Request;
@@ -21,8 +21,7 @@ namespace SealabAPI.DataAccess.Services
         }
         public async Task<dynamic> Score(ScoreListGroupRequest data)
         {
-            _client.AddHeader("Cookie", "ci_session=" + _token);
-
+            SetToken();
             var request = new
             {
                 aksi = (int?)(data.Group == null ? null : 1),
@@ -32,7 +31,8 @@ namespace SealabAPI.DataAccess.Services
                 kelompok_id = data.Group,
                 praktikum_id = 168,
                 terms = "on"
-            }.ToDict();
+            }.ToDictionary();
+
             bool isInput = false;
             if (data is ScoreInputRequest input)
             {
@@ -40,29 +40,10 @@ namespace SealabAPI.DataAccess.Services
                 request.AddKey("modulid", input.Module.ToString());
                 request.AddKey("tanggal", input.Date.ToString("yyyy-MM-dd"));
                 request.AddKey("submit", "submit");
-                // request.Add(new KeyValuePair<string, string>("modulid", data.module.ToString()));
-                // request.Add(new KeyValuePair<string, string>("tanggal", data.date.ToString("yyyy-MM-dd")));
-                // request.Add(new KeyValuePair<string, string>("submit", "submit"));
-
-                var score = new Dictionary<string, dynamic>{
-                    {"uid[]", input.GetUid()},
-                    {"status[]", input.GetStatus()},
-                    {"TP[]", input.GetTP()},
-                    {"TA[]", input.GetTA()},
-                    {"D1[]", input.GetD()},
-                    {"D2[]", input.GetD()},
-                    {"D3[]", input.GetD()},
-                    {"D4[]", input.GetD()},
-                    {"I1[]", input.GetI1()},
-                    {"I2[]", input.GetI2()}
-                };
-                foreach (var item in score)
-                    foreach (string arr in item.Value)
-                        request.AddKey(item.Key, arr);
+                input.GetScores(request);
             }
 
             HttpResponseMessage response = await _client.HtmlPost("/pageasisten/inputnilaipraktikum", request);
-
             var table = response.ParseHtml().QuerySelector("table");
 
             if (data.Group == null)
@@ -70,7 +51,7 @@ namespace SealabAPI.DataAccess.Services
                 int count = 0, id_group = 0, counter = 0;
                 string span;
                 var columns = table?.QuerySelectorAll("td");
-                var result = new List<object>(); //new ExpandoObject() as IDictionary<string, object>;
+                List<object> result = new();
                 List<string> names = new();
                 foreach (var item in columns)
                 {
@@ -90,7 +71,7 @@ namespace SealabAPI.DataAccess.Services
                         if (names.Count == count)
                         {
                             result.Add(new { id_group, names });
-                            names = new List<string>();
+                            names.Clear();
                         }
                     }
                 }
@@ -105,7 +86,6 @@ namespace SealabAPI.DataAccess.Services
             else
                 return response.ParseHtml().QuerySelector("#myAlert b").TextContent;
         }
-
         public async Task<dynamic> Schedule()
         {
             _client.AddHeader("Cookie", "ci_session=" + _token);
@@ -120,8 +100,7 @@ namespace SealabAPI.DataAccess.Services
                     shift = td.Children[4].TextContent
                 });
         }
-
-        public dynamic Login(string nim, string password, string role)
+        public async Task<dynamic> Login(string nim, string password, string role)
         {
             var data = new
             {
@@ -130,7 +109,7 @@ namespace SealabAPI.DataAccess.Services
                 login_ass = role == "Assistant" ? 2 : 1,
                 submit = ""
             };
-            HttpResponseMessage response = _client.HtmlPost("/home/loginprak", data);
+            HttpResponseMessage response = await _client.HtmlPost("/home/loginprak", data);
             var name = response.ParseHtml().QuerySelector(".navbar-link")?.TextContent;
             Cookie cookie = name != null ? _client.GetCookie("ci_session") : null;
             return new
@@ -140,6 +119,10 @@ namespace SealabAPI.DataAccess.Services
                 token = cookie?.Value,
                 expires = cookie?.Expires,
             }.ToExpando();
+        }
+        private void SetToken()
+        {
+            _client.AddHeader("Cookie", "ci_session=" + _token);
         }
     }
 }
