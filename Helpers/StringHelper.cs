@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Web;
 
 namespace SealabAPI.Helpers
 {
@@ -15,6 +16,14 @@ namespace SealabAPI.Helpers
         public static string ToTitleCase(this string title)
         {
             return title != null ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title.ToLower()) : null;
+        }
+        public static string ToQueryString(this object data, string url)
+        {
+            var properties = from property in data.GetType().GetProperties()
+                             where property.GetValue(data, null) != null
+                             select property.Name + "=" + HttpUtility.UrlEncode(property.GetValue(data, null).ToString());
+            url += "?" + string.Join("&", properties.ToArray());
+            return url;
         }
     }
 }

@@ -7,11 +7,7 @@ namespace SealabAPI.Helpers
 {
     public static class JwtHelper
     {
-        public static string GetSeelabsToken(this HttpRequest request)
-        {
-            return ReadToken(request, "seelabs_token");
-        }
-        public static dynamic ReadToken(HttpRequest request, string property = null)
+        public static dynamic ReadToken(this HttpRequest request, string property = null)
         {
             var bearer = request.Headers["Authorization"].ToString().Split(' ');
             if (bearer[0].ToLower() != "bearer")
@@ -27,7 +23,7 @@ namespace SealabAPI.Helpers
                 var claims = tokenHandler.ReadJwtToken(token).Claims.Select(
                     c => new { c.Type, c.Value }
                 );
-                return property == null ? claims : (dynamic)claims.Where(c => c.Type == property).SingleOrDefault().Value;
+                return property == null ? claims : claims.Where(c => c.Type == property).SingleOrDefault().Value;
             }
             catch { throw new ArgumentException("Invalid token!"); }
         }

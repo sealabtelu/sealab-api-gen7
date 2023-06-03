@@ -42,7 +42,7 @@ namespace SealabAPI.DataAccess.Services
                 if (!PasswordHelper.VerifyHashedPassword(user.Password, password))
                     throw new ArgumentException("Wrong Password");
 
-                var seelabs = _seelabsService.Login(user.Nim, password, user.Role);
+                var seelabs = await _seelabsService.Login(user.Nim, password, user.Role);
 
                 user.AppToken = JwtHelper.CreateToken(new Claim[]{
                     // new Claim(ClaimTypes.Email, user.email),
