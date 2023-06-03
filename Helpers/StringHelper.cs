@@ -12,16 +12,15 @@ namespace SealabAPI.Helpers
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-
         public static string ToTitleCase(this string title)
         {
             return title != null ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title.ToLower()) : null;
         }
         public static string ToQueryString(this object data, string url)
         {
-            var properties = from property in data.GetType().GetProperties()
-                             where property.GetValue(data, null) != null
-                             select property.Name + "=" + HttpUtility.UrlEncode(property.GetValue(data, null).ToString());
+            var properties = data.GetType().GetProperties()
+                            .Where(property => property.GetValue(data) != null)
+                            .Select(property => $"{property.Name}={HttpUtility.UrlEncode(property.GetValue(data).ToString())}");
             url += "?" + string.Join("&", properties.ToArray());
             return url;
         }
