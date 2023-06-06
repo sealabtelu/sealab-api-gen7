@@ -71,7 +71,7 @@ namespace SealabAPI.DataAccess.Services
                         if (names.Count == count)
                         {
                             result.Add(new { id_group, names });
-                            names.Clear();
+                            names = new();
                         }
                     }
                 }

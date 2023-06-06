@@ -11,7 +11,6 @@ namespace SealabAPI.DataAccess.Extensions
         {
             return new HtmlParser().ParseDocument(response.Content.ReadAsStringAsync().Result);
         }
-
         public static List<KeyValuePair<string, string>> AddKey(this List<KeyValuePair<string, string>> data, string key, string value)
         {
             data.Add(new KeyValuePair<string, string>(key, value));

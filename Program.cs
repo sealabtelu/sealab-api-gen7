@@ -113,11 +113,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(
-    // opt =>
-    //    {
-    //        opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-    //        opt.RoutePrefix = string.Empty;
-    //    }
+    opt =>
+       {
+           opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+           opt.RoutePrefix = string.Empty;
+       }
     );
 }
 

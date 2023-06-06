@@ -23,7 +23,6 @@ namespace SealabAPI.Controllers
             _logger = logger;
             _modelService = modelService;
         }
-
         public async override Task<ActionResult> Create(CreateAssistantRequest model)
         {
             try
