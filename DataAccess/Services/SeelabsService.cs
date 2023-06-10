@@ -44,7 +44,8 @@ namespace SealabAPI.DataAccess.Services
             }
 
             HttpResponseMessage response = await _client.HtmlPost("/pageasisten/inputnilaipraktikum", request);
-            var table = response.ParseHtml().QuerySelector("table");
+            var responseHtml = response.ParseHtml();
+            var table = responseHtml.QuerySelector("table");
 
             if (data.Group == null)
             {
@@ -83,8 +84,12 @@ namespace SealabAPI.DataAccess.Services
                     uid = td.QuerySelector("input").GetAttribute("value"),
                     name = td.Children[1].TextContent,
                 });
-            else
-                return response.ParseHtml().QuerySelector("#myAlert b").TextContent;
+            else{
+                var result = responseHtml.QuerySelector("#myAlert b")?.TextContent;
+                if (result == "Gagal")
+                    throw new ArgumentException("Failed input score!");
+                return result;
+            }
         }
         public async Task<dynamic> Schedule()
         {
