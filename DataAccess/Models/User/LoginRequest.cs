@@ -4,7 +4,8 @@ namespace SealabAPI.DataAccess.Models
 {
     public class LoginRequest : BaseModel
     {
-        public string Username { get; set; }
+        private string _username;
+        public string Username { get => _username; set => _username = value?.ToLower(); }
         public string Password { get; set; }
     }
 }

@@ -69,6 +69,10 @@ namespace SealabAPI.DataAccess.Services
 
                 userDetails.Seelabs = seelabs.valid ? "Valid" : "Invalid";
             }
+            else
+            {
+                throw new ArgumentException("Username not found!");
+            }
 
             return userDetails;
         }

@@ -24,11 +24,11 @@ namespace SealabAPI.Controllers
             _userService = userService;
         }
         [HttpPost("login")]
-        public virtual async Task<ActionResult> Create(string username, string password)
+        public virtual async Task<ActionResult> Create(LoginRequest loginRequest)
         {
             try
             {
-                object result = await _userService.Login(username, password);
+                object result = await _userService.Login(loginRequest.Username, loginRequest.Password);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), result);
             }
             catch (Exception ex)
