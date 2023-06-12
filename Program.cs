@@ -73,14 +73,16 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddCors(opt =>
+builder.Services.AddCors(options =>
 {
-    opt.AddPolicy("CorsPolicy",
-        builder => builder
-        .AllowAnyMethod()
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader());
+    options.AddDefaultPolicy(policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+
+    });
 });
 
 var key = Encoding.ASCII.GetBytes("3a97556f-c07f-4f5a-8bc6-28711d4922e9");
@@ -113,21 +115,21 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(
-    opt =>
-      {
-          opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-          opt.RoutePrefix = string.Empty;
-      }
-    );
+    app.UseHttpsRedirection();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI(
+opt =>
+  {
+      opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+      opt.RoutePrefix = string.Empty;
+  }
+);
 
 app.UseAuthentication();
 
-app.UseCors("CorsPolicy");
-
-app.UseHttpsRedirection();
+app.UseCors();
 
 app.UseAuthorization();
 
