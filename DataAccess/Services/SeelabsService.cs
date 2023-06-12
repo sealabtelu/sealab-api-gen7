@@ -1,4 +1,5 @@
 ﻿using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using SealabAPI.DataAccess.Entities;
@@ -46,16 +47,52 @@ namespace SealabAPI.DataAccess.Services
                 search = true,
                 modul_id = data.Module
             }.ToDictionary();
+            bool isUpdate = false;
             if (data.Group != null)
             {
                 request.AddKey("modul", data.Module.ToString());
                 request.AddKey("kelompok_id", data.Group.ToString());
+                if (data is ScoreUpdateRequest update)
+                {
+                    isUpdate = true;
+                    request.AddKey("modulid", update.Module.ToString());
+                    request.AddKey("praktikum_id", "168");
+                    request.AddKey("editinput", "submit");
+                    update.GetScores(request);
+                }
+
             }
             HttpResponseMessage response = await _client.HtmlPost("/pageasisten/lihat_inputnilai", request);
             var responseHtml = await response.ParseHtml();
             if (action == 1)
             {
-                return null;
+                if (isUpdate)
+                {
+                    var result = responseHtml.QuerySelector("#myAlert b")?.TextContent;
+                    if (result == "Gagal")
+                        throw new ArgumentException("Failed update score!");
+                    return result;
+                }
+                else
+                {
+                    var tr = responseHtml.QuerySelector("table")?.QuerySelectorAll("tr")?.Skip(2);
+                    return new
+                    {
+                        Module = (responseHtml.QuerySelector("select[name='modulid']") as IHtmlSelectElement).Value,
+                        Scores = tr.Select(td => new
+                        {
+                            Name = td.Children[1].TextContent,
+                            Uid = td.QuerySelector("input[name='id[]']")?.GetAttribute("value"),
+                            Status = td.QuerySelector("option")?.GetAttribute("value") == "1",
+                            TP = int.Parse(td.QuerySelector("input[name='TP[]']")?.GetAttribute("value")),
+                            TA = int.Parse(td.QuerySelector("input[name='TA[]']")?.GetAttribute("value")),
+                            D = int.Parse(td.QuerySelector("input[name='D1[]']")?.GetAttribute("value")),
+                            I1 = int.Parse(td.QuerySelector("input[name='I1[]']")?.GetAttribute("value")),
+                            I2 = int.Parse(td.QuerySelector("input[name='I2[]']")?.GetAttribute("value"))
+                        })
+                    };
+
+                }
             }
             else if (action == 2)
             {

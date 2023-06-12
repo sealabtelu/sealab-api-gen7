@@ -74,6 +74,19 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        [HttpPut("score")]
+        public async Task<ActionResult> ScoreUpdate(ScoreUpdateRequest model)
+        {
+            try
+            {
+                var data = await _modelService.ScoreResult(model, 1);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
         [HttpPost("score")]
         public async Task<ActionResult> ScoreInput(ScoreInputRequest model)
         {
