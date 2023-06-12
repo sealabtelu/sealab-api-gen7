@@ -12,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
 builder.Services.AddControllers();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -114,10 +116,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(
     opt =>
-       {
-           opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-           opt.RoutePrefix = string.Empty;
-       }
+      {
+          opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+          opt.RoutePrefix = string.Empty;
+      }
     );
 }
 

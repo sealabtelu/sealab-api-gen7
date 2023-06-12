@@ -1,4 +1,5 @@
 ﻿using AngleSharp.Html.Parser;
+using AngleSharp.Html.Dom;
 using Newtonsoft.Json;
 using SealabAPI.Helpers;
 using System.Dynamic;
@@ -7,9 +8,9 @@ namespace SealabAPI.DataAccess.Extensions
 {
     public static class ObjectExtension
     {
-        public static AngleSharp.Html.Dom.IHtmlDocument ParseHtml(this HttpResponseMessage response)
+        public static async Task<IHtmlDocument> ParseHtml(this HttpResponseMessage response)
         {
-            return new HtmlParser().ParseDocument(response.Content.ReadAsStringAsync().Result);
+            return new HtmlParser().ParseDocument(await response.Content.ReadAsStringAsync());
         }
         public static List<KeyValuePair<string, string>> AddKey(this List<KeyValuePair<string, string>> data, string key, string value)
         {
