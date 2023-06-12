@@ -1,4 +1,5 @@
-﻿using AngleSharp.Html.Parser;
+﻿using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using SealabAPI.DataAccess.Entities;
 using SealabAPI.DataAccess.Extensions;
@@ -19,7 +20,78 @@ namespace SealabAPI.DataAccess.Services
             _httpRequest = httpRequest.HttpContext.Request;
             _client = new HttpRequestHelper("https://see.labs.telkomuniversity.ac.id/praktikum/index.php");
         }
-        public async Task<dynamic> Score(ScoreListGroupRequest data)
+        public async Task<dynamic> BAP(DateTime date)
+        {
+            SetToken();
+            var request = new
+            {
+                first_date = date.ToString("yyyy-MM-dd"),
+            }.ToDictionary();
+            HttpResponseMessage response = await _client.HtmlPost("/pageasisten/bap", request);
+            var responseHtml = await response.ParseHtml();
+            return responseHtml.QuerySelector("table")?.QuerySelectorAll("tr").Skip(1)
+                .Select(td => new
+                {
+                    date = td.Children[1].TextContent,
+                    shift = td.Children[2].TextContent,
+                    module = td.Children[3].TextContent,
+                });
+        }
+        public async Task<dynamic> ScoreResult(ScoreResultRequest data, int? action = null)
+        {
+            SetToken();
+            var request = new
+            {
+                pilihan = action,
+                search = true,
+                modul_id = data.Module
+            }.ToDictionary();
+            if (data.Group != null)
+            {
+                request.AddKey("modul", data.Module.ToString());
+                request.AddKey("kelompok_id", data.Group.ToString());
+            }
+            HttpResponseMessage response = await _client.HtmlPost("/pageasisten/lihat_inputnilai", request);
+            var responseHtml = await response.ParseHtml();
+            if (action == 1)
+            {
+                return null;
+            }
+            else if (action == 2)
+            {
+                var tr = responseHtml.QuerySelector("table")?.QuerySelectorAll("tr")?.Skip(2);
+                return new
+                {
+                    Module = tr.ElementAt(0).Children[2].TextContent,
+                    Shift = tr.ElementAt(0).Children[12].TextContent,
+                    Scores = tr.Select(td => new
+                    {
+                        Name = td.Children[1].TextContent,
+                        TP = td.Children[3].TextContent,
+                        TA = td.Children[4].TextContent,
+                        D1 = td.Children[5].TextContent,
+                        D2 = td.Children[6].TextContent,
+                        D3 = td.Children[7].TextContent,
+                        D4 = td.Children[8].TextContent,
+                        I1 = td.Children[9].TextContent,
+                        I2 = td.Children[10].TextContent,
+                        Date = td.Children[11].TextContent
+                    })
+                };
+            }
+            else if (action == 3)
+            {
+                var result = responseHtml.QuerySelector("#myAlert b")?.TextContent;
+                return result;
+            }
+            else
+            {
+                var table = responseHtml.QuerySelector("table");
+                var result = TableToJson(table, 6);
+                return result;
+            }
+        }
+        public async Task<dynamic> ScoreInput(ScoreListGroupRequest data)
         {
             SetToken();
             var request = new
@@ -44,39 +116,17 @@ namespace SealabAPI.DataAccess.Services
             }
 
             HttpResponseMessage response = await _client.HtmlPost("/pageasisten/inputnilaipraktikum", request);
-            var responseHtml = response.ParseHtml();
+            var responseHtml = await response.ParseHtml();
             var table = responseHtml.QuerySelector("table");
 
             if (data.Group == null)
             {
-                int count = 0, id_group = 0, counter = 0;
-                string span;
-                var columns = table?.QuerySelectorAll("td");
-                List<object> result = new();
-                List<string> names = new();
-                foreach (var item in columns)
+                var result = TableToJson(table, 4);
+                return result.Select(group => new
                 {
-                    if ((span = item.GetAttribute("rowspan")) != null)
-                    {
-                        count = int.Parse(span);
-                        counter++;
-                        if (counter == 4)
-                        {
-                            counter = 0;
-                            id_group = int.Parse(item.QuerySelector("input[name='kelompok_id']").GetAttribute("value"));
-                        }
-                    }
-                    else
-                    {
-                        names.Add(item.TextContent.Substring(2));
-                        if (names.Count == count)
-                        {
-                            result.Add(new { id_group, names });
-                            names = new();
-                        }
-                    }
-                }
-                return result;
+                    id_group = group.id_group,
+                    names = ((List<string>)group.names).Select(name => name.Substring(2)).ToArray()
+                });
             }
             else if (data.Group != null && !isInput)
                 return table?.QuerySelectorAll("tr").Skip(2).Select(td => new
@@ -84,7 +134,8 @@ namespace SealabAPI.DataAccess.Services
                     uid = td.QuerySelector("input").GetAttribute("value"),
                     name = td.Children[1].TextContent,
                 });
-            else{
+            else
+            {
                 var result = responseHtml.QuerySelector("#myAlert b")?.TextContent;
                 if (result == "Gagal")
                     throw new ArgumentException("Failed input score!");
@@ -93,10 +144,10 @@ namespace SealabAPI.DataAccess.Services
         }
         public async Task<dynamic> Schedule()
         {
-            _client.AddHeader("Cookie", "ci_session=" + _token);
+            SetToken();
             HttpResponseMessage response = await _client.HtmlGet("/pageasisten/datajadwal");
-
-            return response.ParseHtml().QuerySelector("table")?
+            var responseHtml = await response.ParseHtml();
+            return responseHtml.QuerySelector("table")?
                 .QuerySelectorAll("tr").Skip(1).Select(td => new
                 {
                     nim = td.Children[1].TextContent,
@@ -115,7 +166,8 @@ namespace SealabAPI.DataAccess.Services
                 submit = ""
             };
             HttpResponseMessage response = await _client.HtmlPost("/home/loginprak", data);
-            var name = response.ParseHtml().QuerySelector(".navbar-link")?.TextContent;
+            var responseHtml = await response.ParseHtml();
+            var name = responseHtml.QuerySelector(".navbar-link")?.TextContent;
             Cookie cookie = name != null ? _client.GetCookie("ci_session") : null;
             return new
             {
@@ -124,6 +176,37 @@ namespace SealabAPI.DataAccess.Services
                 token = cookie?.Value,
                 expires = cookie?.Expires,
             }.ToExpando();
+        }
+        private List<dynamic> TableToJson(IElement table, int rowCount)
+        {
+            int count = 0, id_group = 0, counter = 0;
+            string span;
+            var columns = table?.QuerySelectorAll("td");
+            List<object> result = new();
+            List<string> names = new();
+            foreach (var item in columns)
+            {
+                if ((span = item.GetAttribute("rowspan")) != null)
+                {
+                    count = int.Parse(span);
+                    counter++;
+                    if (counter == rowCount)
+                    {
+                        counter = 0;
+                        id_group = int.Parse(item.QuerySelector("input[name='kelompok_id']").GetAttribute("value"));
+                    }
+                }
+                else
+                {
+                    names.Add(item.TextContent);
+                    if (names.Count == count)
+                    {
+                        result.Add(new { id_group, names });
+                        names = new();
+                    }
+                }
+            }
+            return result;
         }
         private void SetToken()
         {

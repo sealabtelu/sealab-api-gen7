@@ -35,12 +35,64 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
-        [HttpPost("score/input")]
+        [HttpGet("bap")]
+        public async Task<ActionResult> BAP([FromQuery] BAPRequest model)
+        {
+            try
+            {
+                var data = await _modelService.BAP(model.date);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
+        [HttpGet("score")]
+        public async Task<ActionResult> ScoreList([FromQuery] ScoreResultRequest model)
+        {
+            try
+            {
+                var data = await _modelService.ScoreResult(model, model.Group != null ? 2 : null);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
+        [HttpDelete("score")]
+        public async Task<ActionResult> ScoreDelete(ScoreResultRequest model)
+        {
+            try
+            {
+                var data = await _modelService.ScoreResult(model, 3);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
+        [HttpPost("score")]
         public async Task<ActionResult> ScoreInput(ScoreInputRequest model)
         {
             try
             {
-                var data = await _modelService.Score(model);
+                var data = await _modelService.ScoreInput(model);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
+        [HttpPost("score/detail")]
+        public async Task<ActionResult> ScoreDetail(ScoreResultRequest model)
+        {
+            try
+            {
+                var data = await _modelService.ScoreResult(model, 1);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -53,7 +105,7 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                var data = await _modelService.Score(model);
+                var data = await _modelService.ScoreInput(model);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
