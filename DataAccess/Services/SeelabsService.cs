@@ -30,7 +30,7 @@ namespace SealabAPI.DataAccess.Services
             }.ToDictionary();
             HttpResponseMessage response = await _client.HtmlPost("/pageasisten/bap", request);
             var responseHtml = await response.ParseHtml();
-            return responseHtml.QuerySelector("table")?.QuerySelectorAll("tr").Skip(1)
+            return responseHtml.QuerySelector("table")?.QuerySelectorAll("tr")?.Skip(1)
                 .Select(td => new
                 {
                     date = td.Children[1].TextContent,

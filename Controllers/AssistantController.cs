@@ -6,6 +6,7 @@ using SealabAPI.DataAccess.Entities;
 using SealabAPI.DataAccess.Models.Constants;
 using SealabAPI.DataAccess.Models;
 using SealabAPI.DataAccess.Services;
+using SealabAPI.Helpers;
 
 namespace SealabAPI.Controllers
 {
@@ -29,6 +30,20 @@ namespace SealabAPI.Controllers
             {
                 Assistant result = await _modelService.Create(model);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), result.Id);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
+        [HttpPost("excel/insert")]
+        public async Task<dynamic> ExcelInsert(IFormFile file, CancellationToken cancellationToken)
+        {
+            try
+            {
+                List<CreateAssistantRequest> excel = FileHelper.GetExcelData<CreateAssistantRequest>(file, cancellationToken);
+                var result = await _modelService.BulkInsert(excel);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), result);
             }
             catch (Exception ex)
             {
