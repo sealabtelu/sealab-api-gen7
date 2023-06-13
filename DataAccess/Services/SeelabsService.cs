@@ -30,13 +30,17 @@ namespace SealabAPI.DataAccess.Services
             }.ToDictionary();
             HttpResponseMessage response = await _client.HtmlPost("/pageasisten/bap", request);
             var responseHtml = await response.ParseHtml();
-            return responseHtml.QuerySelector("table")?.QuerySelectorAll("tr")?.Skip(1)
-                .Select(td => new
+            var tr = responseHtml.QuerySelector("table")?.QuerySelectorAll("tr").Skip(1);
+            if (tr.ElementAt(0).Children.Length > 1)
+            {
+                return tr.Select(td => new
                 {
                     date = td.Children[1].TextContent,
                     shift = td.Children[2].TextContent,
                     module = td.Children[3].TextContent,
                 });
+            }
+            return null;
         }
         public async Task<dynamic> ScoreResult(ScoreResultRequest data, int? action = null)
         {
