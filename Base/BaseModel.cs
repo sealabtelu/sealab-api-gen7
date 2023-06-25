@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using SealabAPI.DataAccess.Extensions;
+using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -10,7 +12,9 @@ namespace SealabAPI.Base
         public virtual TEntity MapToEntity<TEntity>() where TEntity : BaseEntity
         {
             IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap(GetType(), typeof(TEntity))).CreateMapper();
-            return (TEntity)mapper.Map(this, GetType(), typeof(TEntity));
+            TEntity entity = (TEntity)mapper.Map(this, GetType(), typeof(TEntity));
+            if (entity.File != null) entity.GetType().GetProperty("FilePath").SetValue(entity, entity.Id.ToString());
+            return entity;
         }
 
         public virtual void MapToModel<TEntity>(TEntity entity) where TEntity : BaseEntity

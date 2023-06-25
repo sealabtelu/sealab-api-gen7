@@ -6,14 +6,13 @@ namespace SealabAPI.DataAccess.Extensions
     {
         public static string GetFileName(this IFormFile file)
         {
-            return ContentDispositionHeaderValue.Parse(
-                            file.ContentDisposition).FileName.ToString().Trim('"');
+            return ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.ToString().Trim('"');
         }
 
-        public static string SetFilePath(this IFormFile file, string path, string fileName)
+        public static string SetFileName(this IFormFile file, string fileName)
         {
-            var ext = Path.GetExtension(file.GetFileName());
-            return Path.Combine(path, fileName + ext);
+            string ext = Path.GetExtension(file.GetFileName());
+            return fileName + ext;
         }
 
         public static async Task<MemoryStream> GetFileStream(this IFormFile file)

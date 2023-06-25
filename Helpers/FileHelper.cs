@@ -1,5 +1,7 @@
 ﻿using OfficeOpenXml;
+using SealabAPI.Base;
 using SealabAPI.DataAccess.Extensions;
+using System.IO;
 
 namespace SealabAPI.Helpers
 {
@@ -69,36 +71,14 @@ namespace SealabAPI.Helpers
             List<T> entities = worksheet.ConvertSheetToObjects<T>();
             return entities;
         }
-        public static UploadFileInfo GetFileInfo<T>(T entity) where T : class
-        {
-            if (entity.GetType().GetProperty("file")?.GetValue(entity) != null)
-            {
-                UploadFileInfo fileInfo = SetFilePath(
-                    (IFormFile)entity.GetType().GetProperty("file")?.GetValue(entity),
-                    (string)entity.GetType().GetProperty("filePath")?.GetValue(entity),
-                    (string)entity.GetType().GetProperty("id")?.GetValue(entity)
-                );
-                entity.GetType().GetProperty("filePath").SetValue(entity, fileInfo.FilePath);
-                return fileInfo;
-            }
-            return null;
-        }
-        public static UploadFileInfo SetFilePath(IFormFile file, string path, string fileName)
-        {
-            return new UploadFileInfo
-            {
-                File = file,
-                FilePath = file.SetFilePath(path, fileName)
-            };
-        }
-        public static void UploadFileAsync(UploadFileInfo upload)
+        public static async Task UploadFileAsync(UploadFileInfo upload)
         {
             if (upload.File == null || upload.File.Length == 0) { return; }
             var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "upload", upload.FilePath);
-            (new FileInfo(path)).Directory.Create();
+            new FileInfo(path).Directory.Create();
 
-            using (var stream = new FileStream(path, FileMode.Create))
-                upload.File.CopyTo(stream);
+            using var stream = new FileStream(path, FileMode.Create);
+            await upload.File.CopyToAsync(stream);
         }
     }
 }

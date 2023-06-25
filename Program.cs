@@ -1,7 +1,9 @@
 using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SealabAPI.Base;
@@ -14,7 +16,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -106,8 +111,14 @@ builder.Services.AddAuthentication(x =>
 
 //builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<IFileProvider>(
+    new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+
+
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAssistantService, AssistantService>();
+builder.Services.AddScoped<IPreliminaryAssignmentQuestionService, PreliminaryAssignmentQuestionService>();
 builder.Services.AddScoped<SeelabsService>();
 
 var app = builder.Build();
@@ -122,10 +133,11 @@ app.UseSwagger();
 app.UseSwaggerUI(
 opt =>
   {
-      opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-      opt.RoutePrefix = string.Empty;
+     opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+     opt.RoutePrefix = string.Empty;
   }
 );
+app.UseStaticFiles();
 
 app.UseAuthentication();
 

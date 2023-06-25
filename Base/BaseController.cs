@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using SealabAPI.DataAccess;
 using SealabAPI.DataAccess.Models;
@@ -94,6 +94,18 @@ namespace SealabAPI.Base
             {
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
+        }
+    }
+
+    public class SlugifyParameterTransformer : IOutboundParameterTransformer
+    {
+        public string TransformOutbound(object value)
+        {
+            return value == null ? null : 
+                   Regex.Replace(value.ToString()!, 
+                   "([a-z])([A-Z])", "$1-$2", 
+                   RegexOptions.CultureInvariant, 
+                   TimeSpan.FromMilliseconds(100)).ToLowerInvariant();
         }
     }
 }

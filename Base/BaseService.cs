@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SealabAPI.DataAccess;
+using SealabAPI.Helpers;
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -23,7 +24,7 @@ namespace SealabAPI.Base
         List<TModel> GetAll<TModel>(Expression<Func<TEntity, bool>> expression = null) where TModel : BaseModel, new();
     }
 
-    public class BaseService<TEntity> : IBaseService<TEntity> where TEntity: BaseEntity
+    public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : BaseEntity
     {
         protected readonly AppDbContext _appDbContext;
         public BaseService(AppDbContext appDbContext)
@@ -36,6 +37,7 @@ namespace SealabAPI.Base
             TEntity entity = model.MapToEntity<TEntity>();
             await _appDbContext.Set<TEntity>().AddAsync(entity);
             await _appDbContext.SaveChangesAsync();
+            if (entity.File != null) await FileHelper.UploadFileAsync(entity.GetFileInfo());
             return entity;
         }
 
@@ -47,15 +49,19 @@ namespace SealabAPI.Base
             {
                 foreach (PropertyInfo propertyInfo in data.GetType().GetProperties())
                 {
+                    Type propertyType = propertyInfo.PropertyType;
+                    if (propertyType == typeof(IFormFile)) continue;
                     var source = entity.GetType().GetProperty(propertyInfo.Name).GetValue(entity);
                     var target = propertyInfo.GetValue(data);
-                    if (source != null && !source.Equals(target))
-                        propertyInfo.SetValue(data, source);
-                    else if (source?.ToString() == "none")
+                    bool isDefault = propertyType.IsValueType ? source.Equals(Activator.CreateInstance(propertyType)) : source == null;
+                    if (source?.ToString() == "none")
                         propertyInfo.SetValue(data, null);
+                    else if (!isDefault && !source.Equals(target))
+                        propertyInfo.SetValue(data, source);
                 }
                 _appDbContext.Set<TEntity>().Update(data);
                 await _appDbContext.SaveChangesAsync();
+                if (entity.File != null) await FileHelper.UploadFileAsync(entity.GetFileInfo());
             }
             return data;
         }
