@@ -9,6 +9,6 @@ namespace SealabAPI.DataAccess.Entities
         public string Code { get; set; }
         public string Position { get; set; }
         [ForeignKey(nameof(IdUser))]
-        public virtual User User { get; set; }
+        public User User { get; set; }
     }
 }

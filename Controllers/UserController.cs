@@ -12,29 +12,38 @@ namespace SealabAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : BaseController<
-        CreateUserRequest, UpdateUserRequest,
-        DeleteUserRequest, DetailUserResponse,
-        ListUserResponse, User>
+        CreateUserRequest,
+        UpdateUserRequest,
+        DeleteUserRequest,
+        DetailUserResponse,
+        ListUserResponse,
+        User>
     {
         private readonly ILogger<UserController> _logger;
-        private readonly IUserService _userService;
-        public UserController(ILogger<UserController> logger, IUserService userService) : base(userService)
+        private readonly IUserService _service;
+        public UserController(ILogger<UserController> logger, IUserService service) : base(service)
         {
             _logger = logger;
-            _userService = userService;
+            _service = service;
         }
         [HttpPost("login")]
-        public virtual async Task<ActionResult> Create(LoginRequest loginRequest)
+        public async Task<ActionResult> Create(LoginRequest loginRequest)
         {
             try
             {
-                object result = await _userService.Login(loginRequest.Username, loginRequest.Password);
+                object result = await _service.Login(loginRequest.Username, loginRequest.Password);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), result);
             }
             catch (Exception ex)
             {
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
+        }
+
+        [NonAction]
+        public override Task<ActionResult> Create(CreateUserRequest model)
+        {
+            throw new NotImplementedException();
         }
     }
 }

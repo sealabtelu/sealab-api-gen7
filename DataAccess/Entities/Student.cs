@@ -11,6 +11,6 @@ namespace SealabAPI.DataAccess.Entities
         public string Day { get; set; }
         public int Shift { get; set; }
         [ForeignKey(nameof(IdUser))]
-        public virtual User User { get; set; }
+        public User User { get; set; }
     }
 }
