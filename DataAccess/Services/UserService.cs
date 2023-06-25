@@ -48,7 +48,7 @@ namespace SealabAPI.DataAccess.Services
                     // new Claim(ClaimTypes.Email, user.email),
                     new Claim(ClaimTypes.Role, user.Role.ToString()),
                     seelabs.valid? new Claim("seelabs_token", seelabs.token) : null
-                }, DateTime.UtcNow.AddHours(2));
+                }, 2);
 
                 await _appDbContext.SaveChangesAsync();
 
