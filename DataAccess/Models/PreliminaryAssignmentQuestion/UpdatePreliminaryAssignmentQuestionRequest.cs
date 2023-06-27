@@ -9,8 +9,9 @@ namespace SealabAPI.DataAccess.Models
     {
         public Guid Id { get; set; }
         public int Module { get; set; }
-        public string Question { get; set; }
         public string Type { get; set; }
+        public string Question { get; set; }
+        public string Answer { get; set; }
         public IFormFile File { get; set; }
     }
 }

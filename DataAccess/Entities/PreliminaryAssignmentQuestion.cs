@@ -8,8 +8,9 @@ namespace SealabAPI.DataAccess.Entities
     public class PreliminaryAssignmentQuestion : BaseEntity
     {
         public int Module { get; set; }
-        public string Question { get; set; }
         public string Type { get; set; }
+        public string Question { get; set; }
+        public string Answer { get; set; }
         public string FilePath
         {
             get => _filePath;
