@@ -80,7 +80,7 @@ namespace SealabAPI.Base
         {
             TModel model = new();
             TEntity data;
-            string[] includedProperty = new TModel().IncludedProperty;
+            string[] includedProperty = new TModel().GetIncludedProperty();
 
             if (expression == null)
             {
@@ -108,7 +108,7 @@ namespace SealabAPI.Base
         {
             List<TModel> models = new();
             List<TEntity> entities;
-            string[] includedProperty = new TModel().IncludedProperty;
+            string[] includedProperty = new TModel().GetIncludedProperty();
 
             if (expression == null)
             {

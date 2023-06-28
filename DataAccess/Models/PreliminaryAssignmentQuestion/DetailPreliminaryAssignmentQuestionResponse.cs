@@ -12,6 +12,6 @@ namespace SealabAPI.DataAccess.Models
         public string Type { get; set; }
         public string Text { get; set; }
         public string AnswerKey { get; set; }
-        public string Filepath { get; set; }
+        public string FilePath { get; set; }
     }
 }
