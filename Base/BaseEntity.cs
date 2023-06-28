@@ -8,7 +8,7 @@ namespace SealabAPI.Base
     {
         protected string _filePath;
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         [NotMapped]
         public IFormFile File { get; set; }
         public UploadFileInfo GetFileInfo()

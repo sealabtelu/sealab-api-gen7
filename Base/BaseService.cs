@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SealabAPI.DataAccess;
+using SealabAPI.DataAccess.Extensions;
 using SealabAPI.Helpers;
 using System;
 using System.Linq.Expressions;
@@ -79,10 +80,26 @@ namespace SealabAPI.Base
         {
             TModel model = new();
             TEntity data;
+            string[] includedProperty = new TModel().GetIncludedProperty();
+
             if (expression == null)
-                data = await _appDbContext.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync();
+            {
+                if (includedProperty is null || includedProperty.Count() == 0)
+                    data = await _appDbContext.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync();
+                else
+                    data = await _appDbContext.Set<TEntity>().Include(includedProperty).AsNoTracking().FirstOrDefaultAsync();
+            }
             else
-                data = await _appDbContext.Set<TEntity>().Where(expression).AsNoTracking().FirstOrDefaultAsync();
+            {
+                if (includedProperty is null || includedProperty.Count() == 0)
+                    data = await _appDbContext.Set<TEntity>().Where(expression).AsNoTracking().FirstOrDefaultAsync();
+                else
+                    data = await _appDbContext.Set<TEntity>().Include(includedProperty).Where(expression).AsNoTracking().FirstOrDefaultAsync();
+            }
+            if (data == null)
+            {
+                throw new ArgumentException("Data not found!");
+            }
             model.MapToModel(data);
             return model;
         }
@@ -91,10 +108,22 @@ namespace SealabAPI.Base
         {
             List<TModel> models = new();
             List<TEntity> entities;
+            string[] includedProperty = new TModel().GetIncludedProperty();
+
             if (expression == null)
-                entities = _appDbContext.Set<TEntity>().AsNoTracking().ToList();
+            {
+                if (includedProperty is null || includedProperty.Count() == 0)
+                    entities = _appDbContext.Set<TEntity>().AsNoTracking().ToList();
+                else
+                    entities = _appDbContext.Set<TEntity>().Include(includedProperty).AsNoTracking().ToList();
+            }
             else
-                entities = _appDbContext.Set<TEntity>().Where(expression).AsNoTracking().ToList();
+            {
+                if (includedProperty.Count() == 0)
+                    entities = _appDbContext.Set<TEntity>().Where(expression).AsNoTracking().ToList();
+                else
+                    entities = _appDbContext.Set<TEntity>().Include(includedProperty).Where(expression).AsNoTracking().ToList();
+            }
 
             if (entities != null)
                 foreach (var entity in entities)
