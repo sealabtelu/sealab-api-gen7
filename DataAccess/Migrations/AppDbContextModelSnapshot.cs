@@ -50,12 +50,47 @@ namespace SealabAPI.DataAccess.Migrations
                     b.ToTable("assistant", (string)null);
                 });
 
+            modelBuilder.Entity("SealabAPI.DataAccess.Entities.PreliminaryAssignmentAnswer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Answer")
+                        .HasColumnType("text")
+                        .HasColumnName("answer");
+
+                    b.Property<Guid>("IdQuestion")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id_question");
+
+                    b.Property<Guid>("IdUser")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id_user");
+
+                    b.HasKey("Id")
+                        .HasName("pk_preliminary_assignment_answer");
+
+                    b.HasIndex("IdQuestion")
+                        .HasDatabaseName("ix_preliminary_assignment_answer_id_question");
+
+                    b.HasIndex("IdUser")
+                        .HasDatabaseName("ix_preliminary_assignment_answer_id_user");
+
+                    b.ToTable("preliminary_assignment_answer", (string)null);
+                });
+
             modelBuilder.Entity("SealabAPI.DataAccess.Entities.PreliminaryAssignmentQuestion", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
+
+                    b.Property<string>("AnswerKey")
+                        .HasColumnType("text")
+                        .HasColumnName("answer_key");
 
                     b.Property<string>("FilePath")
                         .HasColumnType("text")
@@ -65,9 +100,9 @@ namespace SealabAPI.DataAccess.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("module");
 
-                    b.Property<string>("Question")
+                    b.Property<string>("Text")
                         .HasColumnType("text")
-                        .HasColumnName("question");
+                        .HasColumnName("text");
 
                     b.Property<string>("Type")
                         .HasColumnType("text")
@@ -168,6 +203,27 @@ namespace SealabAPI.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_assistant_user_id_user");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SealabAPI.DataAccess.Entities.PreliminaryAssignmentAnswer", b =>
+                {
+                    b.HasOne("SealabAPI.DataAccess.Entities.PreliminaryAssignmentQuestion", "Question")
+                        .WithMany()
+                        .HasForeignKey("IdQuestion")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_preliminary_assignment_answer_preliminary_assignment_questi");
+
+                    b.HasOne("SealabAPI.DataAccess.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_preliminary_assignment_answer_user_id_user");
+
+                    b.Navigation("Question");
 
                     b.Navigation("User");
                 });

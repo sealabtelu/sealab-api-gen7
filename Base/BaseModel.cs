@@ -10,6 +10,7 @@ namespace SealabAPI.Base
     public abstract class BaseModel
     {
         private string[] _includedProperty;
+        public string[] IncludedProperty => _includedProperty;
         public virtual TEntity MapToEntity<TEntity>() where TEntity : BaseEntity
         {
             IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap(GetType(), typeof(TEntity))).CreateMapper();
@@ -27,11 +28,6 @@ namespace SealabAPI.Base
         public void IncludeProperty(string[] properties)
         {
             _includedProperty = properties;
-        }
-
-        public string[] GetIncludedProperty()
-        {
-            return _includedProperty;
         }
     }
 }

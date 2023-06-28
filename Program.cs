@@ -119,6 +119,7 @@ builder.Services.AddSingleton<IFileProvider>(
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAssistantService, AssistantService>();
 builder.Services.AddScoped<IPreliminaryAssignmentQuestionService, PreliminaryAssignmentQuestionService>();
+builder.Services.AddScoped<IPreliminaryAssignmentAnswerService, PreliminaryAssignmentAnswerService>();
 builder.Services.AddScoped<SeelabsService>();
 
 var app = builder.Build();
