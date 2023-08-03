@@ -23,7 +23,6 @@ namespace SealabAPI.DataAccess.Services
                 Assistant assistant = row.MapToEntity<Assistant>();
                 assistant.User = row.MapToEntity<User>();
                 assistant.User.Role = "Assistant";
-                assistant.User.Email = assistant.User.Username;
                 assistants.Add(assistant);
                 await _appDbContext.Set<Assistant>().AddAsync(assistant);
             }
@@ -36,7 +35,6 @@ namespace SealabAPI.DataAccess.Services
             Assistant assistant = model.MapToEntity<Assistant>();
             assistant.User = model.MapToEntity<User>();
             assistant.User.Role = "Assistant";
-            assistant.User.Email = assistant.User.Username;
 
             await _appDbContext.Set<Assistant>().AddAsync(assistant);
             await _appDbContext.SaveChangesAsync();
