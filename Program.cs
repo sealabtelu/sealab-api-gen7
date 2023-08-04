@@ -115,12 +115,13 @@ builder.Services.AddSingleton<IFileProvider>(
     new PhysicalFileProvider(
         Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
 
-
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAssistantService, AssistantService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IPreliminaryAssignmentQuestionService, PreliminaryAssignmentQuestionService>();
 builder.Services.AddScoped<IPreliminaryAssignmentAnswerService, PreliminaryAssignmentAnswerService>();
+builder.Services.AddScoped<IPreTestQuestionService, PreTestQuestionService>();
+builder.Services.AddScoped<IPreTestOptionService, PreTestOptionService>();
 builder.Services.AddScoped<SeelabsService>();
 
 var app = builder.Build();
