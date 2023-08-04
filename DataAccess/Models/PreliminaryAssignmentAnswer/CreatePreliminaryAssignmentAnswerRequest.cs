@@ -7,7 +7,7 @@ namespace SealabAPI.DataAccess.Models
 {
     public class CreatePreliminaryAssignmentAnswerRequest : BaseModel
     {
-        public Guid IdUser { get; set; }
+        public Guid IdStudent { get; set; }
         public Guid IdQuestion { get; set; }
         public string Answer { get; set; }
     }
