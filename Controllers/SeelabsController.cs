@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace SealabAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [Authorize(Roles = "Assistant")]
     [ApiController]
     public class SeelabsController : ControllerBase

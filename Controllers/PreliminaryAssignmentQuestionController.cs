@@ -9,7 +9,7 @@ using SealabAPI.DataAccess.Services;
 
 namespace SealabAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class PreliminaryAssignmentQuestionController : BaseController<
         CreatePreliminaryAssignmentQuestionRequest,

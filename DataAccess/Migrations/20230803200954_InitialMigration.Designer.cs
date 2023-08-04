@@ -12,15 +12,14 @@ using SealabAPI.DataAccess;
 namespace SealabAPI.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230602081453_UserMigration")]
-    partial class UserMigration
+    [Migration("20230803200954_InitialMigration")]
+    partial class InitialMigration
     {
-        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "6.0.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -53,6 +52,70 @@ namespace SealabAPI.DataAccess.Migrations
                     b.ToTable("assistant", (string)null);
                 });
 
+            modelBuilder.Entity("SealabAPI.DataAccess.Entities.PreliminaryAssignmentAnswer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Answer")
+                        .HasColumnType("text")
+                        .HasColumnName("answer");
+
+                    b.Property<Guid>("IdQuestion")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id_question");
+
+                    b.Property<Guid>("IdStudent")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id_student");
+
+                    b.HasKey("Id")
+                        .HasName("pk_preliminary_assignment_answer");
+
+                    b.HasIndex("IdQuestion")
+                        .HasDatabaseName("ix_preliminary_assignment_answer_id_question");
+
+                    b.HasIndex("IdStudent")
+                        .HasDatabaseName("ix_preliminary_assignment_answer_id_student");
+
+                    b.ToTable("preliminary_assignment_answer", (string)null);
+                });
+
+            modelBuilder.Entity("SealabAPI.DataAccess.Entities.PreliminaryAssignmentQuestion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AnswerKey")
+                        .HasColumnType("text")
+                        .HasColumnName("answer_key");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("text")
+                        .HasColumnName("file_path");
+
+                    b.Property<int>("Module")
+                        .HasColumnType("integer")
+                        .HasColumnName("module");
+
+                    b.Property<string>("Question")
+                        .HasColumnType("text")
+                        .HasColumnName("question");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("text")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_preliminary_assignment_question");
+
+                    b.ToTable("preliminary_assignment_question", (string)null);
+                });
+
             modelBuilder.Entity("SealabAPI.DataAccess.Entities.Student", b =>
                 {
                     b.Property<Guid>("Id")
@@ -64,8 +127,8 @@ namespace SealabAPI.DataAccess.Migrations
                         .HasColumnType("text")
                         .HasColumnName("classroom");
 
-                    b.Property<string>("Day")
-                        .HasColumnType("text")
+                    b.Property<int>("Day")
+                        .HasColumnType("integer")
                         .HasColumnName("day");
 
                     b.Property<int>("Group")
@@ -146,6 +209,27 @@ namespace SealabAPI.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SealabAPI.DataAccess.Entities.PreliminaryAssignmentAnswer", b =>
+                {
+                    b.HasOne("SealabAPI.DataAccess.Entities.PreliminaryAssignmentQuestion", "Question")
+                        .WithMany()
+                        .HasForeignKey("IdQuestion")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_preliminary_assignment_answer_preliminary_assignment_questi");
+
+                    b.HasOne("SealabAPI.DataAccess.Entities.Student", "Student")
+                        .WithMany("PreliminaryAssignments")
+                        .HasForeignKey("IdStudent")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_preliminary_assignment_answer_student_id_student");
+
+                    b.Navigation("Question");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("SealabAPI.DataAccess.Entities.Student", b =>
                 {
                     b.HasOne("SealabAPI.DataAccess.Entities.User", "User")
@@ -156,6 +240,11 @@ namespace SealabAPI.DataAccess.Migrations
                         .HasConstraintName("fk_student_user_id_user");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SealabAPI.DataAccess.Entities.Student", b =>
+                {
+                    b.Navigation("PreliminaryAssignments");
                 });
 #pragma warning restore 612, 618
         }
