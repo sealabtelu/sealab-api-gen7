@@ -8,9 +8,10 @@ namespace SealabAPI.DataAccess.Entities
         public Guid IdUser { get; set; }
         public string Classroom { get; set; }
         public int Group { get; set; }
-        public string Day { get; set; }
+        public int Day { get; set; }
         public int Shift { get; set; }
         [ForeignKey(nameof(IdUser))]
         public User User { get; set; }
+        public ICollection<PreliminaryAssignmentAnswer> PreliminaryAssignments { get; set; } = new HashSet<PreliminaryAssignmentAnswer>();
     }
 }
