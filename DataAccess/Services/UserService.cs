@@ -13,7 +13,7 @@ namespace SealabAPI.DataAccess.Services
     }
     public class UserService : BaseService<User>, IUserService
     {
-        private SeelabsService _seelabsService;
+        private readonly SeelabsService _seelabsService;
         public UserService(AppDbContext appDbContext, SeelabsService seelabsService) : base(appDbContext)
         {
             _seelabsService = seelabsService;

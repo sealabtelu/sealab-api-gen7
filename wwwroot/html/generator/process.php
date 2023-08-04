@@ -6,6 +6,8 @@
 $model = $_POST['modelName'];
 
 $data = [
+    make_script($model, null, 'Entity'),
+    make_script($model, null, 'Service'),
     make_script($model, null, 'Controller'),
     make_script($model, 'Create', 'Request'),
     make_script($model, 'Delete', 'Request'),
@@ -23,6 +25,11 @@ foreach ($data as $item) {
 
     if (str_replace($model, "", $fileName) == "Controller.cs") {
         $destination =  realpath($directory . '/../../../') . '/Controllers/' . $fileName;
+    } else if (str_replace($model, "", $fileName) == "Service.cs") {
+        $destination =  realpath($directory . '/../../../') . '/DataAccess/Services/' . $fileName;
+    } else if (str_replace($model, "", $fileName) == "Entity.cs") {
+        $fileName = str_replace("Entity", "", $fileName);
+        $destination =  realpath($directory . '/../../../') . '/DataAccess/Entities/' . $fileName;
     } else {
         // Menggabungkan path tujuan dengan nama file
         $destination =  realpath($directory . '/../../../') . '/DataAccess/Models/' . $model . '/' . $fileName;

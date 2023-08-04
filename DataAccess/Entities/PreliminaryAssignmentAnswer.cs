@@ -1,8 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using SealabAPI.Base;
-using SealabAPI.DataAccess.Extensions;
-using SealabAPI.Helpers;
-using static SealabAPI.Helpers.FileHelper;
+﻿using SealabAPI.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SealabAPI.DataAccess.Entities
 {

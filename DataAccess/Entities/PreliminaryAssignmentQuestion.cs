@@ -1,7 +1,5 @@
 ﻿using SealabAPI.Base;
 using SealabAPI.DataAccess.Extensions;
-using SealabAPI.Helpers;
-using static SealabAPI.Helpers.FileHelper;
 
 namespace SealabAPI.DataAccess.Entities
 {
