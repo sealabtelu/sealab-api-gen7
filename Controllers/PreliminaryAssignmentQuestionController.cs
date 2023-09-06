@@ -30,9 +30,22 @@ namespace SealabAPI.Controllers
         {
             return base.Create(model);
         }
-        public override Task<ActionResult> Update([FromForm]UpdatePreliminaryAssignmentQuestionRequest model)
+        public override Task<ActionResult> Update([FromForm] UpdatePreliminaryAssignmentQuestionRequest model)
         {
             return base.Update(model);
+        }
+        [HttpGet("module/{idModule}")]
+        public virtual async Task<ActionResult<DetailPreliminaryAssignmentQuestionResponse>> GetByIdModule(Guid idModule)
+        {
+            try
+            {
+                DetailPreliminaryAssignmentQuestionResponse model = await _baseService.Get<DetailPreliminaryAssignmentQuestionResponse>(x => x.IdModule == idModule);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), model);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
         }
     }
 }
