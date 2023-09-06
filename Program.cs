@@ -118,6 +118,7 @@ builder.Services.AddSingleton<IFileProvider>(
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAssistantService, AssistantService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IModuleService, ModuleService>();
 builder.Services.AddScoped<IPreliminaryAssignmentQuestionService, PreliminaryAssignmentQuestionService>();
 builder.Services.AddScoped<IPreliminaryAssignmentAnswerService, PreliminaryAssignmentAnswerService>();
 builder.Services.AddScoped<IPreTestQuestionService, PreTestQuestionService>();
