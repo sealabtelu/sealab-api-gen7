@@ -35,11 +35,11 @@ namespace SealabAPI.Controllers
             return base.Update(model);
         }
         [HttpGet("module/{idModule}")]
-        public virtual async Task<ActionResult<DetailPreliminaryAssignmentQuestionResponse>> GetByIdModule(Guid idModule)
+        public virtual ActionResult<List<ListPreliminaryAssignmentQuestionResponse>> GetByIdModule(Guid idModule)
         {
             try
             {
-                DetailPreliminaryAssignmentQuestionResponse model = await _baseService.Get<DetailPreliminaryAssignmentQuestionResponse>(x => x.IdModule == idModule);
+                List<ListPreliminaryAssignmentQuestionResponse> model = _baseService.GetAll<ListPreliminaryAssignmentQuestionResponse>(x => x.IdModule == idModule);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), model);
             }
             catch (Exception ex)
