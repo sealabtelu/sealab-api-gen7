@@ -8,7 +8,7 @@ namespace SealabAPI.DataAccess.Models
     public class UpdatePreliminaryAssignmentQuestionRequest : BaseModel
     {
         public Guid Id { get; set; }
-        public int Module { get; set; }
+        public Guid IdModule { get; set; }
         public string Type { get; set; }
         public string Question { get; set; }
         public string AnswerKey { get; set; }

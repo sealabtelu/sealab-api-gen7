@@ -10,7 +10,7 @@ using SealabAPI.Helpers;
 
 namespace SealabAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class StudentController : BaseController<
         CreateStudentRequest,

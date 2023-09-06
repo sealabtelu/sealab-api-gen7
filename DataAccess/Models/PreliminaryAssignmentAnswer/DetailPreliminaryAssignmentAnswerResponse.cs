@@ -21,7 +21,7 @@ namespace SealabAPI.DataAccess.Models
         {
             base.MapToModel(entity);
             PreliminaryAssignmentAnswer answer = entity as PreliminaryAssignmentAnswer;
-            Module = answer.Question.Module;
+            Module = answer.Question.Module.SeelabsId;
             Question = answer.Question.Question;
         }
     }
