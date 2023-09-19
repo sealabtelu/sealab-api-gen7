@@ -26,5 +26,18 @@ namespace SealabAPI.Controllers
             _logger = logger;
             _service = service;
         }
+        [HttpGet("module/{idModule}")]
+        public virtual ActionResult<List<ListPreTestQuestionResponse>> GetByIdModule(Guid idModule)
+        {
+            try
+            {
+                List<ListPreTestQuestionResponse> model = _baseService.GetAll<ListPreTestQuestionResponse>(x => x.IdModule == idModule);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), model);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
     }
 }
