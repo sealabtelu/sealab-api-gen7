@@ -139,7 +139,7 @@ namespace SealabAPI.DataAccess.Services
             {
                 aksi = (int?)(data.Group == null ? null : 1),
                 search = true,
-                hari_id = data.Day,
+                hari_id = data.Day + 7,
                 shift_id = data.Shift,
                 kelompok_id = data.Group,
                 praktikum_id = 114,
