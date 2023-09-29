@@ -60,7 +60,7 @@ namespace SealabAPI.DataAccess.Services
                 {
                     isUpdate = true;
                     request.AddKey("modulid", update.Module.ToString());
-                    request.AddKey("praktikum_id", "168");
+                    request.AddKey("praktikum_id", "114");
                     request.AddKey("editinput", "submit");
                     update.GetScores(request);
                 }
@@ -142,7 +142,7 @@ namespace SealabAPI.DataAccess.Services
                 hari_id = data.Day + 7,
                 shift_id = data.Shift,
                 kelompok_id = data.Group,
-                praktikum_id = 168,
+                praktikum_id = 114,
                 terms = "on"
             }.ToDictionary();
 
