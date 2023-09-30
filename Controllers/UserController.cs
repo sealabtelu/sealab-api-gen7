@@ -6,6 +6,7 @@ using SealabAPI.DataAccess.Entities;
 using SealabAPI.DataAccess.Models.Constants;
 using SealabAPI.DataAccess.Models;
 using SealabAPI.DataAccess.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SealabAPI.Controllers
 {
@@ -26,6 +27,7 @@ namespace SealabAPI.Controllers
             _logger = logger;
             _service = service;
         }
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult> Create(LoginRequest loginRequest)
         {
