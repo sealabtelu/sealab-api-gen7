@@ -3,6 +3,7 @@ using SealabAPI.Base;
 using SealabAPI.DataAccess.Entities;
 using SealabAPI.DataAccess.Models;
 using SealabAPI.Helpers;
+using System.Net;
 using System.Security.Claims;
 
 namespace SealabAPI.DataAccess.Services
@@ -40,7 +41,7 @@ namespace SealabAPI.DataAccess.Services
             {
                 User user = result.User;
                 if (!PasswordHelper.VerifyHashedPassword(user.Password, password))
-                    throw new ArgumentException("Wrong Password");
+                    throw new HttpRequestException("Wrong password!", null, HttpStatusCode.Unauthorized);
 
                 var seelabs = await _seelabsService.Login(user.Nim, password, user.Role);
 
@@ -71,7 +72,7 @@ namespace SealabAPI.DataAccess.Services
             }
             else
             {
-                throw new ArgumentException("Username not found!");
+                throw new HttpRequestException("Username not found!", null, HttpStatusCode.NotFound);
             }
 
             return userDetails;

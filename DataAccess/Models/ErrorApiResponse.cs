@@ -9,9 +9,9 @@ namespace SealabAPI.DataAccess.Models
     {
         private const int DefaultStatusCode = StatusCodes.Status500InternalServerError;
 
-        public ErrorApiResponse(string message, object data = null) : base(new { message, data })
+        public ErrorApiResponse(string message, object data = null, int? statusCode = null) : base(new { message, data })
         {
-            StatusCode = DefaultStatusCode;
+            StatusCode = statusCode == null ? DefaultStatusCode : statusCode;
         }
     }
 }

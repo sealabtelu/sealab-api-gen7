@@ -36,6 +36,10 @@ namespace SealabAPI.Controllers
                 object result = await _service.Login(loginRequest.Username, loginRequest.Password);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), result);
             }
+            catch (HttpRequestException ex)
+            {
+                return new ErrorApiResponse(ex.Message, statusCode: (int)ex.StatusCode);
+            }
             catch (Exception ex)
             {
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
