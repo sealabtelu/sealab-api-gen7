@@ -15,11 +15,13 @@ namespace SealabAPI.DataAccess.Services
     {
         private readonly HttpRequestHelper _client;
         private readonly HttpRequest _httpRequest;
+        private readonly string _idLab;
         private string _token => _httpRequest.ReadToken("seelabs_token");
-        public SeelabsService(IHttpContextAccessor httpRequest)
+        public SeelabsService(IHttpContextAccessor httpRequest, IConfiguration configuration)
         {
             _httpRequest = httpRequest.HttpContext.Request;
-            _client = new HttpRequestHelper("https://see.labs.telkomuniversity.ac.id/praktikum/index.php");
+            _client = new HttpRequestHelper(configuration["SeelabsUrl"]);
+            _idLab = configuration["LabId"];
         }
         public async Task<dynamic> BAP(DateTime date)
         {
