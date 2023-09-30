@@ -122,7 +122,6 @@ builder.Services.AddScoped<IModuleService, ModuleService>();
 builder.Services.AddScoped<IPreliminaryAssignmentQuestionService, PreliminaryAssignmentQuestionService>();
 builder.Services.AddScoped<IPreliminaryAssignmentAnswerService, PreliminaryAssignmentAnswerService>();
 builder.Services.AddScoped<IPreTestQuestionService, PreTestQuestionService>();
-builder.Services.AddScoped<IPreTestOptionService, PreTestOptionService>();
 builder.Services.AddScoped<SeelabsService>();
 
 var app = builder.Build();
