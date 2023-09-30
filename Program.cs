@@ -128,11 +128,6 @@ builder.Services.AddScoped<SeelabsService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
-
 app.UseSwagger();
 
 app.UseSwaggerUI(opt =>
@@ -149,6 +144,14 @@ app.UseCors();
 
 app.UseAuthorization();
 
-app.MapControllers().RequireAuthorization();
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+    app.MapControllers();
+}
+else
+{
+    app.MapControllers().RequireAuthorization();
+}
 
 app.Run();
