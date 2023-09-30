@@ -10,7 +10,7 @@ namespace SealabAPI.DataAccess.Models
         public string Option { get; set; }
         public bool IsTrue { get; set; }
     }
-    public class PTOptionId : PTOption
+    public class PTOptionDetail : PTOption
     {
         public Guid Id { get; set; }
     }
