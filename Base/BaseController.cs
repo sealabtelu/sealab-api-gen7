@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using SealabAPI.DataAccess;
 using SealabAPI.DataAccess.Models;
@@ -101,11 +103,29 @@ namespace SealabAPI.Base
     {
         public string TransformOutbound(object value)
         {
-            return value == null ? null : 
-                   Regex.Replace(value.ToString()!, 
-                   "([a-z])([A-Z])", "$1-$2", 
-                   RegexOptions.CultureInvariant, 
+            return value == null ? null :
+                   Regex.Replace(value.ToString()!,
+                   "([a-z])([A-Z])", "$1-$2",
+                   RegexOptions.CultureInvariant,
                    TimeSpan.FromMilliseconds(100)).ToLowerInvariant();
+        }
+    }
+
+    public class UtcDateTimeConverterHelper : JsonConverter<DateTime>
+    {
+        public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            using (var jsonDoc = JsonDocument.ParseValue(ref reader))
+            {
+                var stringValue = jsonDoc.RootElement.GetRawText().Trim('"').Trim('\'');
+                var value = DateTime.Parse(stringValue, null, System.Globalization.DateTimeStyles.RoundtripKind);
+                return value;
+            }
+        }
+
+        public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToString("yyyy-MM-ddTHH:mm:ss.fffZ", System.Globalization.CultureInfo.InvariantCulture));
         }
     }
 }
