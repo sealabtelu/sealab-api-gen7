@@ -17,7 +17,6 @@ namespace SealabAPI.DataAccess.Models
 
         public void GetScores(List<KeyValuePair<string, string>> request)
         {
-            // var score = new Dictionary<string, dynamic>();
             var score = new Dictionary<string, dynamic>{
                         {"id[]", _uid},
                         {"status[]", _status},
