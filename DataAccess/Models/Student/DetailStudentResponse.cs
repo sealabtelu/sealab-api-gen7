@@ -8,7 +8,7 @@ namespace SealabAPI.DataAccess.Models
     public class DetailStudentResponse : BaseModel
     {
         public Guid Id { get; set; }
-        public Guid IdStudent { get; set; }
+        public Guid IdUser { get; set; }
         public string Username { get; set; }
         public string Nim { get; set; }
         public string Name { get; set; }
@@ -26,7 +26,7 @@ namespace SealabAPI.DataAccess.Models
         {
             base.MapToModel(entity);
             Student assistant = entity as Student;
-            IdStudent = assistant.Id;
+            IdUser = assistant.User.Id;
             Username = assistant.User.Username;
             Nim = assistant.User.Nim;
             Name = assistant.User.Name;
