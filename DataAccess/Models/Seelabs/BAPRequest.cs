@@ -5,6 +5,6 @@ namespace SealabAPI.DataAccess.Models
 {
     public class BAPRequest : BaseModel
     {
-        public DateTime date { get; set; }
+        public DateTime Date { get; set; }
     }
 }
