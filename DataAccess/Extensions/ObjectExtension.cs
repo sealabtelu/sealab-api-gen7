@@ -3,6 +3,7 @@ using AngleSharp.Html.Dom;
 using Newtonsoft.Json;
 using SealabAPI.Helpers;
 using System.Dynamic;
+using AngleSharp.Common;
 
 namespace SealabAPI.DataAccess.Extensions
 {
@@ -21,21 +22,20 @@ namespace SealabAPI.DataAccess.Extensions
         {
             return new FormUrlEncodedContent(data.ToDictionary());
         }
-        public static List<KeyValuePair<string, string>> ToDictionary(this object data)
-        {
-            string json = JsonConvert.SerializeObject(data);
-            return JsonConvert.DeserializeObject<Dictionary<string, string>>(json).ToList();
-            // return data.GetType().GetProperties()
-            //     .Select(x => new KeyValuePair<string, string>(x .Name, x.GetValue(data)?.ToString())).ToList();
-        }
-        public static dynamic ToExpando(this object data)
-        {
-            string json = JsonConvert.SerializeObject(data);
-            return JsonConvert.DeserializeObject<ExpandoObject>(json);
-            // var expando = new ExpandoObject() as IDictionary<string, object>;
-            // foreach (var property in data.GetType().GetProperties())
-            //     expando.Add(property.Name, property.GetValue(data));
-        }
-
+        // public static List<KeyValuePair<string, string>> ToDictionary(this object data)
+        // {
+        //     string json = JsonConvert.SerializeObject(data);
+        //     return JsonConvert.DeserializeObject<Dictionary<string, string>>(json).ToList();
+        //     // return data.GetType().GetProperties()
+        //     //     .Select(x => new KeyValuePair<string, string>(x .Name, x.GetValue(data)?.ToString())).ToList();
+        // }
+        // public static dynamic ToExpando(this object data)
+        // {
+        //     string json = JsonConvert.SerializeObject(data);
+        //     return JsonConvert.DeserializeObject<ExpandoObject>(json);
+        //     // var expando = new ExpandoObject() as IDictionary<string, object>;
+        //     // foreach (var property in data.GetType().GetProperties())
+        //     //     expando.Add(property.Name, property.GetValue(data));
+        // }
     }
 }

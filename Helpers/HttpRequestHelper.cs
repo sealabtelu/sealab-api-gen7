@@ -15,8 +15,10 @@ namespace SealabAPI.Helpers
         {
             _handler.CookieContainer = new();
             _handler.UseCookies = true;
-            _client = new HttpClient(_handler);
-            _client.BaseAddress = new Uri(BaseAddress);
+            _client = new HttpClient(_handler)
+            {
+                BaseAddress = new Uri(BaseAddress)
+            };
             // Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}")));
         }
         public async Task<HttpResponseMessage> HtmlPost(string endpoint, List<KeyValuePair<string, string>> data)
