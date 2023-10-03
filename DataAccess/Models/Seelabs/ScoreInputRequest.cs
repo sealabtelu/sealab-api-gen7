@@ -4,18 +4,7 @@ using SealabAPI.DataAccess.Extensions;
 
 namespace SealabAPI.DataAccess.Models
 {
-    public class Score
-    {
-        public string Uid { get; set; }
-        public bool Status { get; set; }
-        public int TP { get; set; }
-        public int TA { get; set; }
-        public int I1 { get; set; }
-        public int I2 { get; set; }
-        public int D { get; set; }
-    }
-
-    public class ScoreInputRequest : ScoreListGroupRequest
+    public class ScoreInputRequest : DetailGroupRequest
     {
         public int Module { get; set; }
         public DateTime Date { get; set; }
@@ -30,7 +19,6 @@ namespace SealabAPI.DataAccess.Models
 
         public void GetScores(List<KeyValuePair<string, string>> request)
         {
-            // var score = new Dictionary<string, dynamic>();
             var score = new Dictionary<string, dynamic>{
                         {"uid[]", _uid},
                         {"status[]", _status},
