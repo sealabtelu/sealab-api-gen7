@@ -3,8 +3,8 @@ using SealabAPI.DataAccess.Entities;
 
 namespace SealabAPI.DataAccess.Models
 {
-    public class ScoreResultRequest : ScoreListRequest
+    public class ScoreListRequest : BaseModel
     {
-        public int Group { get; set; }
+        public int Module { get; set; }
     }
 }
