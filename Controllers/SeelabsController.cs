@@ -23,7 +23,7 @@ namespace SealabAPI.Controllers
             _service = service;
         }
         [HttpGet("schedule")]
-        public async Task<ActionResult> Schedule()
+        public async Task<ActionResult<List<SeelabsScheduleResponse>>> Schedule()
         {
             try
             {
@@ -36,11 +36,11 @@ namespace SealabAPI.Controllers
             }
         }
         [HttpGet("bap")]
-        public async Task<ActionResult> BAP([FromQuery] BAPRequest model)
+        public async Task<ActionResult<List<SeelabsBAPResponse>>> BAP([FromQuery] BAPRequest model)
         {
             try
             {
-                var data = await _service.BAP(model.date);
+                var data = await _service.BAP(new SeelabsBAPRequest(model));
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -49,11 +49,11 @@ namespace SealabAPI.Controllers
             }
         }
         [HttpGet("score")]
-        public async Task<ActionResult> ScoreList([FromQuery] ScoreResultRequest model)
+        public async Task<ActionResult<List<SeelabsListGroupResponse>>> ScoreList([FromQuery] ScoreListRequest model)
         {
             try
             {
-                var data = await _service.ScoreResult(model, model.Group != null ? 2 : null);
+                var data = await _service.ScoreList(new SeelabsScoreListRequest(model));
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -66,7 +66,7 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                var data = await _service.ScoreResult(model, 3);
+                var data = await _service.ScoreDelete(new SeelabsScoreDeleteRequest(model));
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -79,7 +79,7 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                var data = await _service.ScoreResult(model, 1);
+                var data = await _service.ScoreUpdate(model);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -101,11 +101,11 @@ namespace SealabAPI.Controllers
             }
         }
         [HttpPost("score/detail")]
-        public async Task<ActionResult> ScoreDetail(ScoreResultRequest model)
+        public async Task<ActionResult<SeelabsScoreDetailResponse>> ScoreDetail(ScoreResultRequest model)
         {
             try
             {
-                var data = await _service.ScoreResult(model, 1);
+                var data = await _service.ScoreDetail(new SeelabsScoreDetailRequest(model));
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -113,12 +113,38 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
-        [HttpPost("score/list-group")]
-        public async Task<ActionResult> ScoreListGroup(ScoreListGroupRequest model)
+        [HttpPost("score/result")]
+        public async Task<ActionResult<SeelabsScoreResultResponse>> ScoreResult(ScoreResultRequest model)
         {
             try
             {
-                var data = await _service.ScoreInput(model);
+                var data = await _service.ScoreResult(new SeelabsScoreResultRequest(model));
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
+        [HttpPost("group/detail")]
+        public async Task<ActionResult<List<SeelabsDetailGroupResponse>>> DetailGroup(DetailGroupRequest model)
+        {
+            try
+            {
+                var data = await _service.GroupDetail(new SeelabsDetailGroupRequest(model));
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
+        [HttpPost("group/list")]
+        public async Task<ActionResult<List<SeelabsListGroupResponse>>> ListGroup(ListGroupRequest model)
+        {
+            try
+            {
+                var data = await _service.GroupList(new SeelabsListGroupRequest(model));
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
