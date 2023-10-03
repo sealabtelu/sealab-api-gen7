@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using SealabAPI.Base;
 using SealabAPI.DataAccess.Entities;
 using SealabAPI.Helpers;
@@ -9,20 +10,20 @@ namespace SealabAPI.DataAccess.Models
     {
         public Guid Id { get; set; }
         public Guid IdStudent { get; set; }
-        public Guid IdQuestion { get; set; }
-        public int Module { get; set; }
-        public string Question { get; set; }
-        public string Answer { get; set; }
+        public Guid IdModule { get; set; }
+        public string ModuleInfo { get; set; }
+        public string FilePath { get; set; }
+        public DetailStudentResponse StudentInfo { get; set; } = new();
         public DetailPreliminaryAssignmentAnswerResponse()
         {
-            IncludeProperty(new string[] { "Student", "Student.User", "Question" });
+            IncludeProperty(new string[] { "Student", "Student.User", "Module" });
         }
         public override void MapToModel<TEntity>(TEntity entity)
         {
-            base.MapToModel(entity);
             PreliminaryAssignmentAnswer answer = entity as PreliminaryAssignmentAnswer;
-            Module = answer.Question.Module.SeelabsId;
-            Question = answer.Question.Question;
+            base.MapToModel(answer);
+            StudentInfo.MapToModel(answer.Student);
+            ModuleInfo = $"Module {answer.Module.SeelabsId}: {answer.Module.Name}";
         }
     }
 }

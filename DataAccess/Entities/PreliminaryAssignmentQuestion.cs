@@ -13,7 +13,7 @@ namespace SealabAPI.DataAccess.Entities
         public string FilePath
         {
             get => _filePath;
-            set => _filePath = _filePath == null ? Path.Combine("PreliminaryAssignment", Module.SeelabsId.ToString(), File.SetFileName(value)) : value;
+            set => _filePath = _filePath == null ? $"PreliminaryAssignment/{IdModule}/Submission/{File.SetFileName(value)}" : value;
         }
         [ForeignKey(nameof(IdModule))]
         public Module Module { get; set; }

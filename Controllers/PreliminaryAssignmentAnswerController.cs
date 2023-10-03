@@ -26,5 +26,14 @@ namespace SealabAPI.Controllers
             _logger = logger;
             _service = service;
         }
+        public override Task<ActionResult> Create([FromForm] CreatePreliminaryAssignmentAnswerRequest model)
+        {
+            return base.Create(model);
+        }
+        [NonAction]
+        public override Task<ActionResult> Update(UpdatePreliminaryAssignmentAnswerRequest model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

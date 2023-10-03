@@ -1,4 +1,5 @@
 ﻿using SealabAPI.Base;
+using SealabAPI.DataAccess.Extensions;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SealabAPI.DataAccess.Entities
@@ -6,11 +7,16 @@ namespace SealabAPI.DataAccess.Entities
     public class PreliminaryAssignmentAnswer : BaseEntity
     {
         public Guid IdStudent { get; set; }
-        public Guid IdQuestion { get; set; }
-        public string Answer { get; set; }
+        public Guid IdModule { get; set; }
+        public string FilePath
+        {
+            get => _filePath;
+            set => _filePath = _filePath == null ? $"PreliminaryAssignment/{value[..3]}/Submission/{File.SetFileName(value)}" : value;
+        }
+        public DateTime SubmitTime { get; set; }
         [ForeignKey(nameof(IdStudent))]
         public Student Student { get; set; }
-        [ForeignKey(nameof(IdQuestion))]
-        public PreliminaryAssignmentQuestion Question { get; set; }
+        [ForeignKey(nameof(IdModule))]
+        public Module Module { get; set; }
     }
 }
