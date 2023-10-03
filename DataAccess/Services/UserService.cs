@@ -43,12 +43,12 @@ namespace SealabAPI.DataAccess.Services
                 if (!PasswordHelper.VerifyHashedPassword(user.Password, password))
                     throw new HttpRequestException("Wrong password!", null, HttpStatusCode.Unauthorized);
 
-                var seelabs = await _seelabsService.Login(user.Nim, password, user.Role);
+                SeelabsLoginResponse seelabs = await _seelabsService.Login(new SeelabsLoginRequest(user.Nim, password, user.Role));
 
                 user.AppToken = JwtHelper.CreateToken(new Claim[]{
                     // new Claim(ClaimTypes.Email, user.email),
-                    new Claim(ClaimTypes.Role, user.Role.ToString()),
-                    seelabs.valid? new Claim("seelabs_token", seelabs.token) : null
+                    new(ClaimTypes.Role, user.Role.ToString()),
+                    seelabs.Valid? new Claim("seelabs_token", seelabs.Token) : null
                 }, 2);
 
                 await _appDbContext.SaveChangesAsync();
@@ -68,7 +68,7 @@ namespace SealabAPI.DataAccess.Services
                     userDetails = model;
                 }
 
-                userDetails.Seelabs = seelabs.valid ? "Valid" : "Invalid";
+                userDetails.Seelabs = seelabs.Valid ? "Valid" : "Invalid";
             }
             else
             {
