@@ -1,5 +1,7 @@
 using System.Reflection;
 using System.Text;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SealabAPI.Base;
 using SealabAPI.DataAccess;
+using SealabAPI.DataAccess.Models;
 using SealabAPI.DataAccess.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,7 +43,7 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "SEA Laboratory API",
+        Title = "I-Smile Laboratory API",
         Description = "API untuk website praktikum",
         TermsOfService = new Uri("https://example.com/terms"),
         Contact = new OpenApiContact
@@ -113,19 +116,29 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<AbstractModelValidator<BaseModel>>();
+
 //builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<IFileProvider>(
     new PhysicalFileProvider(
         Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
 
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IAssistantService, AssistantService>();
-builder.Services.AddScoped<IStudentService, StudentService>();
-builder.Services.AddScoped<IModuleService, ModuleService>();
-builder.Services.AddScoped<IPreliminaryAssignmentQuestionService, PreliminaryAssignmentQuestionService>();
-builder.Services.AddScoped<IPreliminaryAssignmentAnswerService, PreliminaryAssignmentAnswerService>();
-builder.Services.AddScoped<IPreTestQuestionService, PreTestQuestionService>();
+Assembly.GetExecutingAssembly()
+    .GetTypes()
+    .Where(t =>
+        !t.IsInterface &&
+        t != typeof(BaseService<>) &&
+        t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IBaseService<>))
+    )
+    .ToList().ForEach(assignedTypes =>
+    {
+        var serviceType = assignedTypes.GetInterfaces().First(i => !i.IsGenericType);
+        builder.Services.AddScoped(serviceType, assignedTypes);
+    });
+
 builder.Services.AddScoped<SeelabsService>();
 
 var app = builder.Build();
