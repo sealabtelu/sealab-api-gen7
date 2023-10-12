@@ -21,6 +21,12 @@ namespace SealabAPI.Controllers
         {
             _logger = logger;
         }
+        [HttpGet]
+        public ActionResult Test()
+        {
+
+            return new SuccessApiResponse(string.Format(MessageConstant.Success), "success");
+        }
         [HttpGet("deploy")]
         public ActionResult Deploy()
         {
