@@ -46,7 +46,7 @@ namespace SealabAPI.DataAccess.Services
                 SeelabsLoginResponse seelabs = await _seelabsService.Login(new SeelabsLoginRequest(user.Nim, password, user.Role));
 
                 user.AppToken = JwtHelper.CreateToken(new Claim[]{
-                    // new Claim(ClaimTypes.Email, user.email),
+                    new(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new(ClaimTypes.Role, user.Role.ToString()),
                     seelabs.Valid? new Claim("seelabs_token", seelabs.Token) : null
                 }, 2);
