@@ -49,8 +49,8 @@ namespace SealabAPI.Controllers
                 {
                     StartInfo = new()
                     {
-                        FileName = "bash",
-                        Arguments = "dotnet SealabAPI.dll",
+                        FileName = "dotnet",
+                        Arguments = "SealabAPI.dll",
                         RedirectStandardOutput = true,
                         UseShellExecute = false,
                         CreateNoWindow = true
