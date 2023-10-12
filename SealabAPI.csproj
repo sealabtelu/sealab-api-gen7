@@ -28,6 +28,9 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
+    <Content Include="deploy.sh">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
