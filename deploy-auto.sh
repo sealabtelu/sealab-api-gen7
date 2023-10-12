@@ -32,7 +32,7 @@ cd bin/Release/net6.0/publish
 
 # Menjalankan aplikasi .NET
 pkill "dotnet"
-dotnet SealabAPI.dll
+nohup dotnet SealabAPI.dll
 
 if [ $? -ne 0 ]; then
     echo "Error: .NET application failed to start"
