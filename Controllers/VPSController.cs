@@ -26,10 +26,8 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                string currentDirectory = Directory.GetCurrentDirectory();
-                for (int i = 0; i < 4; i++) currentDirectory = Directory.GetParent(currentDirectory).FullName;
-                _logger.LogInformation(currentDirectory);
-                string scriptPath = Path.Combine(currentDirectory, "deploy.sh");
+                string scriptPath = Path.Combine(Directory.GetCurrentDirectory(), "deploy.sh");
+                _logger.LogInformation(scriptPath);
                 Process process = new()
                 {
                     StartInfo = new()
