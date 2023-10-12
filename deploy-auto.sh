@@ -27,4 +27,16 @@ if [ $? -ne 0 ]; then
     exit 3
 fi
 
+# Navigasi ke direktori publish
+cd bin/Release/net6.0/publish
+
+# Menjalankan aplikasi .NET
+pkill -f "dotnet WebAPI.dll"
+nohup dotnet SealabAPI.dll
+
+if [ $? -ne 0 ]; then
+    echo "Error: .NET application failed to start"
+    exit 4
+fi
+
 echo "Deploy success!"

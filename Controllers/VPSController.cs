@@ -28,13 +28,13 @@ namespace SealabAPI.Controllers
             return new SuccessApiResponse(string.Format(MessageConstant.Success), "success");
         }
         [HttpGet("deploy")]
-        public async Task<ActionResult> Deploy()
+        public ActionResult Deploy()
         {
             try
             {
                 string scriptPath = Path.Combine(Directory.GetCurrentDirectory(), "deploy-auto.sh");
                 _logger.LogInformation(scriptPath);
-                Process pullAndMigrate = new()
+                Process process = new()
                 {
                     StartInfo = new()
                     {
@@ -45,24 +45,12 @@ namespace SealabAPI.Controllers
                         CreateNoWindow = true
                     }
                 };
-                Process deploy = new()
-                {
-                    StartInfo = new()
-                    {
-                        FileName = "dotnet",
-                        Arguments = "SealabAPI.dll",
-                        RedirectStandardOutput = true,
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    }
-                };
-                pullAndMigrate.Start();
-                await pullAndMigrate.WaitForExitAsync();
-                string output = await pullAndMigrate.StandardOutput.ReadToEndAsync();
-                pullAndMigrate.Close();
-                deploy.Start();
+                process.Start();
+                process.WaitForExit();
+                string output = process.StandardOutput.ReadToEnd().Replace("\n", "");
+                process.Close();
 
-                return new SuccessApiResponse(string.Format(MessageConstant.Success), output.Replace("\n", ""));
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), output);
             }
             catch (Exception ex)
             {
