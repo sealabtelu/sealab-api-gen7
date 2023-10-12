@@ -26,7 +26,7 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                string scriptPath = Path.Combine(Directory.GetCurrentDirectory(), "deploy.sh");
+                string scriptPath = Path.Combine(Directory.GetCurrentDirectory(), "deploy-auto.sh");
                 _logger.LogInformation(scriptPath);
                 Process process = new()
                 {
