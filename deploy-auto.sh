@@ -31,7 +31,7 @@ fi
 cd bin/Release/net6.0/publish
 
 # Menjalankan aplikasi .NET
-pkill -f "dotnet WebAPI.dll"
+pkill "dotnet WebAPI.dll"
 dotnet SealabAPI.dll
 
 if [ $? -ne 0 ]; then
