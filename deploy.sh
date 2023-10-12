@@ -13,5 +13,5 @@ dotnet ef database update
 cd bin/Release/net6.0/publish
 
 # Menjalankan aplikasi .NET
-pkill dotnet
+pkill "dotnet"
 dotnet SealabAPI.dll
