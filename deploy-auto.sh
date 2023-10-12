@@ -16,7 +16,7 @@ dotnet publish -c release
 
 if [ $? -ne 0 ]; then
     echo "Error: .NET publish failed"
-    exit 1
+    exit 2
 fi
 
 # Menjalankan perintah EF Core untuk melakukan database update
@@ -24,18 +24,7 @@ dotnet ef database update
 
 if [ $? -ne 0 ]; then
     echo "Error: EF Core database update failed"
-    exit 1
-fi
-
-# Navigasi ke direktori publish
-cd bin/Release/net6.0/publish
-
-# Menjalankan aplikasi .NET
-dotnet SealabAPI.dll
-
-if [ $? -ne 0 ]; then
-    echo "Error: .NET application failed to start"
-    exit 1
+    exit 3
 fi
 
 echo "Deploy success!"
