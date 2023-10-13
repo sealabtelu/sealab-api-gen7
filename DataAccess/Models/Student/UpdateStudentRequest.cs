@@ -10,7 +10,7 @@ namespace SealabAPI.DataAccess.Models
         public Guid Id { get; set; }
         public string Classroom { get; set; }
         public int Group { get; set; }
-        public string Day { get; set; }
+        public int Day { get; set; }
         public int Shift { get; set; }
     }
 }
