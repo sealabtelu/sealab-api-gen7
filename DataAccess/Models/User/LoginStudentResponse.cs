@@ -5,6 +5,7 @@ namespace SealabAPI.DataAccess.Models
     public class LoginStudentResponse : BaseModel
     {
         public Guid IdUser { get; set; }
+        public Guid IdStudent { get; set; }
         public string Nim { get; set; }
         public string Email { get; set; }
         public string Name { get; set; }

@@ -58,6 +58,7 @@ namespace SealabAPI.DataAccess.Services
                     LoginAssistantResponse model = new();
                     model.MapToModel(result.Assistants);
                     model.MapToModel(user);
+                    model.IdAssistant = result.Assistants.Id;
                     userDetails = model;
                 }
                 else if (result.Students != null)
@@ -65,6 +66,7 @@ namespace SealabAPI.DataAccess.Services
                     LoginStudentResponse model = new();
                     model.MapToModel(result.Students);
                     model.MapToModel(user);
+                    model.IdStudent = result.Students.Id;
                     userDetails = model;
                 }
 
