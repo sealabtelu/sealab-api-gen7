@@ -26,7 +26,7 @@ namespace SealabAPI.Controllers
             _logger = logger;
             _service = service;
         }
-        [HttpPost("submission/pa/{idStudent}")]
+        [HttpGet("submission/pa/{idStudent}")]
         public virtual ActionResult<List<ListSubmittedPAResponse>> GetListSubmittedPA(Guid idStudent)
         {
             try
