@@ -26,5 +26,43 @@ namespace SealabAPI.Controllers
             _logger = logger;
             _service = service;
         }
+        public override ActionResult<List<ListModuleResponse>> GetList()
+        {
+            try
+            {
+                List<ListModuleResponse> models = _baseService.GetAll<ListModuleResponse>().OrderBy(x => x.SeelabsId).ToList();
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
+        [HttpPost("set-pa-status")]
+        public async Task<ActionResult> PAStatus(SetPAStatusRequest model)
+        {
+            try
+            {
+                await _service.SetAssignmentStatus(model);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), "Success");
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
+        [HttpPost("set-prt-status")]
+        public async Task<ActionResult> PRTStatus(SetPRTStatusRequest model)
+        {
+            try
+            {
+                await _service.SetAssignmentStatus(model);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), "Success");
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
     }
 }

@@ -9,6 +9,8 @@ namespace SealabAPI.DataAccess.Entities
     {
         public int SeelabsId { get; set; }
         public string Name { get; set; }
+        public bool IsPAOpen { get; set; } = false;
+        public bool IsPRTOpen { get; set; } = false;
         public ICollection<PreliminaryAssignmentQuestion> PreliminaryAssignments { get; set; } = new HashSet<PreliminaryAssignmentQuestion>();
         public ICollection<PreTestQuestion> PreTests { get; set; } = new HashSet<PreTestQuestion>();
     }

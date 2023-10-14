@@ -10,5 +10,7 @@ namespace SealabAPI.DataAccess.Models
         public Guid Id { get; set; }
         public int SeelabsId { get; set; }
         public string Name { get; set; }
+        public bool IsPAOpen { get; set; }
+        public bool IsPRTOpen { get; set; }
     }
 }
