@@ -24,9 +24,10 @@ namespace SealabAPI.DataAccess.Models
             RuleFor(x => x).Custom((data, context) =>
             {
                 var user = dbContext.Set<User>().AsNoTracking();
-                if (user.Any(x => x.Username == data.Username))
+                Student student = dbContext.Set<Student>().Include(x => x.User).Where(s => s.Id == data.Id).AsNoTracking().FirstOrDefault();
+                if (user.Any(x => x.Username == data.Username && x.Id != student.IdUser))
                     context.AddFailure("username", "Username exist!");
-                if (user.Any(x => x.Nim == data.Phone))
+                if (user.Any(x => x.Nim == data.Phone && x.Id != student.IdUser))
                     context.AddFailure("phone", "Phone number registered!");
             });
         }
