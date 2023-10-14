@@ -21,7 +21,7 @@ namespace SealabAPI.DataAccess.Services
                 CreatePreliminaryAssignmentAnswerRequest answerModel = model as CreatePreliminaryAssignmentAnswerRequest;
                 Module module = await _appDbContext.Set<Module>().Where(module => module.Id == answerModel.IdModule).AsNoTracking().FirstOrDefaultAsync();
                 Student student = await _appDbContext.Set<Student>().Include("User").Where(student => student.Id == answerModel.IdStudent).AsNoTracking().FirstOrDefaultAsync();
-                entity.FilePath = $"TP{module.SeelabsId}_{student.Day}_{student.Shift}_{student.Group}_{student.User.Nim}_{student.User.Name}";
+                entity.FilePath = $"TP{module.SeelabsId}_{student.Day}_{student.Shift}_{student.Group}_{student.User.Nim}_{student.User.Name}_{DateTime.Now.Ticks}";
                 entity.SubmitTime = DateTime.Now;
             }
 
