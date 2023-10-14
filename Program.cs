@@ -90,7 +90,7 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
     {
         policy
-            .AllowAnyOrigin()
+            .WithOrigins("https://ismilelab-telu.com", "http://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod();
 
