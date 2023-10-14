@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using SealabAPI.Base;
 using SealabAPI.DataAccess.Entities;
 using SealabAPI.Helpers;
@@ -16,6 +18,18 @@ namespace SealabAPI.DataAccess.Models
             IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap(GetType(), typeof(TEntity))).CreateMapper();
             TEntity entity = (TEntity)mapper.Map(this, GetType(), typeof(TEntity));
             return entity;
+        }
+    }
+    public class CreatePreliminaryAssignmentAnswerRequestValidator : AbstractModelValidator<CreatePreliminaryAssignmentAnswerRequest>
+    {
+        public CreatePreliminaryAssignmentAnswerRequestValidator(AppDbContext dbContext)
+        {
+            RuleFor(x => x).Custom((data, context) =>
+            {
+                var answer = dbContext.Set<PreliminaryAssignmentAnswer>().AsNoTracking();
+                if (answer.Any(x => x.IdModule == data.IdModule && x.IdStudent == data.IdStudent))
+                    context.AddFailure("module", "Assignment already submitted!");
+            });
         }
     }
 }
