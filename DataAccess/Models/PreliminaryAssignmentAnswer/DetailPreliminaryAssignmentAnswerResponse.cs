@@ -13,6 +13,7 @@ namespace SealabAPI.DataAccess.Models
         public Guid IdModule { get; set; }
         public string ModuleInfo { get; set; }
         public string FilePath { get; set; }
+        public DateTime SubmitTime { get; set; }
         public DetailStudentResponse StudentInfo { get; set; } = new();
         public DetailPreliminaryAssignmentAnswerResponse()
         {
