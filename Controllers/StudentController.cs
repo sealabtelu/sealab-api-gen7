@@ -27,6 +27,30 @@ namespace SealabAPI.Controllers
             _logger = logger;
             _service = service;
         }
+        public async override Task<ActionResult> Create(CreateStudentRequest model)
+        {
+            try
+            {
+                Student result = await _service.Create(model);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), result.Id);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
+        public async override Task<ActionResult> Update(UpdateStudentRequest model)
+        {
+            try
+            {
+                var result = await _service.Update(model);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), result.Id);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
         [HttpPost("excel/insert")]
         public async Task<dynamic> ExcelInsert(IFormFile file, CancellationToken cancellationToken)
         {

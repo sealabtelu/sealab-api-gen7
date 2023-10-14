@@ -10,11 +10,15 @@ namespace SealabAPI.DataAccess.Services
     public interface IStudentService : IBaseService<Student>
     {
         Task<Student> Create(CreateStudentRequest model);
+        Task<Student> Update(UpdateStudentRequest model);
         Task<List<Student>> BulkInsert(List<CreateStudentRequest> model);
     }
     public class StudentService : BaseService<Student>, IStudentService
     {
-        public StudentService(AppDbContext appDbContext) : base(appDbContext) { }
+        IUserService _userService;
+        public StudentService(AppDbContext appDbContext, IUserService userService) : base(appDbContext) { 
+            _userService = userService;
+        }
         public async Task<List<Student>> BulkInsert(List<CreateStudentRequest> excel)
         {
             List<Student> Students = new();
@@ -40,6 +44,13 @@ namespace SealabAPI.DataAccess.Services
             await _appDbContext.SaveChangesAsync();
 
             return Student;
+        }
+        public async Task<Student> Update(UpdateStudentRequest model)
+        {
+            Student student = await base.Update(model);
+            model.Id = student.IdUser;
+            await _userService.Update(model);
+            return student;
         }
     }
 }
