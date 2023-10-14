@@ -26,6 +26,19 @@ namespace SealabAPI.Controllers
             _logger = logger;
             _service = service;
         }
+        [HttpPost("submission/pa/{idStudent}")]
+        public virtual ActionResult<List<ListSubmittedPAResponse>> GetListSubmittedPA(Guid idStudent)
+        {
+            try
+            {
+                List<ListSubmittedPAResponse> models = _service.GetListSubmittedPA(idStudent);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
         public override ActionResult<List<ListModuleResponse>> GetList()
         {
             try
