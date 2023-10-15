@@ -98,10 +98,6 @@ namespace SealabAPI.DataAccess.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id_student");
 
-                    b.Property<Guid?>("PreliminaryAssignmentQuestionId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("preliminary_assignment_question_id");
-
                     b.Property<DateTime>("SubmitTime")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("submit_time");
@@ -114,9 +110,6 @@ namespace SealabAPI.DataAccess.Migrations
 
                     b.HasIndex("IdStudent")
                         .HasDatabaseName("ix_preliminary_assignment_answer_id_student");
-
-                    b.HasIndex("PreliminaryAssignmentQuestionId")
-                        .HasDatabaseName("ix_preliminary_assignment_answer_preliminary_assignment_questi");
 
                     b.ToTable("preliminary_assignment_answer", (string)null);
                 });
@@ -326,11 +319,6 @@ namespace SealabAPI.DataAccess.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_preliminary_assignment_answer_student_id_student");
 
-                    b.HasOne("SealabAPI.DataAccess.Entities.PreliminaryAssignmentQuestion", null)
-                        .WithMany("Answers")
-                        .HasForeignKey("PreliminaryAssignmentQuestionId")
-                        .HasConstraintName("fk_preliminary_assignment_answer_preliminary_assignment_questi");
-
                     b.Navigation("Module");
 
                     b.Navigation("Student");
@@ -391,11 +379,6 @@ namespace SealabAPI.DataAccess.Migrations
                     b.Navigation("PreTests");
 
                     b.Navigation("Questions");
-                });
-
-            modelBuilder.Entity("SealabAPI.DataAccess.Entities.PreliminaryAssignmentQuestion", b =>
-                {
-                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("SealabAPI.DataAccess.Entities.PreTestQuestion", b =>

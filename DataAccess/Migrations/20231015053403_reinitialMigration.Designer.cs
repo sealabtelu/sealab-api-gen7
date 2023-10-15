@@ -12,8 +12,8 @@ using SealabAPI.DataAccess;
 namespace SealabAPI.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231003115004_BindPAWtoModule")]
-    partial class BindPAWtoModule
+    [Migration("20231015053403_reinitialMigration")]
+    partial class reinitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -58,6 +58,14 @@ namespace SealabAPI.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
+
+                    b.Property<bool>("IsPAOpen")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_pa_open");
+
+                    b.Property<bool>("IsPRTOpen")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_prt_open");
 
                     b.Property<string>("Name")
                         .HasColumnType("text")
@@ -300,7 +308,7 @@ namespace SealabAPI.DataAccess.Migrations
             modelBuilder.Entity("SealabAPI.DataAccess.Entities.PreliminaryAssignmentAnswer", b =>
                 {
                     b.HasOne("SealabAPI.DataAccess.Entities.Module", "Module")
-                        .WithMany()
+                        .WithMany("Answers")
                         .HasForeignKey("IdModule")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -321,7 +329,7 @@ namespace SealabAPI.DataAccess.Migrations
             modelBuilder.Entity("SealabAPI.DataAccess.Entities.PreliminaryAssignmentQuestion", b =>
                 {
                     b.HasOne("SealabAPI.DataAccess.Entities.Module", "Module")
-                        .WithMany("PreliminaryAssignments")
+                        .WithMany("Questions")
                         .HasForeignKey("IdModule")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -368,9 +376,11 @@ namespace SealabAPI.DataAccess.Migrations
 
             modelBuilder.Entity("SealabAPI.DataAccess.Entities.Module", b =>
                 {
+                    b.Navigation("Answers");
+
                     b.Navigation("PreTests");
 
-                    b.Navigation("PreliminaryAssignments");
+                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("SealabAPI.DataAccess.Entities.PreTestQuestion", b =>
