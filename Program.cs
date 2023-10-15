@@ -144,13 +144,6 @@ builder.Services.AddScoped<SeelabsService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.UseSwagger();
-
-app.UseSwaggerUI(opt =>
-{
-    opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-    opt.RoutePrefix = string.Empty;
-});
 
 app.UseStaticFiles();
 
@@ -162,6 +155,12 @@ app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseSwagger();
+    app.UseSwaggerUI(opt =>
+    {
+        opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        opt.RoutePrefix = string.Empty;
+    });
     app.UseHttpsRedirection();
     app.MapControllers();
 }
