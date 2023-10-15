@@ -27,6 +27,18 @@ namespace SealabAPI.Controllers
             _logger = logger;
             _service = service;
         }
+        public override ActionResult<List<ListStudentResponse>> GetList()
+        {
+            try
+            {
+                List<ListStudentResponse> models = _baseService.GetAll<ListStudentResponse>().OrderBy(x => x.Day).ThenBy(x => x.Shift).ThenBy(x => x.Group).ToList();
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
         public async override Task<ActionResult> Create(CreateStudentRequest model)
         {
             try
