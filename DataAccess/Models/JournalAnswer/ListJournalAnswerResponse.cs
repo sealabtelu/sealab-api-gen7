@@ -5,8 +5,7 @@ using SealabAPI.Helpers;
 
 namespace SealabAPI.DataAccess.Models
 {
-    public class UpdatePreliminaryAssignmentAnswerRequest : BaseModel
+    public class ListJournalAnswerResponse : DetailJournalAnswerResponse
     {
-        public Guid Id { get; set; }
     }
 }
