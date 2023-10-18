@@ -65,12 +65,12 @@ namespace SealabAPI.DataAccess.Services
         public List<GetSubmissionsResponse> GetSubmissions(GetSubmissionsRequest request)
         {
             List<GetSubmissionsResponse> models = new();
-            List<Student> students = _appDbContext.Set<Student>().Include(x => x.User).Where(x => x.Group == request.Group).AsNoTracking().ToList();
+            List<Student> students = _appDbContext.Set<Student>().Include(x => x.User).Where(x => x.Group == request.Group).OrderBy(x => x.User.Name).AsNoTracking().ToList();
             Module module = _appDbContext.Set<Module>()
                             .Include(j => j.JAnswers).ThenInclude(s => s.Student)
                             .Include(pa => pa.PAAnswers).ThenInclude(s => s.Student)
                             .AsNoTracking()
-                            .FirstOrDefault(x => x.Id == request.IdModule);
+                            .FirstOrDefault(x => x.SeelabsId == request.SeelabsId);
             foreach (var student in students)
             {
                 GetSubmissionsResponse model = new();

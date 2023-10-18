@@ -8,7 +8,7 @@ namespace SealabAPI.DataAccess.Models
 {
     public class GetSubmissionsRequest : BaseModel
     {
-        public Guid IdModule { get; set; }
+        public int SeelabsId { get; set; }
         public int Group { get; set; }
     }
 }
