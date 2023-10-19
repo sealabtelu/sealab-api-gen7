@@ -1,5 +1,6 @@
 using SealabAPI.Base;
 using SealabAPI.DataAccess.Entities;
+using SealabAPI.Helpers;
 
 namespace SealabAPI.DataAccess.Models
 {
@@ -10,7 +11,7 @@ namespace SealabAPI.DataAccess.Models
         public SeelabsListGroupResponse(dynamic group)
         {
             Group = group.id_group;
-            Names = ((List<string>)group.names).Select(name => name[2..]).ToArray();
+            Names = ((List<string>)group.names).Select(name => name[2..].ToTitleCase()).ToArray();
         }
     }
 }
