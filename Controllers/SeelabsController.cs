@@ -100,6 +100,21 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        [AllowAnonymous]
+        [Authorize(Roles = "Student")]
+        [HttpGet("score/student")]
+        public async Task<ActionResult<List<SeelabsScoreStudentResponse>>> ScoreStudent()
+        {
+            try
+            {
+                var data = await _service.ScoreStudent();
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
         [HttpPost("score/detail")]
         public async Task<ActionResult<SeelabsScoreDetailResponse>> ScoreDetail(ScoreResultRequest model)
         {

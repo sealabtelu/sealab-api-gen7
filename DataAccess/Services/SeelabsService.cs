@@ -16,13 +16,13 @@ namespace SealabAPI.DataAccess.Services
     {
         private readonly HttpRequestHelper _client;
         private readonly HttpRequest _httpRequest;
-        private readonly string _idLab;
+        private readonly int _idLab;
         private string _token => _httpRequest.ReadToken("seelabs_token");
         public SeelabsService(IHttpContextAccessor httpRequest, IConfiguration configuration)
         {
             _httpRequest = httpRequest.HttpContext.Request;
             _client = new HttpRequestHelper(configuration["SeelabsUrl"]);
-            _idLab = configuration["LabId"];
+            _idLab = int.Parse(configuration["LabId"]);
         }
         public async Task<List<SeelabsBAPResponse>> BAP(SeelabsBAPRequest request)
         {
@@ -35,6 +35,13 @@ namespace SealabAPI.DataAccess.Services
                 return tr.Select(td => new SeelabsBAPResponse(td)).ToList();
             }
             return null;
+        }
+        public async Task<List<SeelabsScoreStudentResponse>> ScoreStudent()
+        {
+            SetToken();
+            HttpResponseMessage response = await _client.HtmlPost("/page/nilai_user", new SeelabsScoreStudentRequest());
+            var responseHtml = await response.ParseHtml();
+            return responseHtml.QuerySelector("table")?.QuerySelectorAll("tr").Skip(1).Select(td => new SeelabsScoreStudentResponse(td)).ToList();
         }
         public async Task<List<SeelabsListGroupResponse>> ScoreList(SeelabsScoreListRequest request)
         {
@@ -130,7 +137,7 @@ namespace SealabAPI.DataAccess.Services
             Cookie cookie = name != null ? _client.GetCookie("ci_session") : null;
             return new SeelabsLoginResponse(name, cookie);
         }
-        private List<dynamic> TableToJson(IElement table, int rowCount)
+        private static List<dynamic> TableToJson(IElement table, int rowCount)
         {
             int count = 0, id_group = 0, counter = 0;
             string span;
