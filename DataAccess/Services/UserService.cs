@@ -11,6 +11,7 @@ namespace SealabAPI.DataAccess.Services
     public interface IUserService : IBaseService<User>
     {
         Task<object> Login(string username, string password);
+        Task ChangePassword(ChangePasswordRequest model);
     }
     public class UserService : BaseService<User>, IUserService
     {
@@ -78,6 +79,14 @@ namespace SealabAPI.DataAccess.Services
             }
 
             return userDetails;
+        }
+        public async Task ChangePassword(ChangePasswordRequest model)
+        {
+            User user = await _appDbContext.Set<User>().FindAsync(model.IdUser);
+            if (!PasswordHelper.VerifyHashedPassword(user.Password, model.OldPassword))
+                throw new HttpRequestException("Wrong password!", null, HttpStatusCode.Unauthorized);
+            user.Password = model.NewPassword.HashPassword();
+            await _appDbContext.SaveChangesAsync();
         }
     }
 }

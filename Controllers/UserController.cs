@@ -45,7 +45,19 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
-
+        [HttpPost("change-password")]
+        public async Task<ActionResult> ChengePassword(ChangePasswordRequest model)
+        {
+            try
+            {
+                await _service.ChangePassword(model);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), "Success");
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
         [NonAction]
         public override Task<ActionResult> Create(CreateUserRequest model)
         {
