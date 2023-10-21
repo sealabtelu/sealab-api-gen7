@@ -84,7 +84,7 @@ namespace SealabAPI.DataAccess.Services
         {
             User user = await _appDbContext.Set<User>().FindAsync(model.IdUser);
             if (!PasswordHelper.VerifyHashedPassword(user.Password, model.OldPassword))
-                throw new HttpRequestException("Wrong password!", null, HttpStatusCode.Unauthorized);
+                throw new HttpRequestException("Wrong old password!", null, HttpStatusCode.Unauthorized);
             user.Password = model.NewPassword.HashPassword();
             await _appDbContext.SaveChangesAsync();
         }
