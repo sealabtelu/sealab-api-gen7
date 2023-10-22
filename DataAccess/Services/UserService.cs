@@ -28,7 +28,7 @@ namespace SealabAPI.DataAccess.Services
             var query = from u in await _appDbContext.Set<User>().ToListAsync()
                         join a in await _appDbContext.Set<Assistant>().ToListAsync() on u.Id equals a.IdUser into assistant
                         join s in await _appDbContext.Set<Student>().ToListAsync() on u.Id equals s.IdUser into student
-                        where u.Username == username || u.Nim == username
+                        where u.Username == username
                         select new
                         {
                             User = u,
