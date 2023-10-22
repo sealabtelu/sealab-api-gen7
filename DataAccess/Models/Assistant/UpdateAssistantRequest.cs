@@ -7,9 +7,10 @@ namespace SealabAPI.DataAccess.Models
 {
     public class UpdateAssistantRequest : BaseModel
     {
+        private string _phone;
         public Guid Id { get; set; }
         public string Username { get; set; }
-        public string Phone { get; set; }
+        public string Phone { get => _phone; set => _phone = value.Replace(" ", ""); }
         public string Code { get; set; }
         public string Position { get; set; }
     }

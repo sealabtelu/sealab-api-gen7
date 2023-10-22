@@ -9,9 +9,10 @@ namespace SealabAPI.DataAccess.Models
 {
     public class UpdateStudentRequest : BaseModel
     {
+        private string _phone;
         public Guid Id { get; set; }
         public string Username { get; set; }
-        public string Phone { get; set; }
+        public string Phone { get => _phone; set => _phone = value.Replace(" ", ""); }
         public string Classroom { get; set; }
         public int Group { get; set; }
         public int Day { get; set; }
