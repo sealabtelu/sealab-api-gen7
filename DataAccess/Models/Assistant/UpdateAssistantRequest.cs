@@ -23,7 +23,7 @@ namespace SealabAPI.DataAccess.Models
                 Assistant assistant = dbContext.Set<Assistant>().Include(x => x.User).Where(s => s.Id == data.Id).AsNoTracking().FirstOrDefault();
                 if (user.Any(x => x.Username == data.Username && x.Id != assistant.IdUser))
                     context.AddFailure("username", "Username exist!");
-                if (user.Any(x => x.Nim == data.Phone && x.Id != assistant.IdUser))
+                if (user.Any(x => x.Phone == data.Phone && x.Id != assistant.IdUser))
                     context.AddFailure("phone", "Phone number registered!");
             });
         }
