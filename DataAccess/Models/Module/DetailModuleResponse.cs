@@ -12,5 +12,20 @@ namespace SealabAPI.DataAccess.Models
         public string Name { get; set; }
         public bool IsPAOpen { get; set; }
         public bool IsPRTOpen { get; set; }
+        public int PACount { get; set; }
+        public int PRTCount { get; set; }
+        public DetailModuleResponse()
+        {
+            IncludeProperty(new string[] { "PAQuestions", "PRTQuestions" });
+        }
+        public override void MapToModel<TEntity>(TEntity entity)
+        {
+            if (entity is Module module)
+            {
+                base.MapToModel(module);
+                PACount = module.PAQuestions.Count;
+                PRTCount = module.PRTQuestions.Count;
+            }
+        }
     }
 }
