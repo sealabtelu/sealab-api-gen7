@@ -61,7 +61,7 @@ namespace SealabAPI.DataAccess.Services
                 entity.IsPRTOpen = prt.IsOpen;
             }
             await _appDbContext.SaveChangesAsync();
-            return base.GetAll<ListModuleResponse>();
+            return base.GetAll<ListModuleResponse>().OrderBy(x => x.SeelabsId).ToList();
         }
         public List<GetSubmissionsResponse> GetSubmissions(GetSubmissionsRequest request)
         {
