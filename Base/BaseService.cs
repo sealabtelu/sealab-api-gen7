@@ -84,14 +84,14 @@ namespace SealabAPI.Base
 
             if (expression == null)
             {
-                if (includedProperty is null || includedProperty.Count() == 0)
+                if (includedProperty is null || includedProperty.Length == 0)
                     data = await _appDbContext.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync();
                 else
                     data = await _appDbContext.Set<TEntity>().Include(includedProperty).AsNoTracking().FirstOrDefaultAsync();
             }
             else
             {
-                if (includedProperty is null || includedProperty.Count() == 0)
+                if (includedProperty is null || includedProperty.Length == 0)
                     data = await _appDbContext.Set<TEntity>().Where(expression).AsNoTracking().FirstOrDefaultAsync();
                 else
                     data = await _appDbContext.Set<TEntity>().Include(includedProperty).Where(expression).AsNoTracking().FirstOrDefaultAsync();
@@ -112,14 +112,14 @@ namespace SealabAPI.Base
 
             if (expression == null)
             {
-                if (includedProperty is null || includedProperty.Count() == 0)
+                if (includedProperty is null || includedProperty.Length == 0)
                     entities = _appDbContext.Set<TEntity>().AsNoTracking().ToList();
                 else
                     entities = _appDbContext.Set<TEntity>().Include(includedProperty).AsNoTracking().ToList();
             }
             else
             {
-                if (includedProperty.Count() == 0)
+                if (includedProperty.Length == 0)
                     entities = _appDbContext.Set<TEntity>().Where(expression).AsNoTracking().ToList();
                 else
                     entities = _appDbContext.Set<TEntity>().Include(includedProperty).Where(expression).AsNoTracking().ToList();

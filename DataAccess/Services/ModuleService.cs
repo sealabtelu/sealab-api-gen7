@@ -7,7 +7,7 @@ namespace SealabAPI.DataAccess.Services
 {
     public interface IModuleService : IBaseService<Module>
     {
-        Task SetAssignmentStatus(BaseModel model);
+        Task<List<ListModuleResponse>> SetAssignmentStatus(BaseModel model);
         List<GetSubmissionsResponse> GetSubmissions(GetSubmissionsRequest model);
         List<ListSubmittedPAResponse> GetListSubmittedPA(Guid idStudent);
         List<ListSubmittedJResponse> GetListSubmittedJ(Guid idStudent);
@@ -47,7 +47,7 @@ namespace SealabAPI.DataAccess.Services
                 }
             return models;
         }
-        public async Task SetAssignmentStatus(BaseModel model)
+        public async Task<List<ListModuleResponse>> SetAssignmentStatus(BaseModel model)
         {
             var module = _appDbContext.Set<Module>();
             if (model is SetPAStatusRequest pa)
@@ -61,6 +61,7 @@ namespace SealabAPI.DataAccess.Services
                 entity.IsPRTOpen = prt.IsOpen;
             }
             await _appDbContext.SaveChangesAsync();
+            return base.GetAll<ListModuleResponse>();
         }
         public List<GetSubmissionsResponse> GetSubmissions(GetSubmissionsRequest request)
         {
