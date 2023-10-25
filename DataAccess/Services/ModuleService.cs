@@ -49,15 +49,15 @@ namespace SealabAPI.DataAccess.Services
         }
         public async Task SetAssignmentStatus(BaseModel model)
         {
-            var module = _appDbContext.Set<Module>().AsNoTracking();
+            var module = _appDbContext.Set<Module>();
             if (model is SetPAStatusRequest pa)
             {
-                Module entity = await module.FirstOrDefaultAsync(x => x.Id == pa.Id);
+                Module entity = await module.FindAsync(pa.Id);
                 entity.IsPAOpen = pa.IsOpen;
             }
             else if (model is SetPRTStatusRequest prt)
             {
-                Module entity = await module.FirstOrDefaultAsync(x => x.Id == prt.Id);
+                Module entity = await module.FindAsync(prt.Id);
                 entity.IsPRTOpen = prt.IsOpen;
             }
             await _appDbContext.SaveChangesAsync();
