@@ -78,12 +78,12 @@ namespace SealabAPI.Controllers
             }
         }
         [HttpPost("set-pa-status")]
-        public async Task<ActionResult> PAStatus(SetPAStatusRequest model)
+        public async Task<ActionResult<List<ListModuleResponse>>> PAStatus(SetPAStatusRequest model)
         {
             try
             {
-                await _service.SetAssignmentStatus(model);
-                return new SuccessApiResponse(string.Format(MessageConstant.Success), "Success");
+                List<ListModuleResponse> models = await _service.SetAssignmentStatus(model);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
             }
             catch (Exception ex)
             {
@@ -91,12 +91,12 @@ namespace SealabAPI.Controllers
             }
         }
         [HttpPost("set-prt-status")]
-        public async Task<ActionResult> PRTStatus(SetPRTStatusRequest model)
+        public async Task<ActionResult<List<ListModuleResponse>>> PRTStatus(SetPRTStatusRequest model)
         {
             try
             {
-                await _service.SetAssignmentStatus(model);
-                return new SuccessApiResponse(string.Format(MessageConstant.Success), "Success");
+                List<ListModuleResponse> models = await _service.SetAssignmentStatus(model);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
             }
             catch (Exception ex)
             {
