@@ -20,6 +20,7 @@ namespace SealabAPI.DataAccess.Models
         public string JFilePath { get; set; }
         public DateTime? PASubmitTime { get; set; }
         public DateTime? JSubmitTime { get; set; }
+        public Feedback Feedback { get; set; }
         public GetSubmissionsResponse()
         {
             IncludeProperty(new string[] { "Student", "Student.User", "Module" });
@@ -30,6 +31,11 @@ namespace SealabAPI.DataAccess.Models
             {
                 JFilePath = j.FilePath;
                 JSubmitTime = j.SubmitTime;
+                Feedback = new Feedback{
+                    Assistant = j.AssistantFeedback,
+                    Session = j.SessionFeedback,
+                    Laboratory = j.LaboratoryFeedback
+                };
             }
             else if (entity is PreliminaryAssignmentAnswer pa)
             {

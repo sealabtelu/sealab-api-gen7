@@ -8,6 +8,7 @@ namespace SealabAPI.DataAccess.Models
     public class DetailPreTestAnswerResponse : BaseModel
     {
         public Guid IdOption { get; set; }
+        public string Question { get; set; }
         public string Answer { get; set; }
         public string Verdict { get; set; }
     }

@@ -110,6 +110,7 @@ namespace SealabAPI.DataAccess.Services
                                                 .Select(x => new DetailPreTestAnswerResponse
                                                 {
                                                     IdOption = x.IdOption,
+                                                    Question = x.Option.Question.Question,
                                                     Answer = x.Option.Option,
                                                     Verdict = x.Option.IsTrue ? "Correct" : "Incorrect"
                                                 }).ToList();
