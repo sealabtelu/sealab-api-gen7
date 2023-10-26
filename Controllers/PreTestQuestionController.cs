@@ -39,5 +39,18 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        [HttpPost("student")]
+        public virtual ActionResult<List<ListPreTestQuestionResponse>> GetByIdStudent(StudentGetPreTestQuestionRequest model)
+        {
+            try
+            {
+                List<ListPreTestQuestionResponse> data = _baseService.GetAll<ListPreTestQuestionResponse>(x => x.IdModule == model.IdModule).OrderBy(x => Guid.NewGuid()).Take(10).ToList();
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
     }
 }

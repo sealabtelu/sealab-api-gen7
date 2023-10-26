@@ -39,6 +39,19 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        [HttpGet("submission/prt/{idStudent}")]
+        public virtual ActionResult<List<ListSubmittedPRTResponse>> GetListSubmittedPRT(Guid idStudent)
+        {
+            try
+            {
+                List<ListSubmittedPRTResponse> models = _service.GetListSubmittedPRT(idStudent);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
         [HttpGet("submission/j/{idStudent}")]
         public virtual ActionResult<List<ListSubmittedJResponse>> GetListSubmittedJ(Guid idStudent)
         {

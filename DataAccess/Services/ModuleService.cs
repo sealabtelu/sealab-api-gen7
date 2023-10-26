@@ -10,6 +10,7 @@ namespace SealabAPI.DataAccess.Services
         Task<List<ListModuleResponse>> SetAssignmentStatus(BaseModel model);
         List<GetSubmissionsResponse> GetSubmissions(GetSubmissionsRequest model);
         List<ListSubmittedPAResponse> GetListSubmittedPA(Guid idStudent);
+        List<ListSubmittedPRTResponse> GetListSubmittedPRT(Guid idStudent);
         List<ListSubmittedJResponse> GetListSubmittedJ(Guid idStudent);
     }
     public class ModuleService : BaseService<Module>, IModuleService
@@ -18,8 +19,7 @@ namespace SealabAPI.DataAccess.Services
         public List<ListSubmittedPAResponse> GetListSubmittedPA(Guid idStudent)
         {
             List<ListSubmittedPAResponse> models = new();
-            List<Module> entities;
-            entities = _appDbContext.Set<Module>().Include(x => x.PAAnswers).AsNoTracking().OrderBy(x => x.SeelabsId).ToList();
+            List<Module> entities = _appDbContext.Set<Module>().Include(x => x.PAAnswers).AsNoTracking().OrderBy(x => x.SeelabsId).ToList();
 
             if (entities != null)
                 foreach (var entity in entities)
@@ -31,11 +31,30 @@ namespace SealabAPI.DataAccess.Services
                 }
             return models;
         }
+        public List<ListSubmittedPRTResponse> GetListSubmittedPRT(Guid idStudent)
+        {
+            List<ListSubmittedPRTResponse> models = new();
+            List<Module> entities = _appDbContext.Set<Module>().AsNoTracking().OrderBy(x => x.SeelabsId).ToList();
+            List<PreTestAnswer> prt = _appDbContext.Set<PreTestAnswer>()
+                            .Include(x => x.Option)
+                            .ThenInclude(x => x.Question)
+                            .ThenInclude(x => x.Module)
+                            .AsNoTracking().ToList();
+
+            if (entities != null)
+                foreach (var entity in entities)
+                {
+                    ListSubmittedPRTResponse model = new();
+                    model.MapToModel(entity);
+                    model.IsSubmitted = prt.Any(x => x.Option.Question.Module.Id == entity.Id && x.IdStudent == idStudent);
+                    models.Add(model);
+                }
+            return models;
+        }
         public List<ListSubmittedJResponse> GetListSubmittedJ(Guid idStudent)
         {
             List<ListSubmittedJResponse> models = new();
-            List<Module> entities;
-            entities = _appDbContext.Set<Module>().Include(x => x.JAnswers).AsNoTracking().OrderBy(x => x.SeelabsId).ToList();
+            List<Module> entities = _appDbContext.Set<Module>().Include(x => x.JAnswers).AsNoTracking().OrderBy(x => x.SeelabsId).ToList();
 
             if (entities != null)
                 foreach (var entity in entities)
@@ -67,6 +86,12 @@ namespace SealabAPI.DataAccess.Services
         {
             List<GetSubmissionsResponse> models = new();
             List<Student> students = _appDbContext.Set<Student>().Include(x => x.User).Where(x => x.Group == request.Group).OrderBy(x => x.User.Name).AsNoTracking().ToList();
+            List<PreTestAnswer> preTestAnswers = _appDbContext.Set<PreTestAnswer>()
+                            .Include(x => x.Option)
+                            .ThenInclude(x => x.Question)
+                            .ThenInclude(x => x.Module)
+                            .Where(x => x.Option.Question.Module.SeelabsId == request.SeelabsId)
+                            .AsNoTracking().ToList();
             Module module = _appDbContext.Set<Module>()
                             .Include(j => j.JAnswers).ThenInclude(s => s.Student)
                             .Include(pa => pa.PAAnswers).ThenInclude(s => s.Student)
@@ -80,6 +105,14 @@ namespace SealabAPI.DataAccess.Services
                 model.MapToModel(module);
                 model.MapToModel(module.PAAnswers.FirstOrDefault(x => x.IdStudent == student.Id));
                 model.MapToModel(module.JAnswers.FirstOrDefault(x => x.IdStudent == student.Id));
+                model.PRTScore = preTestAnswers.Where(s => s.IdStudent == student.Id && s.Option.IsTrue).Count() * 10;
+                model.PRTDetail = preTestAnswers.Where(s => s.IdStudent == student.Id)
+                                                .Select(x => new DetailPreTestAnswerResponse
+                                                {
+                                                    IdOption = x.IdOption,
+                                                    Answer = x.Option.Option,
+                                                    Verdict = x.Option.IsTrue ? "Correct" : "Incorrect"
+                                                }).ToList();
                 models.Add(model);
             }
             return models;
