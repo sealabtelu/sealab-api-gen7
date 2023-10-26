@@ -32,6 +32,7 @@ namespace SealabAPI.DataAccess.Models
                     IsTrue = option.IsTrue
                 });
             }
+            Options = Options.OrderBy(x => Guid.NewGuid()).ToList();
         }
     }
 }

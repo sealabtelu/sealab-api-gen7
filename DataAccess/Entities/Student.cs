@@ -13,5 +13,6 @@ namespace SealabAPI.DataAccess.Entities
         [ForeignKey(nameof(IdUser))]
         public User User { get; set; }
         public ICollection<PreliminaryAssignmentAnswer> PreliminaryAssignments { get; set; } = new HashSet<PreliminaryAssignmentAnswer>();
+        public ICollection<PreTestAnswer> PreTestAnswers { get; set; } = new HashSet<PreTestAnswer>();
     }
 }

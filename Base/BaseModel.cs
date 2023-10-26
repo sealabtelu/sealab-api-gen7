@@ -24,6 +24,8 @@ namespace SealabAPI.Base
             mapper.Map(entity, this);
         }
 
+        public virtual List<TEntity> MaptoListEntity<TEntity>() where TEntity : BaseEntity { throw new NotImplementedException(); }
+
         public void IncludeProperty(string[] properties)
         {
             _includedProperty = properties;
