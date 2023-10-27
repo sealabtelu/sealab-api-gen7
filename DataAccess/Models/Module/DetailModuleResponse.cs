@@ -12,6 +12,7 @@ namespace SealabAPI.DataAccess.Models
         public string Name { get; set; }
         public bool IsPAOpen { get; set; }
         public bool IsPRTOpen { get; set; }
+        public bool IsJOpen { get; set; }
         public int PACount { get; set; }
         public int PRTCount { get; set; }
         public DetailModuleResponse()
