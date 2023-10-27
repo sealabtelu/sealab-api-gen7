@@ -79,6 +79,11 @@ namespace SealabAPI.DataAccess.Services
                 Module entity = await module.FindAsync(prt.Id);
                 entity.IsPRTOpen = prt.IsOpen;
             }
+            else if (model is SetJStatusRequest j)
+            {
+                Module entity = await module.FindAsync(j.Id);
+                entity.IsJOpen = j.IsOpen;
+            }
             await _appDbContext.SaveChangesAsync();
             return base.GetAll<ListModuleResponse>().OrderBy(x => x.SeelabsId).ToList();
         }

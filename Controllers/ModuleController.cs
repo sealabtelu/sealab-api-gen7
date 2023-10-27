@@ -116,5 +116,18 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        [HttpPost("set-j-status")]
+        public async Task<ActionResult<List<ListModuleResponse>>> JStatus(SetJStatusRequest model)
+        {
+            try
+            {
+                List<ListModuleResponse> models = await _service.SetAssignmentStatus(model);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
     }
 }
