@@ -6,10 +6,12 @@ using SealabAPI.DataAccess.Entities;
 using SealabAPI.DataAccess.Models.Constants;
 using SealabAPI.DataAccess.Models;
 using SealabAPI.DataAccess.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SealabAPI.Controllers
 {
     [Route("[controller]")]
+    [Authorize(Roles = "Assistant")]
     [ApiController]
     public class PreTestQuestionController : BaseController<
         CreatePreTestQuestionRequest,
@@ -39,6 +41,9 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        [AllowAnonymous]
+        [Authorize(Roles = "Student")]
+        [StudentRestricted]
         [HttpPost("student")]
         public virtual ActionResult<List<ListPreTestQuestionResponse>> GetByIdStudent(StudentGetPreTestQuestionRequest model)
         {
