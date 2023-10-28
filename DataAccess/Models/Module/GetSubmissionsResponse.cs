@@ -31,11 +31,7 @@ namespace SealabAPI.DataAccess.Models
             {
                 JFilePath = j.FilePath;
                 JSubmitTime = j.SubmitTime;
-                Feedback = new Feedback{
-                    Assistant = j.AssistantFeedback,
-                    Session = j.SessionFeedback,
-                    Laboratory = j.LaboratoryFeedback
-                };
+                Feedback = new Feedback(j);
             }
             else if (entity is PreliminaryAssignmentAnswer pa)
             {

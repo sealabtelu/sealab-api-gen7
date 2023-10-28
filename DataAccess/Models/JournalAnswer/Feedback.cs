@@ -13,5 +13,11 @@ namespace SealabAPI.DataAccess.Models
         public string Assistant { get; set; }
         public string Session { get; set; }
         public string Laboratory { get; set; }
+        public Feedback(JournalAnswer j)
+        {
+            Assistant = j.AssistantFeedback;
+            Session = j.SessionFeedback;
+            Laboratory = j.LaboratoryFeedback;
+        }
     }
 }
