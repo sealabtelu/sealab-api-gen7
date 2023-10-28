@@ -5,7 +5,7 @@ using SealabAPI.Helpers;
 
 namespace SealabAPI.DataAccess.Models
 {
-    public class DetailPreTestQuestionResponse : BaseModel
+    public class DetailStudentPreTestQuestionResponse : BaseModel
     {
         public Guid Id { get; set; }
         public Guid IdModule { get; set; }
@@ -13,8 +13,8 @@ namespace SealabAPI.DataAccess.Models
         public string Type { get; set; }
         public string Question { get; set; }
         public string FilePath { get; set; }
-        public List<PTOptionDetail> Options { get; set; } = new();
-        public DetailPreTestQuestionResponse()
+        public List<PTOptionStudent> Options { get; set; } = new();
+        public DetailStudentPreTestQuestionResponse()
         {
             IncludeProperty(new string[] { "PTOptions", "Module" });
         }
@@ -25,13 +25,13 @@ namespace SealabAPI.DataAccess.Models
             ModuleInfo = string.Format("Module {0}: {1}", question.Module.SeelabsId, question.Module.Name);
             foreach (var option in question.PTOptions)
             {
-                Options.Add(new PTOptionDetail
+                Options.Add(new PTOptionStudent
                 {
                     Id = option.Id,
                     Option = option.Option,
-                    IsTrue = option.IsTrue
                 });
             }
+            Options = Options.OrderBy(x => Guid.NewGuid()).ToList();
         }
     }
 }
