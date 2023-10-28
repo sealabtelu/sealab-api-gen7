@@ -26,7 +26,9 @@ namespace SealabAPI.DataAccess.Entities
         }
         public string Password { get => _password; set => _password = _password == null ? value?.HashPassword() : value; }
         public string Role { get; set; }
-        public string Phone { get => _phone; set => _phone = value.Replace(" ", ""); }
+        public string Phone { get => _phone; set => _phone = value?.Replace(" ", ""); }
         public string AppToken { get; set; }
+        public Student Student { get; set; }
+        public Assistant Assistant { get; set; }
     }
 }

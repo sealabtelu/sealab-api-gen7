@@ -12,7 +12,7 @@ namespace SealabAPI.DataAccess.Entities
         public int Shift { get; set; }
         [ForeignKey(nameof(IdUser))]
         public User User { get; set; }
-        public ICollection<PreliminaryAssignmentAnswer> PreliminaryAssignments { get; set; } = new HashSet<PreliminaryAssignmentAnswer>();
-        public ICollection<PreTestAnswer> PreTestAnswers { get; set; } = new HashSet<PreTestAnswer>();
+        public ICollection<PreliminaryAssignmentAnswer> PAAnswers { get; set; } = new HashSet<PreliminaryAssignmentAnswer>();
+        public ICollection<PreTestAnswer> PRTAnswers { get; set; } = new HashSet<PreTestAnswer>();
     }
 }

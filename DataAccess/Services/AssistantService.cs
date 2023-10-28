@@ -10,12 +10,12 @@ namespace SealabAPI.DataAccess.Services
     public interface IAssistantService : IBaseService<Assistant>
     {
         Task<Assistant> Create(CreateAssistantRequest model);
-        Task<List<Assistant>> BulkInsert(List<CreateAssistantRequest> model);
+        Task BulkInsert(List<CreateAssistantRequest> model);
     }
     public class AssistantService : BaseService<Assistant>, IAssistantService
     {
         public AssistantService(AppDbContext appDbContext) : base(appDbContext) { }
-        public async Task<List<Assistant>> BulkInsert(List<CreateAssistantRequest> excel)
+        public async Task BulkInsert(List<CreateAssistantRequest> excel)
         {
             List<Assistant> assistants = new();
             foreach (var row in excel)
@@ -24,11 +24,10 @@ namespace SealabAPI.DataAccess.Services
                 assistant.User = row.MapToEntity<User>();
                 assistant.User.Role = "Assistant";
                 assistants.Add(assistant);
-                await _appDbContext.Set<Assistant>().AddAsync(assistant);
             }
 
+            await _appDbContext.Set<Assistant>().AddRangeAsync(assistants);
             await _appDbContext.SaveChangesAsync();
-            return assistants;
         }
         public async Task<Assistant> Create(CreateAssistantRequest model)
         {

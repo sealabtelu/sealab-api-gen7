@@ -11,28 +11,28 @@ namespace SealabAPI.DataAccess.Services
     {
         Task<Student> Create(CreateStudentRequest model);
         Task<Student> Update(UpdateStudentRequest model);
-        Task<List<Student>> BulkInsert(List<CreateStudentRequest> model);
+        Task BulkInsert(List<CreateStudentRequest> model);
     }
     public class StudentService : BaseService<Student>, IStudentService
     {
         IUserService _userService;
-        public StudentService(AppDbContext appDbContext, IUserService userService) : base(appDbContext) { 
+        public StudentService(AppDbContext appDbContext, IUserService userService) : base(appDbContext)
+        {
             _userService = userService;
         }
-        public async Task<List<Student>> BulkInsert(List<CreateStudentRequest> excel)
+        public async Task BulkInsert(List<CreateStudentRequest> excel)
         {
-            List<Student> Students = new();
+            List<Student> students = new();
             foreach (var row in excel)
             {
-                Student Student = row.MapToEntity<Student>();
-                Student.User = row.MapToEntity<User>();
-                Student.User.Role = "Student";
-                Students.Add(Student);
-                await _appDbContext.Set<Student>().AddAsync(Student);
+                Student student = row.MapToEntity<Student>();
+                student.User = row.MapToEntity<User>();
+                student.User.Role = "Student";
+                students.Add(student);
             }
 
+            await _appDbContext.Set<Student>().AddRangeAsync(students);
             await _appDbContext.SaveChangesAsync();
-            return Students;
         }
         public async Task<Student> Create(CreateStudentRequest model)
         {

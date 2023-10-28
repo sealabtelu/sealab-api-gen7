@@ -40,13 +40,13 @@ namespace SealabAPI.Controllers
             }
         }
         [HttpPost("excel/insert")]
-        public async Task<dynamic> ExcelInsert(IFormFile file, CancellationToken cancellationToken)
+        public async Task<ActionResult> ExcelInsert(IFormFile file, CancellationToken cancellationToken)
         {
             try
             {
                 List<CreateAssistantRequest> excel = FileHelper.GetExcelData<CreateAssistantRequest>(file, cancellationToken);
-                var result = await _service.BulkInsert(excel);
-                return new SuccessApiResponse(string.Format(MessageConstant.Success), result);
+                await _service.BulkInsert(excel);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success));
             }
             catch (Exception ex)
             {

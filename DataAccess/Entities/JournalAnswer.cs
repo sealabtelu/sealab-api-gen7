@@ -17,7 +17,7 @@ namespace SealabAPI.DataAccess.Entities
             get => _filePath;
             set => _filePath = _filePath == null ? $"Journal/{value[..2]}/Submission/{File.SetFileName(value)}" : value;
         }
-        public DateTime SubmitTime { get; set; }
+        public DateTime SubmitTime { get; set; } = DateTime.Now;
         [ForeignKey(nameof(IdStudent))]
         public Student Student { get; set; }
         [ForeignKey(nameof(IdModule))]

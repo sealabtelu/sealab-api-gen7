@@ -20,9 +20,8 @@ namespace SealabAPI.DataAccess.Services
             {
                 CreateJournalAnswerRequest answerModel = model as CreateJournalAnswerRequest;
                 Module module = await _appDbContext.Set<Module>().Where(module => module.Id == answerModel.IdModule).AsNoTracking().FirstOrDefaultAsync();
-                Student student = await _appDbContext.Set<Student>().Include("User").Where(student => student.Id == answerModel.IdStudent).AsNoTracking().FirstOrDefaultAsync();
+                Student student = await _appDbContext.Set<Student>().Include(x => x.User).Where(student => student.Id == answerModel.IdStudent).AsNoTracking().FirstOrDefaultAsync();
                 entity.FilePath = $"J{module.SeelabsId}_{student.Day}_{student.Shift}_{student.Group}_{student.User.Nim}_{((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds()}_{student.User.Name}";
-                entity.SubmitTime = DateTime.Now;
             }
 
             await _appDbContext.Set<JournalAnswer>().AddAsync(entity);
