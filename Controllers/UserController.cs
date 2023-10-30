@@ -15,7 +15,6 @@ namespace SealabAPI.Controllers
     public class UserController : BaseController<
         CreateUserRequest,
         UpdateUserRequest,
-        DeleteUserRequest,
         DetailUserResponse,
         User>
     {

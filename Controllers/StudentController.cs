@@ -15,7 +15,6 @@ namespace SealabAPI.Controllers
     public class StudentController : BaseController<
         CreateStudentRequest,
         UpdateStudentRequest,
-        DeleteStudentRequest,
         DetailStudentResponse,
         Student>
     {

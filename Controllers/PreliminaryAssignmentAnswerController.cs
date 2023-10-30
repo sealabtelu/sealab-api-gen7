@@ -14,7 +14,6 @@ namespace SealabAPI.Controllers
     public class PreliminaryAssignmentAnswerController : BaseController<
         CreatePreliminaryAssignmentAnswerRequest,
         UpdatePreliminaryAssignmentAnswerRequest,
-        DeletePreliminaryAssignmentAnswerRequest,
         DetailPreliminaryAssignmentAnswerResponse,
         PreliminaryAssignmentAnswer>
     {

@@ -15,7 +15,6 @@ namespace SealabAPI.Controllers
     public class AssistantController : BaseController<
         CreateAssistantRequest, 
         UpdateAssistantRequest,
-        DeleteAssistantRequest, 
         DetailAssistantResponse,
         Assistant>
     {

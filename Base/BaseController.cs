@@ -14,12 +14,10 @@ namespace SealabAPI.Base
     public class BaseController<
         ModelCreate,
         ModelUpdate,
-        ModelDelete,
         ModelDetail,
         TEntity> : ControllerBase
         where ModelCreate : BaseModel
         where ModelUpdate : BaseModel
-        where ModelDelete : BaseModel
         where ModelDetail : BaseModel, new()
         where TEntity : BaseEntity
     {

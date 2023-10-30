@@ -14,7 +14,6 @@ namespace SealabAPI.Controllers
     public class PreTestAnswerController : BaseController<
         CreatePreTestAnswerRequest,
         UpdatePreTestAnswerRequest,
-        DeletePreTestAnswerRequest,
         DetailPreTestAnswerResponse,
         PreTestAnswer>
     {

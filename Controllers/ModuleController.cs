@@ -14,7 +14,6 @@ namespace SealabAPI.Controllers
     public class ModuleController : BaseController<
         CreateModuleRequest,
         UpdateModuleRequest,
-        DeleteModuleRequest,
         DetailModuleResponse,
         Module>
     {

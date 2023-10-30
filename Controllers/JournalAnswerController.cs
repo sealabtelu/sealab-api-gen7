@@ -14,7 +14,6 @@ namespace SealabAPI.Controllers
     public class JournalAnswerController : BaseController<
         CreateJournalAnswerRequest,
         UpdateJournalAnswerRequest,
-        DeleteJournalAnswerRequest,
         DetailJournalAnswerResponse,
         JournalAnswer>
     {
