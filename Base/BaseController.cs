@@ -8,9 +8,11 @@ using SealabAPI.DataAccess;
 using SealabAPI.DataAccess.Entities;
 using SealabAPI.DataAccess.Models;
 using SealabAPI.DataAccess.Models.Constants;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SealabAPI.Base
 {
+    [Authorize(Roles = "Assistant")]
     public class BaseController<
         ModelCreate,
         ModelUpdate,

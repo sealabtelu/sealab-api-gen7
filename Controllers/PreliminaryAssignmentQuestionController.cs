@@ -6,6 +6,7 @@ using SealabAPI.DataAccess.Entities;
 using SealabAPI.DataAccess.Models.Constants;
 using SealabAPI.DataAccess.Models;
 using SealabAPI.DataAccess.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SealabAPI.Controllers
 {
@@ -38,6 +39,21 @@ namespace SealabAPI.Controllers
             try
             {
                 List<DetailPreliminaryAssignmentQuestionResponse> model = _baseService.GetAll<DetailPreliminaryAssignmentQuestionResponse>(x => x.IdModule == idModule);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), model);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
+        [AllowAnonymous]
+        [Authorize(Roles = "Student")]
+        [HttpGet("student/{idModule}")]
+        public virtual ActionResult<List<DetailStudentPreliminaryAssignmentQuestionResponse>> GetForStudent(Guid idModule)
+        {
+            try
+            {
+                List<DetailStudentPreliminaryAssignmentQuestionResponse> model = _baseService.GetAll<DetailStudentPreliminaryAssignmentQuestionResponse>(x => x.IdModule == idModule);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), model);
             }
             catch (Exception ex)

@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 namespace SealabAPI.Controllers
 {
     [Route("[controller]")]
-    [Authorize(Roles = "Assistant")]
     [ApiController]
     public class PreTestQuestionController : BaseController<
         CreatePreTestQuestionRequest,

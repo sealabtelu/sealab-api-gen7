@@ -7,6 +7,7 @@ using SealabAPI.DataAccess.Models.Constants;
 using SealabAPI.DataAccess.Models;
 using SealabAPI.DataAccess.Services;
 using SealabAPI.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SealabAPI.Controllers
 {
@@ -49,6 +50,8 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        [AllowAnonymous]
+        [Authorize]
         public async override Task<ActionResult> Update(UpdateStudentRequest model)
         {
             try

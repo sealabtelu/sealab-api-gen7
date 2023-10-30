@@ -43,6 +43,8 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        [AllowAnonymous]
+        [Authorize]
         [HttpPost("change-password")]
         public async Task<ActionResult> ChengePassword(ChangePasswordRequest model)
         {

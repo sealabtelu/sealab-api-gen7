@@ -6,6 +6,7 @@ using SealabAPI.DataAccess.Entities;
 using SealabAPI.DataAccess.Models.Constants;
 using SealabAPI.DataAccess.Models;
 using SealabAPI.DataAccess.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SealabAPI.Controllers
 {
@@ -24,6 +25,8 @@ namespace SealabAPI.Controllers
             _logger = logger;
             _service = service;
         }
+        [AllowAnonymous]
+        [Authorize(Roles = "Student")]
         [HttpGet("submission/pa/{idStudent}")]
         public virtual ActionResult<List<ListSubmittedPAResponse>> GetListSubmittedPA(Guid idStudent)
         {
@@ -37,6 +40,8 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        [AllowAnonymous]
+        [Authorize(Roles = "Student")]
         [HttpGet("submission/prt/{idStudent}")]
         public virtual ActionResult<List<ListSubmittedPRTResponse>> GetListSubmittedPRT(Guid idStudent)
         {
@@ -50,6 +55,8 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        [AllowAnonymous]
+        [Authorize(Roles = "Student")]
         [HttpGet("submission/j/{idStudent}")]
         public virtual ActionResult<List<ListSubmittedJResponse>> GetListSubmittedJ(Guid idStudent)
         {
