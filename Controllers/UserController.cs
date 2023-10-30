@@ -17,7 +17,6 @@ namespace SealabAPI.Controllers
         UpdateUserRequest,
         DeleteUserRequest,
         DetailUserResponse,
-        ListUserResponse,
         User>
     {
         private readonly ILogger<UserController> _logger;

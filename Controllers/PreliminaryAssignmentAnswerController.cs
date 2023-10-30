@@ -16,7 +16,6 @@ namespace SealabAPI.Controllers
         UpdatePreliminaryAssignmentAnswerRequest,
         DeletePreliminaryAssignmentAnswerRequest,
         DetailPreliminaryAssignmentAnswerResponse,
-        ListPreliminaryAssignmentAnswerResponse,
         PreliminaryAssignmentAnswer>
     {
         private readonly ILogger<PreliminaryAssignmentAnswerController> _logger;

@@ -16,7 +16,6 @@ namespace SealabAPI.Controllers
         UpdateJournalAnswerRequest,
         DeleteJournalAnswerRequest,
         DetailJournalAnswerResponse,
-        ListJournalAnswerResponse,
         JournalAnswer>
     {
         private readonly ILogger<JournalAnswerController> _logger;

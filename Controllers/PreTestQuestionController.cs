@@ -18,7 +18,6 @@ namespace SealabAPI.Controllers
         UpdatePreTestQuestionRequest,
         DeletePreTestQuestionRequest,
         DetailPreTestQuestionResponse,
-        ListPreTestQuestionResponse,
         PreTestQuestion>
     {
         private readonly ILogger<PreTestQuestionController> _logger;
@@ -29,11 +28,11 @@ namespace SealabAPI.Controllers
             _service = service;
         }
         [HttpGet("module/{idModule}")]
-        public virtual ActionResult<List<ListPreTestQuestionResponse>> GetByIdModule(Guid idModule)
+        public virtual ActionResult<List<DetailPreTestQuestionResponse>> GetByIdModule(Guid idModule)
         {
             try
             {
-                List<ListPreTestQuestionResponse> model = _baseService.GetAll<ListPreTestQuestionResponse>(x => x.IdModule == idModule);
+                List<DetailPreTestQuestionResponse> model = _baseService.GetAll<DetailPreTestQuestionResponse>(x => x.IdModule == idModule);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), model);
             }
             catch (Exception ex)

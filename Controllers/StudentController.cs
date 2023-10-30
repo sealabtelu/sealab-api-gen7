@@ -17,7 +17,6 @@ namespace SealabAPI.Controllers
         UpdateStudentRequest,
         DeleteStudentRequest,
         DetailStudentResponse,
-        ListStudentResponse,
         Student>
     {
         private readonly ILogger<StudentController> _logger;
@@ -27,11 +26,11 @@ namespace SealabAPI.Controllers
             _logger = logger;
             _service = service;
         }
-        public override ActionResult<List<ListStudentResponse>> GetList()
+        public override ActionResult<List<DetailStudentResponse>> GetList()
         {
             try
             {
-                List<ListStudentResponse> models = _baseService.GetAll<ListStudentResponse>().OrderBy(x => x.Day).ThenBy(x => x.Shift).ThenBy(x => x.Group).ToList();
+                List<DetailStudentResponse> models = _baseService.GetAll<DetailStudentResponse>().OrderBy(x => x.Day).ThenBy(x => x.Shift).ThenBy(x => x.Group).ToList();
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
             }
             catch (Exception ex)

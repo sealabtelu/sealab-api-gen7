@@ -16,7 +16,6 @@ namespace SealabAPI.Controllers
         UpdatePreTestAnswerRequest,
         DeletePreTestAnswerRequest,
         DetailPreTestAnswerResponse,
-        ListPreTestAnswerResponse,
         PreTestAnswer>
     {
         private readonly ILogger<PreTestAnswerController> _logger;

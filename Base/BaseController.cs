@@ -16,13 +16,11 @@ namespace SealabAPI.Base
         ModelUpdate,
         ModelDelete,
         ModelDetail,
-        ModelList,
         TEntity> : ControllerBase
         where ModelCreate : BaseModel
         where ModelUpdate : BaseModel
         where ModelDelete : BaseModel
         where ModelDetail : BaseModel, new()
-        where ModelList : BaseModel, new()
         where TEntity : BaseEntity
     {
         protected IBaseService<TEntity> _baseService;
@@ -88,11 +86,11 @@ namespace SealabAPI.Base
         }
 
         [HttpGet("list")]
-        public virtual ActionResult<List<ModelList>> GetList()
+        public virtual ActionResult<List<ModelDetail>> GetList()
         {
             try
             {
-                List<ModelList> models = _baseService.GetAll<ModelList>();
+                List<ModelDetail> models = _baseService.GetAll<ModelDetail>();
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
             }
             catch (Exception ex)

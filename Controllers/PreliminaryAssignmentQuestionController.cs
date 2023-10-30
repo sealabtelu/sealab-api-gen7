@@ -16,7 +16,6 @@ namespace SealabAPI.Controllers
         UpdatePreliminaryAssignmentQuestionRequest,
         DeletePreliminaryAssignmentQuestionRequest,
         DetailPreliminaryAssignmentQuestionResponse,
-        ListPreliminaryAssignmentQuestionResponse,
         PreliminaryAssignmentQuestion>
     {
         private readonly ILogger<PreliminaryAssignmentQuestionController> _logger;
@@ -35,11 +34,11 @@ namespace SealabAPI.Controllers
             return base.Update(model);
         }
         [HttpGet("module/{idModule}")]
-        public virtual ActionResult<List<ListPreliminaryAssignmentQuestionResponse>> GetByIdModule(Guid idModule)
+        public virtual ActionResult<List<DetailPreliminaryAssignmentQuestionResponse>> GetByIdModule(Guid idModule)
         {
             try
             {
-                List<ListPreliminaryAssignmentQuestionResponse> model = _baseService.GetAll<ListPreliminaryAssignmentQuestionResponse>(x => x.IdModule == idModule);
+                List<DetailPreliminaryAssignmentQuestionResponse> model = _baseService.GetAll<DetailPreliminaryAssignmentQuestionResponse>(x => x.IdModule == idModule);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), model);
             }
             catch (Exception ex)

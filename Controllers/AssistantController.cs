@@ -17,7 +17,6 @@ namespace SealabAPI.Controllers
         UpdateAssistantRequest,
         DeleteAssistantRequest, 
         DetailAssistantResponse,
-        ListAssistantResponse, 
         Assistant>
     {
         private readonly ILogger<AssistantController> _logger;

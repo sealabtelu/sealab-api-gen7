@@ -16,7 +16,6 @@ namespace SealabAPI.Controllers
         UpdateModuleRequest,
         DeleteModuleRequest,
         DetailModuleResponse,
-        ListModuleResponse,
         Module>
     {
         private readonly ILogger<ModuleController> _logger;
@@ -78,11 +77,11 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
-        public override ActionResult<List<ListModuleResponse>> GetList()
+        public override ActionResult<List<DetailModuleResponse>> GetList()
         {
             try
             {
-                List<ListModuleResponse> models = _baseService.GetAll<ListModuleResponse>().OrderBy(x => x.SeelabsId).ToList();
+                List<DetailModuleResponse> models = _baseService.GetAll<DetailModuleResponse>().OrderBy(x => x.SeelabsId).ToList();
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
             }
             catch (Exception ex)
@@ -91,11 +90,11 @@ namespace SealabAPI.Controllers
             }
         }
         [HttpPost("set-pa-status")]
-        public async Task<ActionResult<List<ListModuleResponse>>> PAStatus(SetPAStatusRequest model)
+        public async Task<ActionResult<List<DetailModuleResponse>>> PAStatus(SetPAStatusRequest model)
         {
             try
             {
-                List<ListModuleResponse> models = await _service.SetAssignmentStatus(model);
+                List<DetailModuleResponse> models = await _service.SetAssignmentStatus(model);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
             }
             catch (Exception ex)
@@ -104,11 +103,11 @@ namespace SealabAPI.Controllers
             }
         }
         [HttpPost("set-prt-status")]
-        public async Task<ActionResult<List<ListModuleResponse>>> PRTStatus(SetPRTStatusRequest model)
+        public async Task<ActionResult<List<DetailModuleResponse>>> PRTStatus(SetPRTStatusRequest model)
         {
             try
             {
-                List<ListModuleResponse> models = await _service.SetAssignmentStatus(model);
+                List<DetailModuleResponse> models = await _service.SetAssignmentStatus(model);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
             }
             catch (Exception ex)
@@ -117,11 +116,11 @@ namespace SealabAPI.Controllers
             }
         }
         [HttpPost("set-j-status")]
-        public async Task<ActionResult<List<ListModuleResponse>>> JStatus(SetJStatusRequest model)
+        public async Task<ActionResult<List<DetailModuleResponse>>> JStatus(SetJStatusRequest model)
         {
             try
             {
-                List<ListModuleResponse> models = await _service.SetAssignmentStatus(model);
+                List<DetailModuleResponse> models = await _service.SetAssignmentStatus(model);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
             }
             catch (Exception ex)

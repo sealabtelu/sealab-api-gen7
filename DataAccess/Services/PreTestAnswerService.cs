@@ -15,7 +15,7 @@ namespace SealabAPI.DataAccess.Services
         public PreTestAnswerService(AppDbContext appDbContext) : base(appDbContext) { }
         public override List<TModel> GetAll<TModel>(Expression<Func<PreTestAnswer, bool>> expression = null)
         {
-            List<ListPreTestAnswerResponse> models = new();
+            List<DetailPreTestAnswerResponse> models = new();
             List<IGrouping<Guid, PreTestAnswer>> entities;
             if (expression == null)
             {
@@ -40,7 +40,7 @@ namespace SealabAPI.DataAccess.Services
                     var answers = entity.GroupBy(x => x.GetModule().Id).ToList();
                     foreach (var answer in answers)
                     {
-                        ListPreTestAnswerResponse model = new()
+                        DetailPreTestAnswerResponse model = new()
                         {
                             IdStudent = entity.Key,
                             IdModule = answer.Key,
