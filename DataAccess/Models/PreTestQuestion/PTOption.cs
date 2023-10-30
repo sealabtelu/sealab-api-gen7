@@ -5,17 +5,17 @@ using SealabAPI.Helpers;
 
 namespace SealabAPI.DataAccess.Models
 {
-    public class PTOptionStudent : BaseModel
+    public class PRTOptionStudent : BaseModel
     {
         public Guid Id { get; set; }
         public string Option { get; set; }
     }
-    public class PTOption : BaseModel
+    public class PRTOption : BaseModel
     {
         public string Option { get; set; }
         public bool IsTrue { get; set; }
     }
-    public class PTOptionDetail : PTOption
+    public class PRTOptionDetail : PRTOption
     {
         public Guid Id { get; set; }
     }

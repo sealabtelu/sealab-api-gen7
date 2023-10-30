@@ -11,14 +11,14 @@ namespace SealabAPI.DataAccess.Models
         public string Type { get; set; }
         public string Question { get; set; }
         public IFormFile File { get; set; }
-        public List<PTOption> Options { get; set; }
+        public List<PRTOption> Options { get; set; }
 
         public override TEntity MapToEntity<TEntity>()
         {
             TEntity question = base.MapToEntity<TEntity>();
             foreach (var option in Options)
             {
-                (question as PreTestQuestion).PTOptions.Add(option.MapToEntity<PreTestOption>());
+                (question as PreTestQuestion).PRTOptions.Add(option.MapToEntity<PreTestOption>());
             }
             return question;
         }

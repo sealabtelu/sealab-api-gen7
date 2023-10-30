@@ -12,7 +12,7 @@ namespace SealabAPI.DataAccess.Models
         public string Type { get; set; }
         public string Question { get; set; }
         // public IFormFile File { get; set; }
-        public List<PTOptionDetail> Options { get; set; }
+        public List<PRTOptionDetail> Options { get; set; }
 
         public override TEntity MapToEntity<TEntity>()
         {
@@ -21,7 +21,7 @@ namespace SealabAPI.DataAccess.Models
             {
                 PreTestOption entity = option.MapToEntity<PreTestOption>();
                 entity.IdQuestion = Id;
-                (question as PreTestQuestion).PTOptions.Add(entity);
+                (question as PreTestQuestion).PRTOptions.Add(entity);
             }
             return question;
         }

@@ -11,5 +11,6 @@ namespace SealabAPI.DataAccess.Entities
         public bool IsTrue { get; set; }
         [ForeignKey(nameof(IdQuestion))]
         public PreTestQuestion Question { get; set; }
+        public ICollection<PreTestAnswer> Answers { get; set; } = new HashSet<PreTestAnswer>();
     }
 }

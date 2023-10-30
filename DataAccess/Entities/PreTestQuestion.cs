@@ -15,7 +15,7 @@ namespace SealabAPI.DataAccess.Entities
             get => _filePath;
             set => _filePath = _filePath == null ? Path.Combine("PreTest", Module.SeelabsId.ToString(), File.SetFileName(value)) : value;
         }
-        public ICollection<PreTestOption> PTOptions { get; set; } = new HashSet<PreTestOption>();
+        public ICollection<PreTestOption> PRTOptions { get; set; } = new HashSet<PreTestOption>();
         [ForeignKey(nameof(IdModule))]
         public Module Module { get; set; }
     }

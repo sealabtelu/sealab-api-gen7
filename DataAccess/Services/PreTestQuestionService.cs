@@ -16,14 +16,14 @@ namespace SealabAPI.DataAccess.Services
         public override async Task<PreTestQuestion> Update<TModel>(TModel model)
         {
             PreTestQuestion question = model.MapToEntity<PreTestQuestion>();
-            foreach (var item in question.PTOptions)
+            foreach (var item in question.PRTOptions)
                 if (item.Id == default)
                 {
                     await _appDbContext.Set<PreTestOption>().AddAsync(item);
-                    question.PTOptions.Remove(item);
+                    question.PRTOptions.Remove(item);
                 }
             List<PreTestOption> optionsToRemove = _appDbContext.Set<PreTestOption>().Where(o => o.IdQuestion == question.Id).AsNoTracking().ToList();
-            optionsToRemove.RemoveAll(existOption => question.PTOptions.Any(newOption => newOption.Id == existOption.Id));
+            optionsToRemove.RemoveAll(existOption => question.PRTOptions.Any(newOption => newOption.Id == existOption.Id));
             _appDbContext.Set<PreTestOption>().RemoveRange(optionsToRemove);
             return await base.Update(model);
         }
