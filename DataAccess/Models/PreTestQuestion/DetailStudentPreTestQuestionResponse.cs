@@ -22,7 +22,7 @@ namespace SealabAPI.DataAccess.Models
         {
             base.MapToModel(entity);
             PreTestQuestion question = entity as PreTestQuestion;
-            ModuleInfo = string.Format("Module {0}: {1}", question.Module.SeelabsId, question.Module.Name);
+            ModuleInfo = $"Module {question.Module.SeelabsId}: {question.Module.Name}";
             foreach (var option in question.PRTOptions)
             {
                 Options.Add(new PRTOptionStudent

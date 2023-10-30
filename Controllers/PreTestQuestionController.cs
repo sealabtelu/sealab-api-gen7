@@ -43,7 +43,7 @@ namespace SealabAPI.Controllers
         [Authorize(Roles = "Student")]
         [StudentRestricted]
         [HttpPost("student")]
-        public virtual ActionResult<List<DetailStudentPreTestQuestionResponse>> GetByIdStudent(StudentGetPreTestQuestionRequest model)
+        public virtual ActionResult<List<DetailStudentPreTestQuestionResponse>> GetForStudent(StudentGetPreTestQuestionRequest model)
         {
             try
             {

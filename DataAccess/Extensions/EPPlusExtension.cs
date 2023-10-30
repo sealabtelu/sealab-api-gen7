@@ -62,7 +62,7 @@ namespace SealabAPI.DataAccess.Extensions
                             else if (prop.PropertyType == typeof(DateTime))
                                 prop.SetValue(tnew, DateTime.FromOADate(unboxedVal));
                             else
-                                throw new NotImplementedException(String.Format("Type '{0}' not implemented yet!", prop.PropertyType.Name));
+                                throw new NotImplementedException($"Type '{prop.PropertyType.Name}' not implemented yet!");
                         }
                         else
                         {
