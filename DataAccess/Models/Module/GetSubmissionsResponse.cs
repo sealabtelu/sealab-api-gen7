@@ -15,7 +15,7 @@ namespace SealabAPI.DataAccess.Models
         public int Shift { get; set; }
         public string ModuleInfo { get; set; }
         public int PRTScore { get; set; }
-        public List<DetailPreTestAnswerResponse> PRTDetail { get; set; }
+        public List<PreTestAnswerDetail> PRTDetail { get; set; }
         public string PAFilePath { get; set; }
         public string JFilePath { get; set; }
         public DateTime? PASubmitTime { get; set; }

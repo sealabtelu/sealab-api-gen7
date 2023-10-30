@@ -112,7 +112,7 @@ namespace SealabAPI.DataAccess.Services
                 model.MapToModel(module.JAnswers.FirstOrDefault(x => x.IdStudent == student.Id));
                 model.PRTScore = preTestAnswers.Where(s => s.IdStudent == student.Id && s.Option.IsTrue).Count() * 10;
                 model.PRTDetail = preTestAnswers.Where(s => s.IdStudent == student.Id)
-                                                .Select(x => new DetailPreTestAnswerResponse
+                                                .Select(x => new PreTestAnswerDetail
                                                 {
                                                     IdOption = x.IdOption,
                                                     Question = x.Option.Question.Question,
