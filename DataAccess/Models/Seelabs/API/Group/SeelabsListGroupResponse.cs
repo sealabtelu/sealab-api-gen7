@@ -11,7 +11,7 @@ namespace SealabAPI.DataAccess.Models
         public SeelabsListGroupResponse(dynamic group)
         {
             Group = group.id_group;
-            Names = ((List<string>)group.names).Select(name => name[2..].ToTitleCase()).ToArray();
+            Names = ((List<string>)group.names).Select(name => (char.IsNumber(name[0]) ? name[2..] : name).ToTitleCase()).ToArray();
         }
     }
 }
