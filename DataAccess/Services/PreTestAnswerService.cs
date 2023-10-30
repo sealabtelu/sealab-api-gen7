@@ -45,13 +45,7 @@ namespace SealabAPI.DataAccess.Services
                             IdStudent = entity.Key,
                             IdModule = answer.Key,
                             PRTScore = answer.Where(s => s.Option.IsTrue).Count() * 10,
-                            PRTDetail = answer.Select(x => new PreTestAnswerDetail
-                            {
-                                IdOption = x.IdOption,
-                                Question = x.GetQuestion().Question,
-                                Answer = x.Option.Option,
-                                Verdict = x.Option.IsTrue ? "Correct" : "Incorrect"
-                            }).ToList()
+                            PRTDetail = answer.Select(x => new PreTestAnswerDetail(x)).ToList()
                         };
                         model.MapToModel(answer.FirstOrDefault().GetModule());
                         model.StudentInfo.MapToModel(answer.FirstOrDefault().Student);

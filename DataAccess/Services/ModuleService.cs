@@ -90,35 +90,26 @@ namespace SealabAPI.DataAccess.Services
         public List<GetSubmissionsResponse> GetSubmissions(GetSubmissionsRequest request)
         {
             List<GetSubmissionsResponse> models = new();
-            List<Student> students = _appDbContext.Set<Student>().Include(x => x.User).Where(x => x.Group == request.Group).OrderBy(x => x.User.Name).AsNoTracking().ToList();
-            List<PreTestAnswer> preTestAnswers = _appDbContext.Set<PreTestAnswer>()
-                            .Include(x => x.Option)
-                            .ThenInclude(x => x.Question)
-                            .ThenInclude(x => x.Module)
-                            .Where(x => x.Option.Question.Module.SeelabsId == request.SeelabsId)
-                            .AsNoTracking().ToList();
-            Module module = _appDbContext.Set<Module>()
-                            .Include(j => j.JAnswers).ThenInclude(s => s.Student)
-                            .Include(pa => pa.PAAnswers).ThenInclude(s => s.Student)
-                            .AsNoTracking()
-                            .FirstOrDefault(x => x.SeelabsId == request.SeelabsId);
+            Module module = _appDbContext.Set<Module>().AsNoTracking().FirstOrDefault(x => x.SeelabsId == request.SeelabsId);
+            List<Student> students = _appDbContext.Set<Student>()
+                                                  .Include(x => x.User)
+                                                  .Include(x => x.PAAnswers).ThenInclude(x => x.Module)
+                                                  .Include(x => x.JAnswers).ThenInclude(x => x.Module)
+                                                  .Include(x => x.PRTAnswers).ThenInclude(x => x.Option).ThenInclude(x => x.Question).ThenInclude(x => x.Module)
+                                                  .Where(x => x.Group == request.Group)
+                                                  .OrderBy(x => x.User.Name).AsNoTracking().ToList();
+
             foreach (var student in students)
             {
                 GetSubmissionsResponse model = new();
+                List<PreTestAnswer> prtAnswers = student.PRTAnswers.Where(x => x.GetModule().SeelabsId == request.SeelabsId).ToList();
                 model.MapToModel(student);
                 model.MapToModel(student.User);
                 model.MapToModel(module);
-                model.MapToModel(module.PAAnswers.FirstOrDefault(x => x.IdStudent == student.Id));
-                model.MapToModel(module.JAnswers.FirstOrDefault(x => x.IdStudent == student.Id));
-                model.PRTScore = preTestAnswers.Where(s => s.IdStudent == student.Id && s.Option.IsTrue).Count() * 10;
-                model.PRTDetail = preTestAnswers.Where(s => s.IdStudent == student.Id)
-                                                .Select(x => new PreTestAnswerDetail
-                                                {
-                                                    IdOption = x.IdOption,
-                                                    Question = x.Option.Question.Question,
-                                                    Answer = x.Option.Option,
-                                                    Verdict = x.Option.IsTrue ? "Correct" : "Incorrect"
-                                                }).ToList();
+                model.MapToModel(student.PAAnswers.FirstOrDefault(x => x.Module.SeelabsId == request.SeelabsId));
+                model.MapToModel(student.JAnswers.FirstOrDefault(x => x.Module.SeelabsId == request.SeelabsId));
+                model.PRTScore = prtAnswers.Where(x => x.Option.IsTrue).Count() * 10;
+                model.PRTDetail = prtAnswers.Select(x => new PreTestAnswerDetail(x)).ToList();
                 models.Add(model);
             }
             return models;

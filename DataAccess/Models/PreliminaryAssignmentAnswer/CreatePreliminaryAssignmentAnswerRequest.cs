@@ -27,7 +27,7 @@ namespace SealabAPI.DataAccess.Models
             RuleFor(x => x).Custom((data, context) =>
             {
                 var answer = dbContext.Set<PreliminaryAssignmentAnswer>().AsNoTracking();
-                var module = dbContext.Set<Module>().Where(x => x.Id == data.IdModule).AsNoTracking().FirstOrDefault();
+                var module = dbContext.Set<Module>().AsNoTracking().FirstOrDefault(x => x.Id == data.IdModule);
                 if (answer.Any(x => x.IdModule == data.IdModule && x.IdStudent == data.IdStudent))
                     context.AddFailure("module", "Assignment already submitted!");
                 if (!module.IsPAOpen)

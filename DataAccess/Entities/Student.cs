@@ -14,5 +14,6 @@ namespace SealabAPI.DataAccess.Entities
         public User User { get; set; }
         public ICollection<PreliminaryAssignmentAnswer> PAAnswers { get; set; } = new HashSet<PreliminaryAssignmentAnswer>();
         public ICollection<PreTestAnswer> PRTAnswers { get; set; } = new HashSet<PreTestAnswer>();
+        public ICollection<JournalAnswer> JAnswers { get; set; } = new HashSet<JournalAnswer>();
     }
 }
