@@ -27,7 +27,7 @@ namespace SealabAPI.DataAccess.Models
                 D4 = int.Parse(td.Children[8].TextContent),
                 I1 = int.Parse(td.Children[9].TextContent),
                 I2 = int.Parse(td.Children[10].TextContent),
-                Date = DateTime.ParseExact(td.Children[11].TextContent, "dd/MMM/yyyy", CultureInfo.InvariantCulture)
+                Date = DateTime.ParseExact(td.Children[11].TextContent, "dd/MMMM/yyyy", CultureInfo.InvariantCulture)
             }).ToList();
         }
     }
