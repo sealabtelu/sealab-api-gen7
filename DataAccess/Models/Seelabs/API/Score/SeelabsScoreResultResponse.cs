@@ -1,7 +1,9 @@
+using System.Globalization;
 using AngleSharp.Dom;
 using AngleSharp.Text;
 using SealabAPI.Base;
 using SealabAPI.DataAccess.Entities;
+using SealabAPI.Helpers;
 
 namespace SealabAPI.DataAccess.Models
 {
@@ -16,7 +18,7 @@ namespace SealabAPI.DataAccess.Models
             Shift = int.Parse(tr.ElementAt(0).Children[12].TextContent);
             Scores = tr.Select(td => new ScoreResult
             {
-                Name = td.Children[1].TextContent,
+                Name = td.Children[1].TextContent?.ToTitleCase(),
                 TP = int.Parse(td.Children[3].TextContent),
                 TA = int.Parse(td.Children[4].TextContent),
                 D1 = int.Parse(td.Children[5].TextContent),
@@ -25,7 +27,7 @@ namespace SealabAPI.DataAccess.Models
                 D4 = int.Parse(td.Children[8].TextContent),
                 I1 = int.Parse(td.Children[9].TextContent),
                 I2 = int.Parse(td.Children[10].TextContent),
-                Date = td.Children[11].TextContent //Not Parsed
+                Date = DateTime.ParseExact(td.Children[11].TextContent, "dd/MMM/yyyy", CultureInfo.InvariantCulture)
             }).ToList();
         }
     }

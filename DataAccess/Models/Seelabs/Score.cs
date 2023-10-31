@@ -16,7 +16,7 @@ namespace SealabAPI.DataAccess.Models
     }
     public class ScoreResult {
         public string Name { get; set; }
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
         public int TP { get; set; }
         public int TA { get; set; }
         public int I1 { get; set; }

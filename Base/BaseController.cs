@@ -116,12 +116,10 @@ namespace SealabAPI.Base
     {
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            using (var jsonDoc = JsonDocument.ParseValue(ref reader))
-            {
-                var stringValue = jsonDoc.RootElement.GetRawText().Trim('"').Trim('\'');
-                var value = DateTime.Parse(stringValue, null, System.Globalization.DateTimeStyles.RoundtripKind);
-                return value;
-            }
+            using var jsonDoc = JsonDocument.ParseValue(ref reader);
+            var stringValue = jsonDoc.RootElement.GetRawText().Trim('"').Trim('\'');
+            var value = DateTime.Parse(stringValue, null, System.Globalization.DateTimeStyles.RoundtripKind);
+            return value;
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)

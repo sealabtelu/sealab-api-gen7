@@ -18,22 +18,17 @@ namespace SealabAPI.DataAccess.Services
             List<DetailPreTestAnswerResponse> models = new();
             List<IGrouping<Guid, PreTestAnswer>> entities;
             if (expression == null)
-            {
                 entities = _appDbContext.Set<PreTestAnswer>()
                                         .Include(x => x.Student).ThenInclude(x => x.User)
                                         .Include(x => x.Option).ThenInclude(x => x.Question).ThenInclude(x => x.Module)
                                         .AsNoTracking().AsEnumerable()
                                         .GroupBy(x => x.IdStudent).ToList();
-            }
             else
-            {
                 entities = _appDbContext.Set<PreTestAnswer>()
                                         .Include(x => x.Student).ThenInclude(x => x.User)
-                                        .Include(x => x.Option).ThenInclude(x => x.Question)
-                                        .ThenInclude(x => x.Module)
+                                        .Include(x => x.Option).ThenInclude(x => x.Question).ThenInclude(x => x.Module)
                                         .Where(expression).AsNoTracking().AsEnumerable()
                                         .GroupBy(x => x.IdStudent).ToList();
-            }
             if (entities != null)
                 foreach (var entity in entities)
                 {
