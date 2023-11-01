@@ -67,7 +67,7 @@ namespace SealabAPI.DataAccess.Services
             var responseHtml = await response.ParseHtml();
             var tr = responseHtml.QuerySelector("table")?.QuerySelectorAll("tr")?.Skip(2);
             var module = int.Parse((responseHtml.QuerySelector("select[name='modulid']") as IHtmlSelectElement).Value);
-            var group = int.Parse((responseHtml.QuerySelector("input[name='kelompok_id']") as IHtmlSelectElement).Value);
+            var group = int.Parse((responseHtml.QuerySelector("input[name='kelompok_id']") as IHtmlInputElement).Value);
             return new SeelabsScoreDetailResponse(module, group, tr);
         }
         public async Task<string> ScoreDelete(SeelabsScoreDeleteRequest request)
