@@ -9,10 +9,12 @@ namespace SealabAPI.DataAccess.Models
     public class SeelabsScoreDetailResponse : BaseModel
     {
         public int Module { get; set; }
+        public int Group { get; set; }
         public List<ScoreDetail> Scores { get; set; }
-        public SeelabsScoreDetailResponse(int module, IEnumerable<IElement> tr)
+        public SeelabsScoreDetailResponse(int module, int group, IEnumerable<IElement> tr)
         {
             Module = module;
+            Group = group;
             Scores = tr.Select(td => new ScoreDetail
             {
                 Name = td.Children[1].TextContent?.ToTitleCase(),
