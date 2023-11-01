@@ -2,6 +2,7 @@ using AngleSharp.Dom;
 using AngleSharp.Text;
 using SealabAPI.Base;
 using SealabAPI.DataAccess.Entities;
+using SealabAPI.Helpers;
 
 namespace SealabAPI.DataAccess.Models
 {
@@ -14,7 +15,7 @@ namespace SealabAPI.DataAccess.Models
             Module = module;
             Scores = tr.Select(td => new ScoreDetail
             {
-                Name = td.Children[1].TextContent,
+                Name = td.Children[1].TextContent?.ToTitleCase(),
                 Uid = td.QuerySelector("input[name='id[]']")?.GetAttribute("value"),
                 Status = td.QuerySelector("option")?.GetAttribute("value") == "1",
                 TP = int.Parse(td.QuerySelector("input[name='TP[]']")?.GetAttribute("value")),
