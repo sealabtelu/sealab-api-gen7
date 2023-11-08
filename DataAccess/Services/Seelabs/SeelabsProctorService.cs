@@ -24,7 +24,7 @@ namespace SealabAPI.DataAccess.Services
             var tr = responseHtml.QuerySelector("table")?.QuerySelectorAll("tr").Skip(1);
             if (tr.ElementAt(0).Children.Length > 1)
             {
-                return tr.Select(td => new SeelabsProctorResponse(td)).ToList();
+                return tr.Select(td => new SeelabsProctorResponse(td)).OrderBy(x => x.Day).ThenBy(x => x.Shift).ToList();
             }
             return null;
         }
