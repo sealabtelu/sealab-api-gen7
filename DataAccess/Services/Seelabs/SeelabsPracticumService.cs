@@ -12,18 +12,9 @@ using System.Net;
 
 namespace SealabAPI.DataAccess.Services
 {
-    public class SeelabsService
+    public class SeelabsPracticumService : SeelabsBase
     {
-        private readonly HttpRequestHelper _client;
-        private readonly HttpRequest _httpRequest;
-        private readonly int _idLab;
-        private string _token => _httpRequest.ReadToken("seelabs_token");
-        public SeelabsService(IHttpContextAccessor httpRequest, IConfiguration configuration)
-        {
-            _httpRequest = httpRequest.HttpContext.Request;
-            _client = new HttpRequestHelper(configuration["SeelabsUrl"]);
-            _idLab = int.Parse(configuration["LabId"]);
-        }
+        public SeelabsPracticumService(IHttpContextAccessor httpRequest, IConfiguration configuration) : base(httpRequest, configuration, "praktikum") { }
         public async Task<List<SeelabsBAPResponse>> BAP(SeelabsBAPRequest request)
         {
             SetToken();
@@ -137,41 +128,6 @@ namespace SealabAPI.DataAccess.Services
             var name = responseHtml.QuerySelector(".navbar-link")?.TextContent;
             Cookie cookie = name != null ? _client.GetCookie("ci_session") : null;
             return new SeelabsLoginResponse(name, cookie);
-        }
-        private static List<dynamic> TableToJson(IElement table, int rowCount)
-        {
-            int count = 0, id_group = 0, counter = 0;
-            string span;
-            var columns = table?.QuerySelectorAll("td");
-            List<object> result = new();
-            List<string> names = new();
-            foreach (var item in columns)
-            {
-                if ((span = item.GetAttribute("rowspan")) != null)
-                {
-                    count = int.Parse(span);
-                    counter++;
-                    if (counter == rowCount)
-                    {
-                        counter = 0;
-                        id_group = int.Parse(item.QuerySelector("input[name='kelompok_id']").GetAttribute("value"));
-                    }
-                }
-                else
-                {
-                    names.Add(item.TextContent);
-                    if (names.Count == count)
-                    {
-                        result.Add(new { id_group, names });
-                        names = new();
-                    }
-                }
-            }
-            return result;
-        }
-        private void SetToken()
-        {
-            _client.AddHeader("Cookie", "ci_session=" + _token);
         }
     }
 }

@@ -16,18 +16,33 @@ namespace SealabAPI.Controllers
     public class SeelabsController : ControllerBase
     {
         private readonly ILogger<SeelabsController> _logger;
-        private readonly SeelabsService _service;
-        public SeelabsController(ILogger<SeelabsController> logger, SeelabsService service)
+        private readonly SeelabsPracticumService _practicum;
+        private readonly SeelabsProctorService _proctor;
+        public SeelabsController(ILogger<SeelabsController> logger, SeelabsPracticumService practicum, SeelabsProctorService proctor)
         {
             _logger = logger;
-            _service = service;
+            _practicum = practicum;
+            _proctor = proctor;
         }
         [HttpGet("schedule")]
         public async Task<ActionResult<List<SeelabsScheduleResponse>>> Schedule()
         {
             try
             {
-                var data = await _service.Schedule();
+                var data = await _practicum.Schedule();
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
+        [HttpGet("proctor/schedule")]
+        public async Task<ActionResult<List<SeelabsProctorResponse>>> ProctorSchedule()
+        {
+            try
+            {
+                var data = await _proctor.Schedule();
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -40,7 +55,7 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                var data = await _service.BAP(new SeelabsBAPRequest(model));
+                var data = await _practicum.BAP(new SeelabsBAPRequest(model));
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -53,7 +68,7 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                var data = await _service.ScoreList(new SeelabsScoreListRequest(model));
+                var data = await _practicum.ScoreList(new SeelabsScoreListRequest(model));
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -66,7 +81,7 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                var data = await _service.ScoreDelete(new SeelabsScoreDeleteRequest(model));
+                var data = await _practicum.ScoreDelete(new SeelabsScoreDeleteRequest(model));
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -79,7 +94,7 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                var data = await _service.ScoreUpdate(model);
+                var data = await _practicum.ScoreUpdate(model);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -92,7 +107,7 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                var data = await _service.ScoreInput(model);
+                var data = await _practicum.ScoreInput(model);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -107,7 +122,7 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                var data = await _service.ScoreStudent();
+                var data = await _practicum.ScoreStudent();
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -120,7 +135,7 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                var data = await _service.ScoreDetail(new SeelabsScoreDetailRequest(model));
+                var data = await _practicum.ScoreDetail(new SeelabsScoreDetailRequest(model));
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -133,7 +148,7 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                var data = await _service.ScoreResult(new SeelabsScoreResultRequest(model));
+                var data = await _practicum.ScoreResult(new SeelabsScoreResultRequest(model));
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -146,7 +161,7 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                var data = await _service.GroupDetail(new SeelabsDetailGroupRequest(model));
+                var data = await _practicum.GroupDetail(new SeelabsDetailGroupRequest(model));
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)
@@ -159,7 +174,7 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                var data = await _service.GroupList(new SeelabsListGroupRequest(model));
+                var data = await _practicum.GroupList(new SeelabsListGroupRequest(model));
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
             }
             catch (Exception ex)

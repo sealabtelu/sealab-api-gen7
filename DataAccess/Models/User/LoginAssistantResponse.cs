@@ -15,6 +15,6 @@ namespace SealabAPI.DataAccess.Models
         public string Role { get; set; }
         public string Position { get; set; }
         public string AppToken { get; set; }
-        public string Seelabs { get; set; }
+        public dynamic Seelabs { get; set; }
     }
 }

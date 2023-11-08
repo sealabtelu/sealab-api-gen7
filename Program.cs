@@ -139,7 +139,8 @@ Assembly.GetExecutingAssembly()
         builder.Services.AddScoped(serviceType, assignedTypes);
     });
 
-builder.Services.AddScoped<SeelabsService>();
+builder.Services.AddScoped<SeelabsPracticumService>();
+builder.Services.AddScoped<SeelabsProctorService>();
 
 var app = builder.Build();
 
