@@ -7,6 +7,7 @@ using SealabAPI.DataAccess.Models.Constants;
 using SealabAPI.DataAccess.Models;
 using SealabAPI.DataAccess.Services;
 using Microsoft.AspNetCore.Authorization;
+using SealabAPI.Helpers;
 
 namespace SealabAPI.Controllers
 {
@@ -30,6 +31,14 @@ namespace SealabAPI.Controllers
         public override Task<ActionResult> Create([FromForm] CreateJournalAnswerRequest model)
         {
             return base.Create(model);
+        }
+        [HttpGet("download-zip/{module}")]
+        public ActionResult Test(string module)
+        {
+            byte[] fileByte = FileHelper.DownloadFolderZip(new string[] { "Journal", $"J{module}", "Submission" });
+            Response.Headers.Add("Content-Disposition", $"attachment; filename=Submission.zip");
+
+            return File(fileByte, "application/zip");
         }
         [NonAction]
         public override Task<ActionResult> Update(UpdateJournalAnswerRequest model)

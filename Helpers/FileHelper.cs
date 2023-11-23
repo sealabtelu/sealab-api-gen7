@@ -2,6 +2,8 @@
 using SealabAPI.Base;
 using SealabAPI.DataAccess.Extensions;
 using System.IO;
+using System.IO.Compression;
+using System.Net;
 
 namespace SealabAPI.Helpers
 {
@@ -18,6 +20,44 @@ namespace SealabAPI.Helpers
             public IFormFile File { get; set; }
             public string FilePath { get; set; }
         }
+
+        public class TreeNode
+        {
+            public string Name { get; set; }
+            public string Type { get; set; }
+            public List<TreeNode> Children { get; set; }
+        }
+
+        public static IEnumerable<TreeNode> GetDirectoryTree(string folderPath)
+        {
+            var nodes = new List<TreeNode>();
+
+            var directories = Directory.GetDirectories(folderPath);
+            foreach (var directory in directories)
+            {
+                var directoryNode = new TreeNode
+                {
+                    Name = Path.GetFileName(directory),
+                    Type = "Folder",
+                    Children = GetDirectoryTree(directory).ToList()
+                };
+                nodes.Add(directoryNode);
+            }
+
+            var files = Directory.GetFiles(folderPath);
+            foreach (var file in files)
+            {
+                var fileNode = new TreeNode
+                {
+                    Name = Path.GetFileName(file),
+                    Type = "File"
+                };
+                nodes.Add(fileNode);
+            }
+
+            return nodes;
+        }
+
         // public static DownloadInfo DownloadExcel<T>(CancellationToken cancellationToken)
         // {
 
@@ -70,6 +110,21 @@ namespace SealabAPI.Helpers
             ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
             List<T> entities = worksheet.ConvertSheetToObjects<T>();
             return entities;
+        }
+        public static byte[] DownloadFolderZip(string[] dir)
+        {
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "upload", Path.Combine(dir));
+
+            if (!Directory.Exists(path))
+                throw new HttpRequestException("Folder not found!", null, HttpStatusCode.NotFound);
+
+            string zipPath = $"{path}_{((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds()}.zip";
+            ZipFile.CreateFromDirectory(path, zipPath);
+
+            byte[] fileByte = File.ReadAllBytes(zipPath);
+            File.Delete(zipPath);
+
+            return fileByte;
         }
         public static async Task UploadFileAsync(UploadFileInfo upload)
         {
