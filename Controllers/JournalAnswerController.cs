@@ -33,12 +33,15 @@ namespace SealabAPI.Controllers
             return base.Create(model);
         }
         [HttpGet("download-zip/{module}")]
-        public ActionResult Test(string module)
+        public async Task<ActionResult> Test(string module)
         {
-            byte[] fileByte = FileHelper.DownloadFolderZip(new string[] { "Journal", $"J{module}", "Submission" });
-            Response.Headers.Add("Content-Disposition", $"attachment; filename=Submission.zip");
+            byte[] fileByte = await FileHelper.DownloadFolderZip(new string[] { "Journal", $"J{module}", "Submission" });
 
-            return File(fileByte, "application/zip");
+            return new FileContentResult(fileByte, "application/zip")
+            {
+                FileDownloadName = "Submission.zip",
+                EnableRangeProcessing = true
+            };
         }
         [NonAction]
         public override Task<ActionResult> Update(UpdateJournalAnswerRequest model)

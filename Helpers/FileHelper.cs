@@ -111,7 +111,7 @@ namespace SealabAPI.Helpers
             List<T> entities = worksheet.ConvertSheetToObjects<T>();
             return entities;
         }
-        public static byte[] DownloadFolderZip(string[] dir)
+        public static async Task<byte[]> DownloadFolderZip(string[] dir)
         {
             string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "upload", Path.Combine(dir));
 
@@ -121,7 +121,7 @@ namespace SealabAPI.Helpers
             string zipPath = $"{path}_{((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds()}.zip";
             ZipFile.CreateFromDirectory(path, zipPath);
 
-            byte[] fileByte = File.ReadAllBytes(zipPath);
+            byte[] fileByte = await File.ReadAllBytesAsync(zipPath);
             File.Delete(zipPath);
 
             return fileByte;
