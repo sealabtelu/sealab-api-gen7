@@ -8,6 +8,7 @@ using SealabAPI.DataAccess.Models;
 using SealabAPI.DataAccess.Services;
 using Microsoft.AspNetCore.Authorization;
 using SealabAPI.Helpers;
+using System.Net.Mime;
 
 namespace SealabAPI.Controllers
 {
@@ -33,15 +34,10 @@ namespace SealabAPI.Controllers
             return base.Create(model);
         }
         [HttpGet("download-zip/{module}")]
-        public async Task<ActionResult> Test(string module)
+        public ActionResult DownloadZip(string module)
         {
-            byte[] fileByte = await FileHelper.DownloadFolderZip(new string[] { "Journal", $"J{module}", "Submission" });
-
-            return new FileContentResult(fileByte, "application/zip")
-            {
-                FileDownloadName = "Submission.zip",
-                EnableRangeProcessing = true
-            };
+            FileStream fs = FileHelper.DownloadFolderZip(new string[] { "Journal", $"J{module}", "Submission" });
+            return File(fileStream: fs, contentType: MediaTypeNames.Application.Zip, fileDownloadName: "Submission.zip");
         }
         [NonAction]
         public override Task<ActionResult> Update(UpdateJournalAnswerRequest model)
