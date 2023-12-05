@@ -37,6 +37,19 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        [HttpGet("input-overview")]
+        public async Task<ActionResult<List<SeelabsScheduleResponse>>> InputOverview([FromQuery] ScoreListRequest model)
+        {
+            try
+            {
+                var data = await _practicum.InputOverview(new SeelabsScoreListRequest(model));
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), data);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
         [HttpGet("proctor/schedule")]
         public async Task<ActionResult<List<SeelabsProctorResponse>>> ProctorSchedule()
         {

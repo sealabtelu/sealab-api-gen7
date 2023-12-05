@@ -15,6 +15,30 @@ namespace SealabAPI.DataAccess.Services
     public class SeelabsPracticumService : SeelabsBase
     {
         public SeelabsPracticumService(IHttpContextAccessor httpRequest, IConfiguration configuration) : base(httpRequest, configuration, "praktikum") { }
+        public async Task<List<SeelabsInputOverviewResponse>> InputOverview(SeelabsScoreListRequest request)
+        {
+            SetToken();
+            HttpResponseMessage response = await _client.HtmlPost("/pageasisten/ceknilaimasuk", request);
+            var responseHtml = await response.ParseHtml();
+            var tr = responseHtml.QuerySelector("table")?.QuerySelectorAll("tr").Skip(1);
+            if (tr.ElementAt(0).Children.Length > 1)
+            {
+                string assistantName = "";
+                return tr.Select(td =>
+                {
+                    assistantName = td.QuerySelectorAll("td[rowspan]").ElementAtOrDefault(1)?.InnerHtml ?? assistantName;
+                    return new InputOverviewList(assistantName, td);
+                })
+                .GroupBy(x => new { x.Mentor, x.Group })
+                .Select(group => new SeelabsInputOverviewResponse
+                {
+                    Mentor = group.Key.Mentor,
+                    Group = group.Key.Group,
+                    StudentList = group.Select(x => new InputOverviewDetail(x)).ToList()
+                }).OrderBy(x => x.Group).ToList();
+            }
+            return null;
+        }
         public async Task<List<SeelabsBAPResponse>> BAP(SeelabsBAPRequest request)
         {
             SetToken();
