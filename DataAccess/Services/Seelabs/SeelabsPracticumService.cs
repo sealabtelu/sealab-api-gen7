@@ -47,11 +47,7 @@ namespace SealabAPI.DataAccess.Services
             HttpResponseMessage response = await _client.HtmlPost("/pageasisten/bap", request);
             var responseHtml = await response.ParseHtml();
             var tr = responseHtml.QuerySelector("table")?.QuerySelectorAll("tr").Skip(1);
-            if (tr.ElementAt(0).Children.Length > 1)
-            {
-                return tr.Select(td => new SeelabsBAPResponse(td)).ToList();
-            }
-            return null;
+            return tr.ElementAt(0).Children.Length > 1 ? tr.Select(td => new SeelabsBAPResponse(td)).ToList() : null;
         }
         public async Task<List<SeelabsScoreStudentResponse>> ScoreStudent()
         {
