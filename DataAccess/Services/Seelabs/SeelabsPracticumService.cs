@@ -24,7 +24,9 @@ namespace SealabAPI.DataAccess.Services
             if (tr.ElementAt(0).Children.Length > 1)
             {
                 string assistantName = "";
-                return tr.Select(td =>
+                return tr
+                .Where(td => td.LastElementChild.InnerHtml != "-")
+                .Select(td =>
                 {
                     assistantName = td.QuerySelectorAll("td[rowspan]").ElementAtOrDefault(1)?.InnerHtml ?? assistantName;
                     return new InputOverviewList(assistantName, td);
