@@ -7,7 +7,10 @@ namespace SealabAPI.DataAccess.Models
 {
     public class CreateGFormSurveyRequest : BaseModel
     {
-        public string IdUser { get; set; }
         public string Response { get; set; }
+    }
+    public class CreateGFormSurvey : CreateGFormSurveyRequest
+    {
+        public string IdUser { get; set; }
     }
 }

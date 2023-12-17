@@ -22,13 +22,13 @@ namespace SealabAPI.Controllers
             _service = service;
         }
         [HttpPost]
-        public virtual async Task<ActionResult> Create([FromBody]string response)
+        public virtual async Task<ActionResult> Create(CreateGFormSurveyRequest model)
         {
             try
             {
-                GFormSurvey result = await _service.Create(new CreateGFormSurveyRequest
+                GFormSurvey result = await _service.Create(new CreateGFormSurvey
                 {
-                    Response = response,
+                    Response = model.Response,
                     IdUser = Request.ReadToken("nameid")
                 });
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), result.Id);
