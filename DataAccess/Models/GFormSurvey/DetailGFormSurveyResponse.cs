@@ -11,11 +11,11 @@ namespace SealabAPI.DataAccess.Models
     {
         public Guid Id { get; set; }
         public string IdUser { get; set; }
-        public dynamic Response { get; set; }
+        public ExpandoObject ResponseForm { get; set; }
         public DetailStudentResponse StudentInfo { get; set; } = new();
         public DetailGFormSurveyResponse()
         {
-            IncludeProperty(new string[] { "User" });
+            IncludeProperty(new string[] { "User", "User.Student" });
         }
         public override void MapToModel<TEntity>(TEntity entity)
         {
@@ -23,7 +23,7 @@ namespace SealabAPI.DataAccess.Models
             {
                 base.MapToModel(gForm);
                 StudentInfo.MapToModel(gForm.User.Student);
-                Response = JsonConvert.DeserializeObject<ExpandoObject>(gForm.Response);
+                ResponseForm = JsonConvert.DeserializeObject<ExpandoObject>(gForm.Response);
             }
         }
     }
