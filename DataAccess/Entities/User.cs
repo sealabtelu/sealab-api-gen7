@@ -30,5 +30,6 @@ namespace SealabAPI.DataAccess.Entities
         public string AppToken { get; set; }
         public Student Student { get; set; }
         public Assistant Assistant { get; set; }
+        public GFormSurvey Feedback { get; set; }
     }
 }

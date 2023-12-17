@@ -37,7 +37,8 @@ namespace SealabAPI.DataAccess.Services
                     Mentor = group.Key.Mentor,
                     Group = group.Key.Group,
                     StudentList = group.Select(x => new InputOverviewDetail(x)).ToList()
-                }).OrderBy(x => x.Group).ToList();
+                })
+                .OrderBy(x => x.Group).ToList();
             }
             return null;
         }
