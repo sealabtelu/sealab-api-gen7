@@ -22,7 +22,7 @@ namespace SealabAPI.Controllers
             _service = service;
         }
         [HttpPost]
-        public virtual async Task<ActionResult> Create(string response)
+        public virtual async Task<ActionResult> Create([FromBody]string response)
         {
             try
             {
