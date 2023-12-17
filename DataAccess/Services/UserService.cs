@@ -24,7 +24,7 @@ namespace SealabAPI.DataAccess.Services
         }
         public async Task<object> Login(string username, string password)
         {
-            User user = await _appDbContext.Set<User>().Include(x => x.Assistant).Include(x => x.Student).FirstOrDefaultAsync(x => x.Username == username);
+            User user = await _appDbContext.Set<User>().Include(x => x.Assistant).Include(x => x.Student).Include(x => x.Feedback).FirstOrDefaultAsync(x => x.Username == username);
             dynamic userDetails = null;
 
             if (user != null)
@@ -65,6 +65,7 @@ namespace SealabAPI.DataAccess.Services
                     LoginStudentResponse model = new();
                     user.AppToken = JwtHelper.CreateToken(claims.ToArray(), 3);
                     model.IdStudent = user.Student.Id;
+                    model.IsSurveyFilled = user.Feedback != null;
                     model.MapToModel(user.Student);
                     model.MapToModel(user);
                     userDetails = model;

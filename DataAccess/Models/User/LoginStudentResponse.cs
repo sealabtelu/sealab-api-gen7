@@ -18,5 +18,6 @@ namespace SealabAPI.DataAccess.Models
         public string Role { get; set; }
         public string AppToken { get; set; }
         public string Seelabs { get; set; }
+        public bool IsSurveyFilled { get; set; }
     }
 }
