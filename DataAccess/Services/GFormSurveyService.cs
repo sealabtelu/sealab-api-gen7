@@ -14,7 +14,7 @@ namespace SealabAPI.DataAccess.Services
         public GFormSurveyService(AppDbContext appDbContext) : base(appDbContext) { }
         public async Task<bool> Verify(Guid id)
         {
-            return await _appDbContext.Set<GFormSurvey>().AsNoTracking().FirstOrDefaultAsync(x => x.IdUser == id) is not null;
+            return await _appDbContext.Set<GFormSurvey>().AsNoTracking().AnyAsync(x => x.IdUser == id);
         }
     }
 }
