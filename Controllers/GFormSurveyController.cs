@@ -54,6 +54,21 @@ namespace SealabAPI.Controllers
             }
         }
 
+        [HttpGet("verify/{id}")]
+        public virtual async Task<ActionResult> Verify(Guid id)
+        {
+            try
+            {
+                bool isValid = await _service.Verify(id);
+
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), new { isValid });
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
+
         [HttpGet("{id}")]
         public virtual async Task<ActionResult<DetailGFormSurveyResponse>> GetById(Guid id)
         {
