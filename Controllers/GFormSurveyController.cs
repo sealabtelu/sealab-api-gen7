@@ -12,17 +12,20 @@ namespace SealabAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class GFormSurveyController : ControllerBase
+    public class GFormSurveyController : BaseController<
+        CreateGFormSurveyRequest,
+        UpdateGFormSurveyRequest,
+        DetailGFormSurveyResponse,
+        GFormSurvey>
     {
         private readonly ILogger<GFormSurveyController> _logger;
         private readonly IGFormSurveyService _service;
-        public GFormSurveyController(ILogger<GFormSurveyController> logger, IGFormSurveyService service)
+        public GFormSurveyController(ILogger<GFormSurveyController> logger, IGFormSurveyService service) : base(service)
         {
             _logger = logger;
             _service = service;
         }
-        [HttpPost]
-        public virtual async Task<ActionResult> Create(CreateGFormSurveyRequest model)
+        public override async Task<ActionResult> Create(CreateGFormSurveyRequest model)
         {
             try
             {
@@ -32,21 +35,6 @@ namespace SealabAPI.Controllers
                     IdUser = Request.ReadToken("nameid")
                 });
                 return new SuccessApiResponse(string.Format(MessageConstant.Success), result.Id);
-            }
-            catch (Exception ex)
-            {
-                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
-            }
-        }
-
-        [HttpDelete]
-        public virtual async Task<ActionResult> Delete(Guid id)
-        {
-            try
-            {
-                await _service.Delete(id);
-
-                return new SuccessApiResponse(string.Format(MessageConstant.Success), id);
             }
             catch (Exception ex)
             {
@@ -68,33 +56,10 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
-
-        [HttpGet("{id}")]
-        public virtual async Task<ActionResult<DetailGFormSurveyResponse>> GetById(Guid id)
+        [NonAction]
+        public override Task<ActionResult> Update(UpdateGFormSurveyRequest model)
         {
-            try
-            {
-                DetailGFormSurveyResponse model = await _service.Get<DetailGFormSurveyResponse>(x => x.Id == id);
-                return new SuccessApiResponse(string.Format(MessageConstant.Success), model);
-            }
-            catch (Exception ex)
-            {
-                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
-            }
-        }
-
-        [HttpGet("list")]
-        public virtual ActionResult<List<DetailGFormSurveyResponse>> GetList()
-        {
-            try
-            {
-                List<DetailGFormSurveyResponse> models = _service.GetAll<DetailGFormSurveyResponse>();
-                return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
-            }
-            catch (Exception ex)
-            {
-                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
-            }
+            throw new NotImplementedException();
         }
     }
 }
