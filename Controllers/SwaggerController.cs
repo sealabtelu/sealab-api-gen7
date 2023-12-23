@@ -9,6 +9,7 @@ using SealabAPI.DataAccess.Services;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.OpenApi.Extensions;
+using Microsoft.OpenApi;
 
 namespace SealabAPI.Controllers
 {
@@ -29,8 +30,11 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                var data = _swaggerProvider.GetSwagger("v1").SerializeAsJson(Microsoft.OpenApi.OpenApiSpecVersion.OpenApi3_0);
-                return Ok(data);
+                var swaggerDoc = _swaggerProvider.GetSwagger("v1");
+                swaggerDoc.Components.SecuritySchemes.Clear();
+                var swaggerJson = swaggerDoc.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
+
+                return Ok(swaggerJson);
             }
             catch (Exception ex)
             {
