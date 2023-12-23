@@ -30,11 +30,11 @@ namespace SealabAPI.Controllers
         {
             try
             {
-                var swaggerDoc = _swaggerProvider.GetSwagger("v1");
-                swaggerDoc.Components.SecuritySchemes.Clear();
-                var swaggerJson = swaggerDoc.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
+                var swaggerDoc = _swaggerProvider.GetSwagger("v1").SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
+                // swaggerDoc.Components.SecuritySchemes.Clear();
+                // var swaggerJson = swaggerDoc.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
 
-                return Ok(swaggerJson);
+                return Ok(swaggerDoc);
             }
             catch (Exception ex)
             {
