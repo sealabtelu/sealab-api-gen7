@@ -16,11 +16,10 @@ namespace SealabAPI.DataAccess.Models
     {
         public LoginRequestValidator(AppDbContext dbContext)
         {
-            RuleFor(x => x).Custom(async (data, context) =>
+            RuleFor(x => x).Custom((data, context) =>
             {
-                User user = await dbContext.Set<User>().AsNoTracking().FirstOrDefaultAsync(x => x.Username == data.Username);
+                User user = dbContext.Set<User>().AsNoTracking().FirstOrDefault(x => x.Username == data.Username);
 
-                var answer = dbContext.Set<PreliminaryAssignmentAnswer>().AsNoTracking();
                 if (user == null)
                     context.AddFailure("username", "Username not found!");
                 if (!PasswordHelper.VerifyHashedPassword(user.Password, data.Password))
