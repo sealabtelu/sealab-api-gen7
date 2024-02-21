@@ -6,7 +6,7 @@ namespace SealabAPI.DataAccess.Models
     public class SeelabsScoreInputRequest : SeelabsDetailGroupRequest
     {
         public int modulid { get; set; }
-        public int praktikum_id { get; set; } = 114;
+        public int praktikum_id { get; set; }
         public string tanggal { get; set; }
         public string submit { get; set; } = "submit";
         public string terms { get; set; } = "on";

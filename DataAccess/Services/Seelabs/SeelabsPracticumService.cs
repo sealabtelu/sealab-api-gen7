@@ -53,7 +53,7 @@ namespace SealabAPI.DataAccess.Services
         public async Task<List<SeelabsScoreStudentResponse>> ScoreStudent()
         {
             SetToken();
-            HttpResponseMessage response = await _client.HtmlPost("/page/nilai_user", new SeelabsScoreStudentRequest());
+            HttpResponseMessage response = await _client.HtmlPost("/page/nilai_user", new SeelabsScoreStudentRequest { praktikum_id = _idLab });
             var responseHtml = await response.ParseHtml();
             return responseHtml.QuerySelector("table")?.QuerySelectorAll("tr").Skip(1).Select(td => new SeelabsScoreStudentResponse(td)).ToList();
         }
@@ -97,7 +97,7 @@ namespace SealabAPI.DataAccess.Services
         public async Task<string> ScoreUpdate(ScoreUpdateRequest data)
         {
             SetToken();
-            SeelabsScoreUpdateRequest update = new(data);
+            SeelabsScoreUpdateRequest update = new(data) { praktikum_id = _idLab };
             var request = update.ToDictionary().ToList();
             data.GetScores(request);
             HttpResponseMessage response = await _client.HtmlPost("/pageasisten/lihat_inputnilai", request);
@@ -127,7 +127,7 @@ namespace SealabAPI.DataAccess.Services
         public async Task<string> ScoreInput(ScoreInputRequest data)
         {
             SetToken();
-            SeelabsScoreInputRequest input = new(data);
+            SeelabsScoreInputRequest input = new(data) { praktikum_id = _idLab };
             var request = input.ToDictionary().ToList();
             data.GetScores(request);
             HttpResponseMessage response = await _client.HtmlPost("/pageasisten/inputnilaipraktikum", request);

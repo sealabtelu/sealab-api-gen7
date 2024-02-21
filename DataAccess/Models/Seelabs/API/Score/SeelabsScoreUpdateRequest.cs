@@ -7,7 +7,7 @@ namespace SealabAPI.DataAccess.Models
     {
         public bool search { get; set; } = true;
         public int modulid => modul;
-        public int praktikum_id { get; set; } = 114;
+        public int praktikum_id { get; set; }
         public string editinput { get; set; } = "submit";
         public SeelabsScoreUpdateRequest(ScoreResultRequest request) : base(request)
         {
