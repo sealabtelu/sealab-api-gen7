@@ -1,6 +1,7 @@
-# Konfigurasi VPS untuk SeaLab API
+# Konfigurasi VPS untuk Sealab API
 
-Berikut adalah langkah-langkah untuk mengkonfigurasi Virtual Private Server (VPS) untuk menjalankan SeaLab API.
+Berikut adalah langkah-langkah untuk mengkonfigurasi Virtual Private Server (VPS) untuk menjalankan Sealab API.
+> Agar instalasi aplikasi web berjalan dengan baik. Konfigurasi API ini terlebih dahulu sebelum web
 
 ## Instalasi .NET SDK 6.0 dan Entity Framework Core Tools
 
@@ -39,21 +40,21 @@ Tambahkan alamat IP Seelabs pada file `/etc/hosts`
 103.233.100.16 see.labs.telkomuniversity.ac.id
 ```
 
-Buat file konfigurasi baru untuk situs web di `/etc/nginx/sites-available` dengan nama  `sealab-telu.com` lalu isi dengan kode berikut
+Buat file konfigurasi baru untuk situs web di `/etc/nginx/sites-available` dengan nama `api.sealab-telu.com` lalu isi dengan kode berikut
 
 ```
 server {
     listen 80;
-    server_name sealab-telu.com;
+    server_name api.sealab-telu.com;
 
     location / {
-        proxy_pass http://localhost:4173;
+        proxy_pass http://localhost:5000;
     }
 }
 ```
 Aktifkan konfigurasi dengan membuat link simbolis ke direktori `/etc/nginx/sites-enabled` dengan kode berikut
 ``` bash
-ln -s /etc/nginx/sites-available/sealab-telu.com /etc/nginx/sites-enabled/
+ln -s /etc/nginx/sites-available/api.sealab-telu.com /etc/nginx/sites-enabled/
 ```
 
 ## Pengaturan zona waktu
@@ -65,12 +66,15 @@ setelah itu ketikan `date` dan akan muncul waktu sekarang
 Thu Feb 22 07:36:45 UTC 2024
 ```
 
-## Menjalankan apliaksi
-Gunakan terminal multiplexer seperti `tmux` untuk menjalankan SeaLab API secara terus menerus:
+## Menjalankan aplikasi
+Gunakan terminal multiplexer seperti `tmux` untuk menjalankan Sealab API secara terus menerus:
 ```bash
 tmux new -s sea-api
 tmux a -t sea-api
 cd sealab-api
+```
+Sebelum menjalankan aplikasi setting dulu `appsettings.json` sesuai dengan contoh di `appsettings.Development.json`. Kemudian untuk menjalankan API ketik:
+```bash
 chmod +x deploy.sh
 ./deploy.sh
 ```
