@@ -10,9 +10,7 @@ $data = [
     make_script($model, null, 'Service'),
     make_script($model, null, 'Controller'),
     make_script($model, 'Create', 'Request'),
-    make_script($model, 'Delete', 'Request'),
     make_script($model, 'Detail', 'Response'),
-    make_script($model, 'List', 'Response'),
     make_script($model, 'Update', 'Request'),
 ];
 

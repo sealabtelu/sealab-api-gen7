@@ -14,9 +14,7 @@ namespace SealabAPI.Controllers
     public class CustomNameController : BaseController<
         CreateCustomNameRequest,
         UpdateCustomNameRequest,
-        DeleteCustomNameRequest,
         DetailCustomNameResponse,
-        ListCustomNameResponse,
         CustomName>
     {
         private readonly ILogger<CustomNameController> _logger;
