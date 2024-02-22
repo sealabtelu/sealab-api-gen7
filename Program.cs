@@ -3,6 +3,7 @@ using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -116,6 +117,13 @@ builder.Services.AddAuthentication(x =>
         ValidateIssuer = false,
         ValidateAudience = false
     };
+});
+
+builder.Services.AddAuthorization(opt =>
+{
+    opt.DefaultPolicy = new AuthorizationPolicyBuilder()
+    .RequireRole("Assistant")
+    .Build();
 });
 
 builder.Services.AddFluentValidationAutoValidation();

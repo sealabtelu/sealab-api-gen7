@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace SealabAPI.Base
 {
-    [Authorize(Roles = "Assistant")]
     public class BaseController<
         ModelCreate,
         ModelUpdate,
