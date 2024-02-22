@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Menjalankan git pull dari branch 'dev' di repository remote 'origin'
-git pull origin dev
+git pull origin master
 
 # Melakukan publish aplikasi .NET dengan konfigurasi release
 dotnet publish -c release
