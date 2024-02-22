@@ -29,6 +29,8 @@ builder.Services.AddControllers(options =>
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var webUrl = builder.Configuration.GetValue<string>("WebUrl");
+var secretKey = builder.Configuration.GetValue<string>("SecretKey");
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(connectionString);
@@ -90,14 +92,14 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
     {
         policy
-            .WithOrigins("https://ismilelab-telu.com", "http://localhost:3000")
+            .WithOrigins(webUrl, "http://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod();
 
     });
 });
 
-var key = Encoding.ASCII.GetBytes("3a97556f-c07f-4f5a-8bc6-28711d4922e9");
+var key = Encoding.ASCII.GetBytes(secretKey);
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

@@ -7,6 +7,17 @@ namespace SealabAPI.Helpers
 {
     public static class JwtHelper
     {
+
+        private static readonly IConfiguration _configuration;
+
+        static JwtHelper()
+        {
+            _configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.Development.json", optional: true)
+                .Build();
+        }
+
         public static dynamic ReadToken(this HttpRequest request, string property = null)
         {
             var bearer = request.Headers["Authorization"].ToString().Split(' ');
@@ -30,7 +41,7 @@ namespace SealabAPI.Helpers
         public static bool ValidateToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("3a97556f-c07f-4f5a-8bc6-28711d4922e9");
+            var key = Encoding.ASCII.GetBytes(_configuration["SecretKey"]);
 
             var validationParameters = new TokenValidationParameters
             {
@@ -47,7 +58,7 @@ namespace SealabAPI.Helpers
         public static string CreateToken(Claim[] claims, int expire)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("3a97556f-c07f-4f5a-8bc6-28711d4922e9");
+            var key = Encoding.ASCII.GetBytes(_configuration["SecretKey"]);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
