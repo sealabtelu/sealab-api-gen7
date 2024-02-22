@@ -27,47 +27,55 @@ namespace SealabAPI.DataAccess.Services
             User user = await _appDbContext.Set<User>().Include(x => x.Assistant).Include(x => x.Student).FirstOrDefaultAsync(x => x.Username == username);
             dynamic userDetails = null;
 
-            SeelabsLoginRequest seelabsLoginRequest = new(user.Nim, password, user.Role);
-            SeelabsLoginResponse practicum = await _practicumService.Login(seelabsLoginRequest);
+            if (user != null)
+            {
+                if (!PasswordHelper.VerifyHashedPassword(user.Password, password))
+                    throw new HttpRequestException("Wrong password!", null, HttpStatusCode.Unauthorized);
 
-            List<Claim> claims = new()
+                SeelabsLoginRequest seelabsLoginRequest = new(user.Nim, password, user.Role);
+                SeelabsLoginResponse practicum = await _practicumService.Login(seelabsLoginRequest);
+
+                List<Claim> claims = new()
                 {
                     new(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new(ClaimTypes.Role, user.Role.ToString())
                 };
 
-            if (practicum.Valid) claims.Add(new Claim("practicum_token", practicum.Token));
+                if (practicum.Valid) claims.Add(new Claim("practicum_token", practicum.Token));
 
-            if (user.Assistant != null)
-            {
-                SeelabsLoginResponse proctor = await _proctorService.Login(seelabsLoginRequest);
-                if (proctor.Valid) claims.Add(new Claim("proctor_token", proctor.Token));
-
-                LoginAssistantResponse model = new();
-                user.AppToken = JwtHelper.CreateToken(claims.ToArray(), 3);
-                model.IdAssistant = user.Assistant.Id;
-                model.MapToModel(user.Assistant);
-                model.MapToModel(user);
-                userDetails = model;
-                userDetails.Seelabs = new
+                if (user.Assistant != null)
                 {
-                    practicum = practicum.Valid ? "Valid" : "Invalid",
-                    proctor = proctor.Valid ? "Valid" : "Invalid"
-                };
-            }
-            else if (user.Student != null)
-            {
-                LoginStudentResponse model = new();
-                user.AppToken = JwtHelper.CreateToken(claims.ToArray(), 3);
-                model.IdStudent = user.Student.Id;
-                model.MapToModel(user.Student);
-                model.MapToModel(user);
-                userDetails = model;
-                userDetails.Seelabs = practicum.Valid ? "Valid" : "Invalid";
-            }
+                    SeelabsLoginResponse proctor = await _proctorService.Login(seelabsLoginRequest);
+                    if (proctor.Valid) claims.Add(new Claim("proctor_token", proctor.Token));
 
-            await _appDbContext.SaveChangesAsync();
-            
+                    LoginAssistantResponse model = new();
+                    user.AppToken = JwtHelper.CreateToken(claims.ToArray(), 3);
+                    model.IdAssistant = user.Assistant.Id;
+                    model.MapToModel(user.Assistant);
+                    model.MapToModel(user);
+                    userDetails = model;
+                    userDetails.Seelabs = new
+                    {
+                        practicum = practicum.Valid ? "Valid" : "Invalid",
+                        proctor = proctor.Valid ? "Valid" : "Invalid"
+                    };
+                }
+                else if (user.Student != null)
+                {
+                    LoginStudentResponse model = new();
+                    user.AppToken = JwtHelper.CreateToken(claims.ToArray(), 3);
+                    model.IdStudent = user.Student.Id;
+                    model.MapToModel(user.Student);
+                    model.MapToModel(user);
+                    userDetails = model;
+                    userDetails.Seelabs = practicum.Valid ? "Valid" : "Invalid";
+                }
+
+                await _appDbContext.SaveChangesAsync();
+            }
+            else
+                throw new HttpRequestException("Username not found!", null, HttpStatusCode.NotFound);
+
             return userDetails;
         }
         public async Task ChangePassword(ChangePasswordRequest model)
