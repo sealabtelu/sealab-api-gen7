@@ -92,7 +92,7 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
     {
         policy
-            .WithOrigins(webUrl, "http://localhost:3000")
+            .WithOrigins($"https://{webUrl}", "http://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod();
 
