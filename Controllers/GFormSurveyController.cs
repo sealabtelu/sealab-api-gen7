@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace SealabAPI.Controllers
 {
-    [Authorize(Roles = "Assistant,Student")]
     [Route("[controller]")]
     [ApiController]
     public class GFormSurveyController : BaseController<
@@ -27,6 +26,8 @@ namespace SealabAPI.Controllers
             _logger = logger;
             _service = service;
         }
+        [AllowAnonymous]
+        [Authorize(Roles = "Student")]
         public override async Task<ActionResult> Create(CreateGFormSurveyRequest model)
         {
             try
@@ -43,7 +44,8 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
-
+        [AllowAnonymous]
+        [Authorize(Roles = "Student")]
         [HttpGet("verify/{id}")]
         public virtual async Task<ActionResult> Verify(Guid id)
         {
