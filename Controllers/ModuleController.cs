@@ -25,7 +25,6 @@ namespace SealabAPI.Controllers
             _logger = logger;
             _service = service;
         }
-        [AllowAnonymous]
         [Authorize(Roles = "Student")]
         [HttpGet("submission/pa/{idStudent}")]
         public virtual ActionResult<List<ListSubmittedPAResponse>> GetListSubmittedPA(Guid idStudent)

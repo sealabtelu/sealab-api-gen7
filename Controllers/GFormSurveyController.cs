@@ -7,9 +7,11 @@ using SealabAPI.DataAccess.Models.Constants;
 using SealabAPI.DataAccess.Models;
 using SealabAPI.DataAccess.Services;
 using SealabAPI.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SealabAPI.Controllers
 {
+    [Authorize(Roles = "Assistant,Student")]
     [Route("[controller]")]
     [ApiController]
     public class GFormSurveyController : BaseController<
