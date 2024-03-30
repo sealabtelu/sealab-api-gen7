@@ -7,7 +7,7 @@ git pull origin master
 dotnet publish -c release
 
 # Menjalankan perintah EF Core untuk melakukan database update
-dotnet ef database update
+# dotnet ef database update
 
 # Navigasi ke direktori publish
 cd bin/Release/net6.0/publish

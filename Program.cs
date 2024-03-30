@@ -32,6 +32,7 @@ builder.Services.AddControllers(options =>
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var webUrl = builder.Configuration.GetValue<string>("WebUrl");
 var secretKey = builder.Configuration.GetValue<string>("SecretKey");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(connectionString);
@@ -96,7 +97,6 @@ builder.Services.AddCors(options =>
             .WithOrigins($"https://{webUrl}", "http://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod();
-
     });
 });
 
@@ -132,9 +132,9 @@ builder.Services.AddValidatorsFromAssemblyContaining<AbstractModelValidator<Base
 
 //builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddSingleton<IFileProvider>(
-    new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+builder.Services.AddSingleton<SeelabsPracticumService>();
+builder.Services.AddSingleton<SeelabsProctorService>();
 
 Assembly.GetExecutingAssembly()
     .GetTypes()
@@ -148,9 +148,6 @@ Assembly.GetExecutingAssembly()
         var serviceType = assignedTypes.GetInterfaces().First(i => !i.IsGenericType);
         builder.Services.AddScoped(serviceType, assignedTypes);
     });
-
-builder.Services.AddScoped<SeelabsPracticumService>();
-builder.Services.AddScoped<SeelabsProctorService>();
 
 var app = builder.Build();
 
@@ -178,6 +175,14 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.MapControllers().RequireAuthorization();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    AppDbContext appContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await appContext.Database.MigrateAsync();
+
+    // await Seeder.Seed<Food, FoodSeed>(appContext);
 }
 
 app.Run();
