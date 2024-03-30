@@ -27,7 +27,7 @@ namespace SealabAPI.Controllers
         }
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult> Create(LoginRequest loginRequest)
+        public async Task<ActionResult> Login(LoginRequest loginRequest)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace SealabAPI.Controllers
             }
             catch (HttpRequestException ex)
             {
-                return new ErrorApiResponse(ex.Message, statusCode: (int)ex.StatusCode);
+                return new ErrorApiResponse(ex.Message, statusCode: (int?)ex.StatusCode);
             }
             catch (Exception ex)
             {
