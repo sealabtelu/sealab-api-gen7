@@ -3,7 +3,7 @@
 version: '3.4'
 
 services:
-  sealabapi:
+  sealab-api:
     image: sealab-api
     build:
       context: .
