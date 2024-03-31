@@ -82,7 +82,7 @@ chmod +x deploy.sh
 Setelah menyelesaikan langkah-langkah diatas, kamu bisa mencoba menjalankan *endpoint* `user/login` untuk memastikan semuanya telah terkonfigurasi dengan benar.
 
 ### Kredensial Admin Default
-Untuk informasi lebih lanjut, lihat [Assistant Seeder](DataAccess\Seeders\AssistantSeed.cs).
+Untuk informasi lebih lanjut, lihat [Assistant Seeder](DataAccess/Seeders/AssistantSeed.cs).
 
 - **Username:** seachan
 - **Password:** seantuy
