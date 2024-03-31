@@ -3,8 +3,8 @@
 version: '3.4'
 
 services:
-  sealab-api:
-    image: sealab-api
+  ismile-api:
+    image: ismile-api
     build:
       context: .
       dockerfile: ./Dockerfile

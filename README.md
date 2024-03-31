@@ -78,3 +78,14 @@ Sebelum menjalankan aplikasi setting dulu `appsettings.json` sesuai dengan conto
 chmod +x deploy.sh
 ./deploy.sh
 ```
+## Login Admin Default
+Setelah menyelesaikan langkah-langkah diatas, kamu bisa mencoba menjalankan *endpoint* `user/login` untuk memastikan semuanya telah terkonfigurasi dengan benar.
+
+### Kredensial Admin Default
+Untuk informasi lebih lanjut, lihat [Assistant Seeder](DataAccess\Seeders\AssistantSeed.cs).
+
+- **Username:** seachan
+- **Password:** seantuy
+
+## Informasi Tambahan
+Pastikan untuk menggunakan kredensial admin ini hanya untuk keperluan pengujian atau pengembangan. Saat memasuki masa praktikum, disarankan untuk mengganti kredensial default dengan yang lebih aman.

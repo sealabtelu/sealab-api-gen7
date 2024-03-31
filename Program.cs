@@ -11,7 +11,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SealabAPI.Base;
 using SealabAPI.DataAccess;
+using SealabAPI.DataAccess.Entities;
 using SealabAPI.DataAccess.Models;
+using SealabAPI.DataAccess.Seeders;
 using SealabAPI.DataAccess.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -188,7 +190,7 @@ using (var scope = app.Services.CreateScope())
     AppDbContext appContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await appContext.Database.MigrateAsync();
 
-    // await Seeder.Seed<Food, FoodSeed>(appContext);
+    await Seeder.Seed<Assistant, AssistantSeed>(appContext);
 }
 
 app.Run();
