@@ -14,10 +14,11 @@ namespace SealabAPI.DataAccess.Seeders
                 Code="SEA",
                 Position="Master Admin",
                 User = new(){
+                    Name = "SEA-chan",
                     Nim = "0000000000",
                     Username = "seachan",
                     Password = "seantuy",
-                    Name = "SEA-chan",
+                    Role = "Assistant"
                 }
             }
         };
