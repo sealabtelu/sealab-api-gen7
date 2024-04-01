@@ -64,12 +64,29 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
-        [HttpPost("excel/insert")]
-        public async Task<ActionResult> ExcelInsert(IFormFile file, CancellationToken cancellationToken)
+        [HttpPost("csv/insert")]
+        public async Task<ActionResult> CsvInsert(IFormFile file)
         {
             try
             {
-                List<CreateStudentRequest> excel = FileHelper.GetExcelData<CreateStudentRequest>(file, cancellationToken);
+                var csv = FileHelper.GetCsvData<CreateStudentRequest>(file);
+                await _service.BulkInsert(csv);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success));
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
+        /// <summary>
+        /// Excel sometimes throws errors. Consider using CSV format if possible
+        /// </summary>
+        [HttpPost("excel/insert")]
+        public async Task<ActionResult> ExcelInsert(IFormFile file)
+        {
+            try
+            {
+                List<CreateStudentRequest> excel = FileHelper.GetExcelData<CreateStudentRequest>(file);
                 await _service.BulkInsert(excel);
                 return new SuccessApiResponse(string.Format(MessageConstant.Success));
             }

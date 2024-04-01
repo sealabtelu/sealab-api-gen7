@@ -1,6 +1,9 @@
-﻿using OfficeOpenXml;
+﻿using CsvHelper;
+using CsvHelper.Configuration;
+using OfficeOpenXml;
 using SealabAPI.Base;
 using SealabAPI.DataAccess.Extensions;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
@@ -20,19 +23,17 @@ namespace SealabAPI.Helpers
             public IFormFile File { get; set; }
             public string FilePath { get; set; }
         }
-
         public class TreeNode
         {
             public string Name { get; set; }
             public string Type { get; set; }
             public List<TreeNode> Children { get; set; }
         }
-
         public static IEnumerable<TreeNode> GetDirectoryTree(string folderPath)
         {
-            var nodes = new List<TreeNode>();
-
-            var directories = Directory.GetDirectories(folderPath);
+            List<TreeNode> nodes = new();
+            var dirPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", folderPath ?? string.Empty);
+            var directories = Directory.GetDirectories(dirPath);
             foreach (var directory in directories)
             {
                 var directoryNode = new TreeNode
@@ -43,8 +44,7 @@ namespace SealabAPI.Helpers
                 };
                 nodes.Add(directoryNode);
             }
-
-            var files = Directory.GetFiles(folderPath);
+            var files = Directory.GetFiles(dirPath);
             foreach (var file in files)
             {
                 var fileNode = new TreeNode
@@ -54,10 +54,8 @@ namespace SealabAPI.Helpers
                 };
                 nodes.Add(fileNode);
             }
-
             return nodes;
         }
-
         // public static DownloadInfo DownloadExcel<T>(CancellationToken cancellationToken)
         // {
 
@@ -95,7 +93,26 @@ namespace SealabAPI.Helpers
         //         fileName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx"
         //     };
         // }
-        public static List<T> GetExcelData<T>(IFormFile file, CancellationToken cancellationToken)
+        public static List<T> GetCsvData<T>(IFormFile file)
+        {
+            if (file == null || file.Length <= 0)
+                throw new ArgumentException("No file chosen!");
+
+            if (!Path.GetExtension(file.FileName).Equals(".csv", StringComparison.OrdinalIgnoreCase))
+                throw new ArgumentException("File extension not supported");
+
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HeaderValidated = null,
+                MissingFieldFound = null
+            };
+            using var reader = new StreamReader(file.OpenReadStream());
+            using var csv = new CsvReader(reader, config);
+
+            List<T> entities = csv.GetRecords<T>().ToList();
+            return entities;
+        }
+        public static List<T> GetExcelData<T>(IFormFile file)
         {
             if (file == null || file.Length <= 0)
                 throw new ArgumentException("No file chosen!");
@@ -103,12 +120,13 @@ namespace SealabAPI.Helpers
             if (!Path.GetExtension(file.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
                 throw new ArgumentException("File extension not supported");
 
-            using var stream = new MemoryStream();
-            file.CopyToAsync(stream, cancellationToken);
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            using var package = new ExcelPackage(stream);
+            using var package = new ExcelPackage(file.OpenReadStream());
             ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
-            List<T> entities = worksheet.ConvertSheetToObjects<T>();
+            var startCell = worksheet.Dimension.Start;
+            var endCell = worksheet.Dimension.End;
+            List<T> entities = worksheet.Cells[startCell.Row, startCell.Column, endCell.Row, endCell.Column].ToCollection<T>();
+
             return entities;
         }
         public static FileStream DownloadFolderZip(string[] dir)

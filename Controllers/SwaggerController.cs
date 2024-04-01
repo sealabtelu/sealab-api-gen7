@@ -14,7 +14,6 @@ using Microsoft.OpenApi;
 namespace SealabAPI.Controllers
 {
     [Route("[controller]")]
-    [Authorize(Roles = "Assistant")]
     [ApiController]
     public class SwaggerController : ControllerBase
     {

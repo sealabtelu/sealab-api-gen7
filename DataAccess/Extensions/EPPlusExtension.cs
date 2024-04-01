@@ -55,7 +55,7 @@ namespace SealabAPI.DataAccess.Extensions
                             var unboxedVal = (double)val;
 
                             //FAR FROM A COMPLETE LIST!!!
-                            if (prop.PropertyType == typeof(Int32))
+                            if (prop.PropertyType == typeof(int))
                                 prop.SetValue(tnew, (int)unboxedVal);
                             else if (prop.PropertyType == typeof(double))
                                 prop.SetValue(tnew, unboxedVal);
