@@ -135,8 +135,6 @@ builder.Services.AddValidatorsFromAssemblyContaining<AbstractModelValidator<Base
 //builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
-builder.Services.AddSingleton<SeelabsPracticumService>();
-builder.Services.AddSingleton<SeelabsProctorService>();
 
 Assembly.GetExecutingAssembly()
     .GetTypes()
@@ -150,6 +148,9 @@ Assembly.GetExecutingAssembly()
         var serviceType = assignedTypes.GetInterfaces().First(i => !i.IsGenericType);
         builder.Services.AddScoped(serviceType, assignedTypes);
     });
+
+builder.Services.AddScoped<SeelabsPracticumService>();
+builder.Services.AddScoped<SeelabsProctorService>();
 
 var app = builder.Build();
 
