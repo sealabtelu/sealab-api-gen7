@@ -8,11 +8,11 @@ using SealabAPI.DataAccess.Models;
 using SealabAPI.DataAccess.Services;
 using Microsoft.AspNetCore.Authorization;
 using System.Diagnostics;
+using SealabAPI.Helpers;
 
 namespace SealabAPI.Controllers
 {
     [Route("[controller]")]
-    [Authorize(Roles = "Assistant")]
     [ApiController]
     public class VPSController : ControllerBase
     {
@@ -21,36 +21,14 @@ namespace SealabAPI.Controllers
         {
             _logger = logger;
         }
-        // [HttpGet]
-        // public ActionResult Test()
-        // {
-
-        //     return new SuccessApiResponse(string.Format(MessageConstant.Success), "success");
-        // }
-        [HttpGet("deploy")]
-        public ActionResult Deploy()
+        [HttpGet("directory-tree")]
+        public ActionResult<List<FileHelper.TreeNode>> GetDirectoryTree(string path)
         {
             try
             {
-                string scriptPath = Path.Combine(Directory.GetCurrentDirectory(), "deploy-auto.sh");
-                _logger.LogInformation(scriptPath);
-                Process process = new()
-                {
-                    StartInfo = new()
-                    {
-                        FileName = "bash",
-                        Arguments = scriptPath,
-                        RedirectStandardOutput = true,
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    }
-                };
-                process.Start();
-                process.WaitForExit();
-                string output = process.StandardOutput.ReadToEnd().Replace("\n", "");
-                process.Close();
+                var treeDir = FileHelper.GetDirectoryTree(path);
 
-                return new SuccessApiResponse(string.Format(MessageConstant.Success), output);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), treeDir);
             }
             catch (Exception ex)
             {
