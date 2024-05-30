@@ -1,4 +1,4 @@
-# Konfigurasi VPS untuk I-Smile LMS API
+# Konfigurasi VPS untuk I-Smile API
 
 Berikut adalah langkah-langkah untuk mengkonfigurasi Virtual Private Server (VPS) untuk menjalankan Sealab API.
 > Agar instalasi aplikasi web berjalan dengan baik. Konfigurasi API ini terlebih dahulu sebelum web
@@ -84,8 +84,8 @@ Setelah menyelesaikan langkah-langkah diatas, kamu bisa mencoba menjalankan *end
 ### Kredensial Admin Default
 Untuk informasi lebih lanjut, lihat [Assistant Seeder](DataAccess/Seeders/AssistantSeed.cs).
 
-- **Username:** seachan
-- **Password:** seantuy
+- **Username:** piachan
+- **Password:** master
 
 ## Informasi Tambahan
 Pastikan untuk menggunakan kredensial admin ini hanya untuk keperluan pengujian atau pengembangan. Saat memasuki masa praktikum, disarankan untuk mengganti kredensial default dengan yang lebih aman.
