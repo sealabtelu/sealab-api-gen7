@@ -1,4 +1,4 @@
-# Konfigurasi VPS untuk Sealab API
+# Konfigurasi VPS untuk I-Smile LMS API
 
 Berikut adalah langkah-langkah untuk mengkonfigurasi Virtual Private Server (VPS) untuk menjalankan Sealab API.
 > Agar instalasi aplikasi web berjalan dengan baik. Konfigurasi API ini terlebih dahulu sebelum web
@@ -69,8 +69,8 @@ Thu Feb 22 07:36:45 UTC 2024
 ## Menjalankan aplikasi
 Gunakan terminal multiplexer seperti `tmux` untuk menjalankan Sealab API secara terus menerus:
 ```bash
-tmux new -s sea-api
-tmux a -t sea-api
+tmux new -s ismile-api
+tmux a -t ismile-api
 cd sealab-api
 ```
 Sebelum menjalankan aplikasi setting dulu `appsettings.json` sesuai dengan contoh di `appsettings.Development.json`. Kemudian untuk menjalankan API ketik:
