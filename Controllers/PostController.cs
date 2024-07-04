@@ -6,6 +6,7 @@ using SealabAPI.DataAccess.Entities;
 using SealabAPI.DataAccess.Models.Constants;
 using SealabAPI.DataAccess.Models;
 using SealabAPI.DataAccess.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SealabAPI.Controllers
 {
@@ -24,5 +25,20 @@ namespace SealabAPI.Controllers
             _logger = logger;
             _service = service;
         }
+        [AllowAnonymous]
+        public override Task<ActionResult<DetailPostResponse>> GetById(Guid id)
+        {
+            return base.GetById(id);
+        }
+        [AllowAnonymous]
+        public override ActionResult<List<DetailPostResponse>> GetList()
+        {
+            return base.GetList();
+        }
+        public override Task<ActionResult> Create([FromForm] CreatePostRequest model)
+        {
+            return base.Create(model);
+        }
+
     }
 }
