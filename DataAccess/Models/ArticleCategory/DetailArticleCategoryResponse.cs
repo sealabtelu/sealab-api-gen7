@@ -5,7 +5,7 @@ using SealabAPI.Helpers;
 
 namespace SealabAPI.DataAccess.Models
 {
-    public class DetailPostCategoryResponse : BaseModel
+    public class DetailArticleCategoryResponse : BaseModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

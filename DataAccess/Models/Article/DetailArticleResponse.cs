@@ -6,7 +6,7 @@ using SealabAPI.Helpers;
 
 namespace SealabAPI.DataAccess.Models
 {
-    public class DetailPostResponse : BaseModel
+    public class DetailArticleResponse : BaseModel
     {
         public Guid Id { get; set; }
         public string ThumbnailUrl { get; set; }
@@ -18,21 +18,21 @@ namespace SealabAPI.DataAccess.Models
         public string Summary { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public DetailPostResponse()
+        public DetailArticleResponse()
         {
             IncludeProperty(new string[] { "Category", "Assistant", "Assistant.User" });
         }
         public override void MapToModel<TEntity>(TEntity entity)
         {
-            if (entity is Post post)
+            if (entity is Article article)
             {
-                IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<Post, DetailPostResponse>()
+                IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<Article, DetailArticleResponse>()
                     .ForMember(dest => dest.Category, opt => opt.Ignore()))
                     .CreateMapper();
-                mapper.Map(post, this);
+                mapper.Map(article, this);
                 string[] words = Content.Split(new char[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                Author = post.Assistant.User.Name;
-                Category = post.Category.Name;
+                Author = article.Assistant.User.Name;
+                Category = article.Category.Name;
                 ReadTime = $"{Math.Ceiling((double)words.Length / 250)} mins";
             }
         }

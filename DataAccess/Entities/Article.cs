@@ -6,7 +6,7 @@ using static SealabAPI.Helpers.FileHelper;
 
 namespace SealabAPI.DataAccess.Entities
 {
-    public class Post : BaseEntity
+    public class Article : BaseEntity
     {
         public override UploadFileInfo GetFileInfo()
         {
@@ -30,7 +30,7 @@ namespace SealabAPI.DataAccess.Entities
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         [ForeignKey(nameof(IdCategory))]
-        public PostCategory Category { get; set; }
+        public ArticleCategory Category { get; set; }
         [ForeignKey(nameof(IdAssistant))]
         public Assistant Assistant { get; set; }
     }

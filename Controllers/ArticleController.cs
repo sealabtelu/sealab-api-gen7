@@ -12,33 +12,32 @@ namespace SealabAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class PostController : BaseController<
-        CreatePostRequest,
-        UpdatePostRequest,
-        DetailPostResponse,
-        Post>
+    public class ArticleController : BaseController<
+        CreateArticleRequest,
+        UpdateArticleRequest,
+        DetailArticleResponse,
+        Article>
     {
-        private readonly ILogger<PostController> _logger;
-        private readonly IPostService _service;
-        public PostController(ILogger<PostController> logger, IPostService service) : base(service)
+        private readonly ILogger<ArticleController> _logger;
+        private readonly IArticleService _service;
+        public ArticleController(ILogger<ArticleController> logger, IArticleService service) : base(service)
         {
             _logger = logger;
             _service = service;
         }
         [AllowAnonymous]
-        public override Task<ActionResult<DetailPostResponse>> GetById(Guid id)
+        public override Task<ActionResult<DetailArticleResponse>> GetById(Guid id)
         {
             return base.GetById(id);
         }
         [AllowAnonymous]
-        public override ActionResult<List<DetailPostResponse>> GetList()
+        public override ActionResult<List<DetailArticleResponse>> GetList()
         {
             return base.GetList();
         }
-        public override Task<ActionResult> Create([FromForm] CreatePostRequest model)
+        public override Task<ActionResult> Create([FromForm] CreateArticleRequest model)
         {
             return base.Create(model);
         }
-
     }
 }

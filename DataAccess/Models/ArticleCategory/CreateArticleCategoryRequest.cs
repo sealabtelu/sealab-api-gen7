@@ -5,7 +5,7 @@ using SealabAPI.Helpers;
 
 namespace SealabAPI.DataAccess.Models
 {
-    public class CreatePostCategoryRequest : BaseModel
+    public class CreateArticleCategoryRequest : BaseModel
     {
         public string Name { get; set; }
     }

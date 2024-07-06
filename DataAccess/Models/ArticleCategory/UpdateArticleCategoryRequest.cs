@@ -5,7 +5,7 @@ using SealabAPI.Helpers;
 
 namespace SealabAPI.DataAccess.Models
 {
-    public class UpdatePostCategoryRequest : BaseModel
+    public class UpdateArticleCategoryRequest : BaseModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

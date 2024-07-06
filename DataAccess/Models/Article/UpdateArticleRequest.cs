@@ -5,8 +5,9 @@ using SealabAPI.Helpers;
 
 namespace SealabAPI.DataAccess.Models
 {
-    public class CreatePostRequest : BaseModel
+    public class UpdateArticleRequest : BaseModel
     {
+        public Guid Id { get; set; }
         public Guid IdAssistant { get; set; }
         public Guid IdCategory { get; set; }
         public string Title { get; set; }
@@ -15,10 +16,10 @@ namespace SealabAPI.DataAccess.Models
         public IFormFile Thumbnail { get; set; }
         public override TEntity MapToEntity<TEntity>()
         {
-            Post post = base.MapToEntity<TEntity>() as Post;
-            post.File = Thumbnail;
-            post.ThumbnailUrl = $"{post.Id}";
-            return post as TEntity;
+            Article article = base.MapToEntity<TEntity>() as Article;
+            article.File = Thumbnail;
+            article.ThumbnailUrl = $"{article.Id}";
+            return article as TEntity;
         }
     }
 }

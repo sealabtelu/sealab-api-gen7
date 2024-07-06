@@ -5,9 +5,9 @@ using SealabAPI.Helpers;
 
 namespace SealabAPI.DataAccess.Entities
 {
-    public class PostCategory : BaseEntity
+    public class ArticleCategory : BaseEntity
     {
         public string Name { get; set; }
-        public ICollection<Post> Posts { get; set; } = new HashSet<Post>();
+        public ICollection<Article> Posts { get; set; } = new HashSet<Article>();
     }
 }
