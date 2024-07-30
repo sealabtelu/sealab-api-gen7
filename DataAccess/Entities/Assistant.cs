@@ -10,5 +10,6 @@ namespace SealabAPI.DataAccess.Entities
         public string Position { get; set; }
         [ForeignKey(nameof(IdUser))]
         public User User { get; set; }
+        public ICollection<Article> Articles { get; set; } = new HashSet<Article>();
     }
 }

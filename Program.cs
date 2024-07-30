@@ -132,9 +132,13 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<AbstractModelValidator<BaseModel>>();
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddMemoryCache();
+
 //builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+builder.Services.AddSingleton<IMailService, MailService>();
 
 Assembly.GetExecutingAssembly()
     .GetTypes()
@@ -177,12 +181,6 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(opt =>
-    {
-        opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        opt.RoutePrefix = string.Empty;
-    });
     app.MapControllers().RequireAuthorization();
 }
 

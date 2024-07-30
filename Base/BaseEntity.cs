@@ -11,7 +11,7 @@ namespace SealabAPI.Base
         public Guid Id { get; set; } = Guid.NewGuid();
         [NotMapped]
         public IFormFile File { get; set; }
-        public UploadFileInfo GetFileInfo()
+        public virtual UploadFileInfo GetFileInfo()
         {
             return new UploadFileInfo
             {

@@ -28,6 +28,7 @@ namespace SealabAPI.DataAccess.Entities
         public string Role { get; set; }
         public string Phone { get => _phone; set => _phone = value?.Replace(" ", ""); }
         public string AppToken { get; set; }
+        public bool IsVerified { get; set; } = false;
         public Student Student { get; set; }
         public Assistant Assistant { get; set; }
         public GFormSurvey Feedback { get; set; }
