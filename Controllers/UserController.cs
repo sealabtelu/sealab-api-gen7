@@ -62,6 +62,23 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        [HttpPost("send-email-verification")]
+        public async Task<ActionResult> SendEmailVerification(SendEmailRequest request)
+        {
+            try
+            {
+                var result = await _service.GenerateEmailVerificationOTP(request.Email);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), "Check email!");
+            }
+            catch (HttpRequestException ex)
+            {
+                return new ErrorApiResponse(ex.Message, statusCode: (int)ex.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
         [NonAction]
         public override Task<ActionResult> Create(CreateUserRequest model)
         {
