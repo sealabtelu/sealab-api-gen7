@@ -1,6 +1,6 @@
 # Integrating Google Forms with Journal Submission
 
-This guide will walk you through integrating Google Forms with the Jurnal system, ensuring users complete the form before submitting their journal.
+This guide will walk you through integrating Google Forms with the Journal system, ensuring users complete the form before submitting their journal.
 
 ![Google Form Intro](./img/form_intro.png)
 
@@ -42,7 +42,7 @@ Now, you’ll need a prefilled link for the token. Go to the form’s settings a
 
 ![Prefilled Link](./img/form_prefill.png)
 
-Enter any placeholder text in the **Token** field and click **Get Link** at the end of the form. The link generated should look something like this:
+Enter any placeholder text in the **Token** field then click **Get Link** at the end of the form. The link generated should look something like this:
 > https://docs.google.com/forms/d/e/.../viewform?usp=pp_url&entry.2072338726=apapun
 
 Replace the placeholder text (in this case, 'apapun') with `${token}`.

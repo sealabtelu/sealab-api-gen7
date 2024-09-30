@@ -12,10 +12,11 @@ namespace SealabAPI.DataAccess.Services
         Task<Student> Create(CreateStudentRequest model);
         Task<Student> Update(UpdateStudentRequest model);
         Task BulkInsert(List<CreateStudentRequest> model);
+        Task DeleteAllStudents(); 
     }
     public class StudentService : BaseService<Student>, IStudentService
     {
-        IUserService _userService;
+        readonly IUserService _userService;
         public StudentService(AppDbContext appDbContext, IUserService userService) : base(appDbContext)
         {
             _userService = userService;
@@ -51,6 +52,12 @@ namespace SealabAPI.DataAccess.Services
             model.Id = student.IdUser;
             await _userService.Update(model);
             return student;
+        }
+        public async Task DeleteAllStudents()
+        {
+            List<User> users = _appDbContext.Set<User>().Where(u => u.Role == "Student").AsNoTracking().ToList();
+            _appDbContext.Set<User>().RemoveRange(users);
+            await _appDbContext.SaveChangesAsync();
         }
     }
 }

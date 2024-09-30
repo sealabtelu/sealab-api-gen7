@@ -134,5 +134,25 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        /// <summary>
+        /// This will delete all modules and related questions!, Use when reset season only!
+        /// </summary>
+        /// <param name = "confirm" > Type "delete all modules" </param>
+        [HttpDelete("all")]
+        public async Task<ActionResult> DeleteAllModules(string confirm)
+        {
+            try
+            {
+                if (confirm == "delete all modules")
+                    await _service.DeleteAllModules();
+                else
+                    throw new ArgumentException("Type: 'delete all mpdules' to confirm");
+                return new SuccessApiResponse(string.Format(MessageConstant.Success));
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
     }
 }
