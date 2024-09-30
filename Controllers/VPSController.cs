@@ -35,5 +35,17 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        [HttpGet("current-time")]
+        public ActionResult<string> CurrentTime()
+        {
+            try
+            {
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
     }
 }
