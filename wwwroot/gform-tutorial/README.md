@@ -6,7 +6,15 @@ This guide will walk you through integrating Google Forms with the Jurnal system
 
 ## 1. Setting up the Google Form
 
-Create a Google Form as you normally would for a survey or feedback form. Ensure that you add a **Token** field at the beginning of the form. This will serve as an identifier for the submission process. Here's an example of how the form should look:
+Create a Google Form as you normally would for a survey or feedback form. Ensure that you add a **Token** field at the beginning of the form. This will serve as an identifier for the submission process. 
+
+To validate the token, add the following regex pattern: 
+>`^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)`
+
+![Google Form Regex](./img/form_regex.png)
+
+
+Here's an example of how the form should look:
 
 ![Google Form Intro](./img/form_token.png)
 
