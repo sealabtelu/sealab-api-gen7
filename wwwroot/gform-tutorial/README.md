@@ -51,3 +51,5 @@ if (isValid) {
 ```
 
 Once done, the system will now prompt users to fill out the Google Form before submitting their journal.
+
+>_Additional resources and inspiration for setting up Google Forms webhook submissions were drawn from this guide by [Eyal Gershon](https://medium.com/@eyalgershon/sending-a-webhook-for-each-google-forms-submission-a0e73f72b397)._
