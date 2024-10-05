@@ -10,7 +10,7 @@ namespace SealabAPI.DataAccess.Models
         public int shift_id { get; set; }
         public SeelabsListGroupRequest(ListGroupRequest request)
         {
-            hari_id = request.Day + 7;
+            hari_id = request.Day;
             shift_id = request.Shift;
         }
     }
