@@ -41,3 +41,26 @@ jobs:
             -t ${{ secrets.DOCKER_HUB_USERNAME }}/ismile-website:$DATE_TAG \
             --push .
 
+  Deploy-Prod:
+    name: Deploy Created Image to Production
+    runs-on: ubuntu-latest
+    needs: Push-Latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Connect to Tailscale Network
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+      - name: Deploy to Local
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_TS_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd ismile-repo/ismile-deploy
+            docker compose pull ${{ env.IMAGE_TAG }}
+            docker compose up -d --force-recreate ${{ env.IMAGE_TAG }}
