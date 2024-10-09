@@ -110,6 +110,7 @@ namespace SealabAPI.DataAccess.Services
         public async Task<List<SeelabsListGroupResponse>> GroupList(SeelabsListGroupRequest request)
         {
             SetToken();
+            SetWeek(request);
             HttpResponseMessage response = await _client.HtmlPost("/pageasisten/inputnilaipraktikum", request);
             var responseHtml = await response.ParseHtml();
             var table = responseHtml.QuerySelector("table");
@@ -119,6 +120,7 @@ namespace SealabAPI.DataAccess.Services
         public async Task<List<SeelabsDetailGroupResponse>> GroupDetail(SeelabsDetailGroupRequest request)
         {
             SetToken();
+            SetWeek(request);
             HttpResponseMessage response = await _client.HtmlPost("/pageasisten/inputnilaipraktikum", request);
             var responseHtml = await response.ParseHtml();
             var table = responseHtml.QuerySelector("table");

@@ -14,12 +14,14 @@ namespace SealabAPI.DataAccess.Services
 {
     public class SeelabsBase
     {
+        protected readonly IConfiguration _configuration;
         protected readonly HttpRequestHelper _client;
         protected readonly HttpRequest _httpRequest;
         protected readonly int _idLab;
         protected virtual string _token => _httpRequest.ReadToken("practicum_token");
         public SeelabsBase(IHttpContextAccessor httpRequest, IConfiguration configuration, string endpoint)
         {
+            _configuration = configuration;
             _httpRequest = httpRequest.HttpContext.Request;
             _client = new HttpRequestHelper($"{configuration["SeelabsUrl"]}/{endpoint}/index.php");
             _idLab = int.Parse(configuration["LabId"]);
@@ -54,6 +56,10 @@ namespace SealabAPI.DataAccess.Services
                 }
             }
             return result;
+        }
+        protected void SetWeek<T>(T request) where T : SeelabsListGroupRequest
+        {
+            request.hari_id += _configuration["StartWeek"] == "1" ? 0 : 7;
         }
         protected void SetToken()
         {
