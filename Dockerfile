@@ -20,4 +20,6 @@ RUN dotnet publish "SealabAPI.csproj" -c Release -o /app/publish /p:UseAppHost=f
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "SealabAPI.dll"]
+COPY entrypoint.sh /app/
+# ENTRYPOINT ["dotnet", "SealabAPI.dll"]
+ENTRYPOINT ["sh", "entrypoint.sh"]

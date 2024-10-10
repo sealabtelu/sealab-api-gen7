@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SealabAPI.DataAccess;
@@ -11,9 +12,10 @@ using SealabAPI.DataAccess;
 namespace SealabAPI.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240703064028_blogMigration")]
+    partial class blogMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,74 +23,6 @@ namespace SealabAPI.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("SealabAPI.DataAccess.Entities.Article", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("text")
-                        .HasColumnName("content");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<Guid>("IdAssistant")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id_assistant");
-
-                    b.Property<Guid>("IdCategory")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id_category");
-
-                    b.Property<string>("Summary")
-                        .HasColumnType("text")
-                        .HasColumnName("summary");
-
-                    b.Property<string>("ThumbnailUrl")
-                        .HasColumnType("text")
-                        .HasColumnName("thumbnail_url");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("text")
-                        .HasColumnName("title");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("updated_at");
-
-                    b.HasKey("Id")
-                        .HasName("pk_article");
-
-                    b.HasIndex("IdAssistant")
-                        .HasDatabaseName("ix_article_id_assistant");
-
-                    b.HasIndex("IdCategory")
-                        .HasDatabaseName("ix_article_id_category");
-
-                    b.ToTable("article", (string)null);
-                });
-
-            modelBuilder.Entity("SealabAPI.DataAccess.Entities.ArticleCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_article_category");
-
-                    b.ToTable("article_category", (string)null);
-                });
 
             modelBuilder.Entity("SealabAPI.DataAccess.Entities.Assistant", b =>
                 {
@@ -222,6 +156,66 @@ namespace SealabAPI.DataAccess.Migrations
                         .HasName("pk_module");
 
                     b.ToTable("module", (string)null);
+                });
+
+            modelBuilder.Entity("SealabAPI.DataAccess.Entities.Post", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("text")
+                        .HasColumnName("content");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("IdAssistant")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id_assistant");
+
+                    b.Property<Guid>("IdCategory")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id_category");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text")
+                        .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_post");
+
+                    b.HasIndex("IdAssistant")
+                        .HasDatabaseName("ix_post_id_assistant");
+
+                    b.HasIndex("IdCategory")
+                        .HasDatabaseName("ix_post_id_category");
+
+                    b.ToTable("post", (string)null);
+                });
+
+            modelBuilder.Entity("SealabAPI.DataAccess.Entities.PostCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_post_category");
+
+                    b.ToTable("post_category", (string)null);
                 });
 
             modelBuilder.Entity("SealabAPI.DataAccess.Entities.PreliminaryAssignmentAnswer", b =>
@@ -434,10 +428,6 @@ namespace SealabAPI.DataAccess.Migrations
                         .HasColumnType("text")
                         .HasColumnName("email");
 
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_verified");
-
                     b.Property<string>("Name")
                         .HasColumnType("text")
                         .HasColumnName("name");
@@ -466,27 +456,6 @@ namespace SealabAPI.DataAccess.Migrations
                         .HasName("pk_user");
 
                     b.ToTable("user", (string)null);
-                });
-
-            modelBuilder.Entity("SealabAPI.DataAccess.Entities.Article", b =>
-                {
-                    b.HasOne("SealabAPI.DataAccess.Entities.Assistant", "Assistant")
-                        .WithMany("Articles")
-                        .HasForeignKey("IdAssistant")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_article_assistant_id_assistant");
-
-                    b.HasOne("SealabAPI.DataAccess.Entities.ArticleCategory", "Category")
-                        .WithMany("Posts")
-                        .HasForeignKey("IdCategory")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_article_article_category_id_category");
-
-                    b.Navigation("Assistant");
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("SealabAPI.DataAccess.Entities.Assistant", b =>
@@ -532,6 +501,27 @@ namespace SealabAPI.DataAccess.Migrations
                     b.Navigation("Module");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("SealabAPI.DataAccess.Entities.Post", b =>
+                {
+                    b.HasOne("SealabAPI.DataAccess.Entities.Assistant", "Assistant")
+                        .WithMany("Posts")
+                        .HasForeignKey("IdAssistant")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_post_assistant_id_assistant");
+
+                    b.HasOne("SealabAPI.DataAccess.Entities.PostCategory", "Category")
+                        .WithMany("Posts")
+                        .HasForeignKey("IdCategory")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_post_post_category_id_category");
+
+                    b.Navigation("Assistant");
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("SealabAPI.DataAccess.Entities.PreliminaryAssignmentAnswer", b =>
@@ -624,14 +614,9 @@ namespace SealabAPI.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SealabAPI.DataAccess.Entities.ArticleCategory", b =>
-                {
-                    b.Navigation("Posts");
-                });
-
             modelBuilder.Entity("SealabAPI.DataAccess.Entities.Assistant", b =>
                 {
-                    b.Navigation("Articles");
+                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("SealabAPI.DataAccess.Entities.Module", b =>
@@ -643,6 +628,11 @@ namespace SealabAPI.DataAccess.Migrations
                     b.Navigation("PAQuestions");
 
                     b.Navigation("PRTQuestions");
+                });
+
+            modelBuilder.Entity("SealabAPI.DataAccess.Entities.PostCategory", b =>
+                {
+                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("SealabAPI.DataAccess.Entities.PreTestOption", b =>

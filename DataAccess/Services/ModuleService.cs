@@ -13,6 +13,7 @@ namespace SealabAPI.DataAccess.Services
         List<ListSubmittedPRTResponse> GetListSubmittedPRT(Guid idStudent);
         List<ListSubmittedJResponse> GetListSubmittedJ(Guid idStudent);
         List<ListSubmittedFTResponse> GetListSubmittedFT(Guid idStudent);
+        Task DeleteAllModules();
     }
     public class ModuleService : BaseService<Module>, IModuleService
     {
@@ -134,6 +135,12 @@ namespace SealabAPI.DataAccess.Services
                 models.Add(model);
             }
             return models;
+        }
+        public async Task DeleteAllModules()
+        {
+            List<Module> modules = _appDbContext.Set<Module>().AsNoTracking().ToList();
+            _appDbContext.Set<Module>().RemoveRange(modules);
+            await _appDbContext.SaveChangesAsync();
         }
     }
 }

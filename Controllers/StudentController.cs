@@ -95,5 +95,25 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        /// <summary>
+        /// This will delete all students!, Use when reset season only!
+        /// </summary>
+        /// <param name = "confirm" > Type "delete all students" </param>
+        [HttpDelete("all")]
+        public async Task<ActionResult> DeleteAllStudents(string confirm)
+        {
+            try
+            {
+                if (confirm == "delete all students")
+                    await _service.DeleteAllStudents();
+                else
+                    throw new ArgumentException("Type: 'delete all students' to confirm");
+                return new SuccessApiResponse(string.Format(MessageConstant.Success));
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
     }
 }

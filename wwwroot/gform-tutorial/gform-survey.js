@@ -1,4 +1,4 @@
-const POST_URL = "https://api.sealab-telu.com/gform-survey"
+const POST_URL = "https://api-local.sealab-telu.com/gform-survey"
 function onSubmit(e) {
     const form = FormApp.getActiveForm()
     const allResponses = form.getResponses()

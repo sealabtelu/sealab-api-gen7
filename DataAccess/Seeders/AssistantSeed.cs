@@ -11,13 +11,13 @@ namespace SealabAPI.DataAccess.Seeders
         private readonly List<Assistant> Assistants = new()
         {
             new(){
-                Code="SEA",
+                Code="AI",
                 Position="Master Admin",
                 User = new(){
-                    Name = "SEA-chan",
+                    Name = "PIA-chan",
                     Nim = "0000000000",
-                    Username = "seachan",
-                    Password = "seantuy",
+                    Username = "piachan",
+                    Password = "master",
                     Role = "Assistant"
                 }
             }
