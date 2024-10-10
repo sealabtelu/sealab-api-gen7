@@ -70,6 +70,21 @@ namespace SealabAPI.Controllers
                 return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
             }
         }
+        [AllowAnonymous]
+        [Authorize(Roles = "Student")]
+        [HttpGet("submission/ft/{idStudent}")]
+        public virtual ActionResult<List<ListSubmittedFTResponse>> GetListSubmittedFT(Guid idStudent)
+        {
+            try
+            {
+                List<ListSubmittedFTResponse> models = _service.GetListSubmittedFT(idStudent);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
         [HttpPost("submission/list")]
         public virtual ActionResult<List<GetSubmissionsResponse>> GetSubmissionList(GetSubmissionsRequest model)
         {
@@ -123,6 +138,19 @@ namespace SealabAPI.Controllers
         }
         [HttpPost("set-j-status")]
         public async Task<ActionResult<List<DetailModuleResponse>>> JStatus(SetJStatusRequest model)
+        {
+            try
+            {
+                List<DetailModuleResponse> models = await _service.SetAssignmentStatus(model);
+                return new SuccessApiResponse(string.Format(MessageConstant.Success), models);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse(ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+            }
+        }
+        [HttpPost("set-ft-status")]
+        public async Task<ActionResult<List<DetailModuleResponse>>> FTStatus(SetFTStatusRequest model)
         {
             try
             {

@@ -12,6 +12,7 @@ namespace SealabAPI.DataAccess.Entities
         public bool IsPAOpen { get; set; } = false;
         public bool IsPRTOpen { get; set; } = false;
         public bool IsJOpen { get; set; } = false;
+        public bool IsFTOpen { get; set; } = false;
         public ICollection<PreliminaryAssignmentQuestion> PAQuestions { get; set; } = new HashSet<PreliminaryAssignmentQuestion>();
         public ICollection<PreliminaryAssignmentAnswer> PAAnswers { get; set; } = new HashSet<PreliminaryAssignmentAnswer>();
         public ICollection<PreTestQuestion> PRTQuestions { get; set; } = new HashSet<PreTestQuestion>();

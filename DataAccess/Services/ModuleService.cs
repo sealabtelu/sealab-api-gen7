@@ -12,6 +12,7 @@ namespace SealabAPI.DataAccess.Services
         List<ListSubmittedPAResponse> GetListSubmittedPA(Guid idStudent);
         List<ListSubmittedPRTResponse> GetListSubmittedPRT(Guid idStudent);
         List<ListSubmittedJResponse> GetListSubmittedJ(Guid idStudent);
+        List<ListSubmittedFTResponse> GetListSubmittedFT(Guid idStudent);
     }
     public class ModuleService : BaseService<Module>, IModuleService
     {
@@ -66,6 +67,21 @@ namespace SealabAPI.DataAccess.Services
                 }
             return models;
         }
+        public List<ListSubmittedFTResponse> GetListSubmittedFT(Guid idStudent)
+        {
+            List<ListSubmittedFTResponse> models = new();
+            List<Module> entities = _appDbContext.Set<Module>().Include(x => x.JAnswers).AsNoTracking().OrderBy(x => x.SeelabsId).ToList();
+
+            if (entities != null)
+                foreach (var entity in entities)
+                {
+                    ListSubmittedFTResponse model = new();
+                    model.MapToModel(entity);
+                    model.IsSubmitted = false;
+                    models.Add(model);
+                }
+            return models;
+        }
         public async Task<List<DetailModuleResponse>> SetAssignmentStatus(BaseModel model)
         {
             var module = _appDbContext.Set<Module>();
@@ -83,6 +99,11 @@ namespace SealabAPI.DataAccess.Services
             {
                 Module entity = await module.FindAsync(j.Id);
                 entity.IsJOpen = j.IsOpen;
+            }
+            else if (model is SetFTStatusRequest ft)
+            {
+                Module entity = await module.FindAsync(ft.Id);
+                entity.IsFTOpen = ft.IsOpen;
             }
             await _appDbContext.SaveChangesAsync();
             return base.GetAll<DetailModuleResponse>().OrderBy(x => x.SeelabsId).ToList();
